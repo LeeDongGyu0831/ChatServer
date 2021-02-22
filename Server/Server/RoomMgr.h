@@ -5,9 +5,10 @@ class CRoom;
 class CRoomMgr
 {
 	unordered_map<int, CRoom*> m_mapRoom;
+
+	SINGLE(CRoomMgr);
+
 public:
-	CRoomMgr();
-	~CRoomMgr();
 
 	bool CreateRoom(int number, int maxUser);
 	bool DestroyRoom(int number);

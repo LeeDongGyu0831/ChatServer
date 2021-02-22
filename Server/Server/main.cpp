@@ -3,15 +3,13 @@
 
 int main()
 {
-	CNetwork network;
 
-	network.Init(SERVERPORT);
+	CNetwork::GetInst()->Init(SERVERPORT);
 
-	while (TRUE == network.Update())
+	while (TRUE == CNetwork::GetInst()->Update())
 	{
 
 	}
 
-	cout << "Close" << endl;
-	network.Close();
+	CNetwork::GetInst()->Close();
 }

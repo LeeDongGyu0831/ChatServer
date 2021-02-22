@@ -116,12 +116,16 @@
   <ItemGroup>
     <ClInclude Include="Define.h" />
     <ClInclude Include="Enum.h" />
+    <ClInclude Include="EventMgr.h" />
+    <ClInclude Include="Func.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="RoomMgr.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EventMgr.cpp" />
+    <ClCompile Include="Func.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="Room.cpp" />

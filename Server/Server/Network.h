@@ -29,9 +29,7 @@ class CNetwork
 	MSGTYPE m_eMsgType;
 
 
-public:
-	CNetwork();
-	~CNetwork();
+	SINGLE(CNetwork);
 
 public:
 	bool Init(int nPortNum);
