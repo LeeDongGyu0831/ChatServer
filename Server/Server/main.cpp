@@ -1,12 +1,17 @@
+#include "stdafx.h"
 #include "Network.h"
 
 int main()
 {
 	CNetwork network;
 
-	network.Init();
+	network.Init(SERVERPORT);
 
-	network.Update();
+	while (TRUE == network.Update())
+	{
 
+	}
+
+	cout << "Close" << endl;
 	network.Close();
 }

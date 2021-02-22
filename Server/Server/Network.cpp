@@ -1,6 +1,5 @@
+#include "stdafx.h"
 #include "Network.h"
-
-
 
 CNetwork::CNetwork()
 {
@@ -11,7 +10,7 @@ CNetwork::~CNetwork()
 {
 }
 
-bool CNetwork::Init()
+bool CNetwork::Init(int nPortNum = SERVERPORT)
 {
 	int retVal;
 
@@ -36,7 +35,7 @@ bool CNetwork::Init()
 	SOCKADDR_IN serverAddr;
 	ZeroMemory(&serverAddr, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons(SERVERPORT);
+	serverAddr.sin_port = htons(nPortNum);
 	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	retVal = bind(m_Sock, (SOCKADDR*)&serverAddr, sizeof(serverAddr));
 	if (retVal == SOCKET_ERROR)
@@ -73,102 +72,119 @@ bool CNetwork::Update()
 	FD_SET rset, wset;
 	SOCKET clientSock;
 	SOCKADDR_IN clientAddr;
-	int addrLen, i;
+	int addrLen;
 
-	while (1)
+	// 소켓 셋 초기화
+	FD_ZERO(&rset);
+	FD_ZERO(&wset);
+	FD_SET(m_Sock, &rset);
+	for (auto& client : m_mapClient)
 	{
-		// 소켓 셋 초기화
-		FD_ZERO(&rset);
-		FD_ZERO(&wset);
-		FD_SET(m_Sock, &rset);
-		for (i = 0; i < m_nTotalSockets; i++)
-		{
-			if (m_socketInfoArray[i]->recvBytes > m_socketInfoArray[i]->sendBytes)
-				FD_SET(m_socketInfoArray[i]->sock, &wset);
-			else
-				FD_SET(m_socketInfoArray[i]->sock, &rset);
-		}
+		if (client.second->recvBytes > client.second->sendBytes)
+			FD_SET(client.second->sock, &wset);
+		else
+			FD_SET(client.second->sock, &rset);
+	}
 
-		// select()
-		retVal = select(0, &rset, &wset, NULL, NULL);
-		if (retVal == SOCKET_ERROR)
+	// select()
+	retVal = select(0, &rset, &wset, NULL, NULL);
+	if (retVal == SOCKET_ERROR)
+	{
+		printf("error select()\n");
+		return FALSE;
+	}
+
+	// 소켓 셋 검사(1) : 클라이언트 접속 수용
+	if (FD_ISSET(m_Sock, &rset))
+	{
+		addrLen = sizeof(clientAddr);
+		clientSock = accept(m_Sock, (SOCKADDR*)&clientAddr, &addrLen);
+		if (clientSock == INVALID_SOCKET)
 		{
-			printf("error select()\n");
-			cout << m_nTotalSockets << endl;
+			printf("error accept()\n");
 			return FALSE;
 		}
-
-		// 소켓 셋 검사(1) : 클라이언트 접속 수용
-		if (FD_ISSET(m_Sock, &rset))
+		else
 		{
-			addrLen = sizeof(clientAddr);
-			clientSock = accept(m_Sock, (SOCKADDR*)&clientAddr, &addrLen);
-			if (clientSock == INVALID_SOCKET)
-			{
-				printf("error accept()\n");
-			}
-			else
-			{
-				char buf[16];
-				inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
-				printf("[TCP 서버] 클라이언트 접속 : IP 주소 = %s, 포트 번호 = %d\n", buf, ntohs(clientAddr.sin_port));
+			char buf[16];
+			inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
+			printf("[TCP 서버] 클라이언트 접속 : IP 주소 = %s, 포트 번호 = %d\n", buf, ntohs(clientAddr.sin_port));
 
-				// 소켓 정보 추가
-				AddSocketInfo(clientSock);
-			}
+			// 소켓 정보 추가
+			if (FALSE == AddSocketInfo(clientSock))
+				return FALSE;
 		}
+	}
 
-		// 소켓 셋 검사(2) : 데이터 통신
-		for (i = 0; i < m_nTotalSockets; i++)
+	// 소켓 셋 검사(2) : 데이터 통신
+	for (auto& client : m_mapClient)
+	{
+		SOCKETINFO* ptr = client.second;
+		if (FD_ISSET(ptr->sock, &rset))
 		{
-			SOCKETINFO* ptr = m_socketInfoArray[i];
-			if (FD_ISSET(ptr->sock, &rset))
+			// 데이터 받기
+			char temp;
+			retVal = recv(ptr->sock, &temp, 1, 0);
+			if (retVal == SOCKET_ERROR)
 			{
-				// 데이터 받기
-				retVal = recv(ptr->sock, ptr->buf, BUFSIZE, 0);
-				if (retVal == SOCKET_ERROR)
-				{
-					printf("recv SOCKET_ERROR\n");
-					RemoveSocketInfo(i);
-					continue;
-				}
-				else if (retVal == 0)
-				{
-					printf("recv 0\n");
-					RemoveSocketInfo(i);
-					continue;
-				}
+				printf("recv SOCKET_ERROR\n");
+				RemoveSocketInfo(client.first);
+				break;
+			}
+			else if (retVal == 0)
+			{
+				printf("recv 0\n");
+				RemoveSocketInfo(client.first);
+				break;
+			}
+			if (temp == '\n')
+			{
+				ptr->buf[ptr->bufCount++] = temp;
+				ptr->buf[ptr->bufCount] = '\0';
+				ptr->recvBytes = ptr->bufCount;
+				ptr->bufCount = 0;
 
-				ptr->recvBytes = retVal;
 				// 받은 데이터 출력
 				addrLen = sizeof(clientAddr);
 				getpeername(ptr->sock, (SOCKADDR*)&clientAddr, &addrLen);
-				ptr->buf[retVal] = '\0';
+				//ptr->buf[retVal] = '\0';
 				char buf[16];
 				inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
 				printf("[TCP %s:%d] %s\n", buf, ntohs(clientAddr.sin_port), ptr->buf);
 			}
-
-			if (FD_ISSET(ptr->sock, &wset))
+			else
 			{
-				// 데이터 보내기
-				retVal = send(ptr->sock, ptr->buf + ptr->sendBytes, ptr->recvBytes - ptr->sendBytes, 0);
+				ptr->buf[ptr->bufCount++] = temp;
+				ptr->buf[ptr->bufCount] = '\0';
+			}
+		}
+
+		if (FD_ISSET(ptr->sock, &wset))
+		{
+			// 데이터 보내기
+			for (auto& otherClient : m_mapClient)
+			{
+				if (otherClient.first == ptr->sock)
+					continue;
+
+				retVal = send(otherClient.second->sock, ptr->buf + ptr->sendBytes, ptr->recvBytes - ptr->sendBytes, 0);
 				if (retVal == SOCKET_ERROR)
 				{
 					printf("send() SOCKET_ERROR\n");
-					RemoveSocketInfo(i);
-					continue;
+					RemoveSocketInfo(client.first);
+					break;
 				}
+			}
 
-				ptr->sendBytes += retVal;
-				if (ptr->recvBytes == ptr->sendBytes)
-				{
-					ptr->recvBytes = 0;
-					ptr->sendBytes = 0;
-				}
+			ptr->sendBytes += retVal;
+			if (ptr->recvBytes == ptr->sendBytes)
+			{
+				ptr->recvBytes = 0;
+				ptr->sendBytes = 0;
 			}
 		}
 	}
+	return TRUE;
 }
 
 void CNetwork::Close()
@@ -180,7 +196,7 @@ void CNetwork::Close()
 
 BOOL CNetwork::AddSocketInfo(SOCKET sock)
 {
-	if (m_nTotalSockets >= FD_SETSIZE)
+	if (m_mapClient.size() > FD_SETSIZE)
 	{
 		printf("[오류] 소켓 정보를 추가할 수 없습니다\n");
 		return FALSE;
@@ -196,28 +212,27 @@ BOOL CNetwork::AddSocketInfo(SOCKET sock)
 	ptr->sock = sock;
 	ptr->recvBytes = 0;
 	ptr->sendBytes = 0;
-	m_socketInfoArray[m_nTotalSockets++] = ptr;
+	ptr->bufCount = 0;
+
+	m_mapClient[ptr->sock] = ptr;
+
+	char msg[BUFSIZE]{ "채팅 서버에 접속하였습니다\n\n" };
+
+	send(ptr->sock, msg, BUFSIZE, 0);
 
 	return TRUE;
 }
 
-void CNetwork::RemoveSocketInfo(int nIndex)
+void CNetwork::RemoveSocketInfo(SOCKET socket)
 {
-	SOCKETINFO* ptr = m_socketInfoArray[nIndex];
-
 	// 클라이언트 정보 얻기
 	SOCKADDR_IN clientAddr;
 	int addrLen = sizeof(clientAddr);
-	getpeername(ptr->sock, (SOCKADDR*)&clientAddr, &addrLen);
+	getpeername(socket, (SOCKADDR*)&clientAddr, &addrLen);
 	char buf[16];
 	inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
 	printf("[TCP 서버] 클라이언트 종료: IP 주소 = %s, 포트 번호 = %d\n", buf, ntohs(clientAddr.sin_port));
 
-	closesocket(ptr->sock);
-	delete ptr;
-
-	if (nIndex != (m_nTotalSockets - 1))
-		m_socketInfoArray[nIndex] = m_socketInfoArray[m_nTotalSockets - 1];
-
-	--m_nTotalSockets;
+	m_mapClient.erase(socket);
+	closesocket(socket);
 }
