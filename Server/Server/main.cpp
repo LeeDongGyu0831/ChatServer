@@ -1,7 +1,12 @@
-#include <iostream>
-using namespace std;
+#include "Network.h"
 
 int main()
 {
-	cout << "Test" << endl;
+	CNetwork network;
+
+	network.Init();
+
+	network.Update();
+
+	network.Close();
 }
