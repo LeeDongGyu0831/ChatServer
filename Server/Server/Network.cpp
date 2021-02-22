@@ -139,8 +139,13 @@ bool CNetwork::Update()
 			}
 			if (temp == '\n')
 			{
+				// 지금까지 모은 문자열을 바탕으로 명령어 체크
+				m_eMsgType = CheckMessage(ptr->sock, ptr->buf, ptr->bufCount);
+
 				ptr->buf[ptr->bufCount++] = temp;
 				ptr->buf[ptr->bufCount] = '\0';
+
+				// 초기화
 				ptr->recvBytes = ptr->bufCount;
 				ptr->bufCount = 0;
 
@@ -150,10 +155,12 @@ bool CNetwork::Update()
 				//ptr->buf[retVal] = '\0';
 				char buf[16];
 				inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
-				printf("[TCP %s:%d] %s\n", buf, ntohs(clientAddr.sin_port), ptr->buf);
+				printf("[TCP %s:%d] [%s] %s", buf, ntohs(clientAddr.sin_port), m_mapClientInfo[ptr->sock]->name, ptr->buf);
+
 			}
 			else
 			{
+				// 조립
 				ptr->buf[ptr->bufCount++] = temp;
 				ptr->buf[ptr->bufCount] = '\0';
 			}
@@ -164,24 +171,48 @@ bool CNetwork::Update()
 			// 데이터 보내기
 			for (auto& otherClient : m_mapClient)
 			{
+				// 자기자신
 				if (otherClient.first == ptr->sock)
-					continue;
-
-				retVal = send(otherClient.second->sock, ptr->buf + ptr->sendBytes, ptr->recvBytes - ptr->sendBytes, 0);
-				if (retVal == SOCKET_ERROR)
 				{
-					printf("send() SOCKET_ERROR\n");
-					RemoveSocketInfo(client.first);
-					break;
+					string msg{ "[Me] " };
+					retVal = send(otherClient.first, msg.c_str(), msg.size(), 0);
+					if (retVal == SOCKET_ERROR)
+					{
+						printf("send() SOCKET_ERROR\n");
+						RemoveSocketInfo(client.first);
+						break;
+					}
+					continue;
+				}
+				else
+				{
+					// 같은 방이 아니라면 대화 전송X
+					if (m_mapClientInfo[otherClient.first]->roomNumber != m_mapClientInfo[ptr->sock]->roomNumber)
+						continue;
+
+					// 브로드캐스팅
+					string msg = "[";
+					msg += m_mapClientInfo[ptr->sock]->name;
+					msg += "] ";
+					retVal = send(otherClient.first, msg.c_str(), msg.size(), 0);
+					if (retVal == SOCKET_ERROR)
+					{
+						printf("send() SOCKET_ERROR\n");
+						RemoveSocketInfo(client.first);
+						break;
+					}
+					retVal = send(otherClient.first, ptr->buf, ptr->recvBytes - ptr->sendBytes, 0);
+					if (retVal == SOCKET_ERROR)
+					{
+						printf("send() SOCKET_ERROR\n");
+						RemoveSocketInfo(client.first);
+						break;
+					}
 				}
 			}
 
-			ptr->sendBytes += retVal;
-			if (ptr->recvBytes == ptr->sendBytes)
-			{
-				ptr->recvBytes = 0;
-				ptr->sendBytes = 0;
-			}
+			ptr->recvBytes = 0;
+			ptr->sendBytes = 0;
 		}
 	}
 	return TRUE;
@@ -192,6 +223,31 @@ void CNetwork::Close()
 	// 윈속 종료
 	WSACleanup();
 	return;
+}
+
+MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount)
+{
+	MSGTYPE eMsgType = MSGTYPE::NORMAL;
+
+	if (message[0] == '/')
+	{
+		eMsgType = MSGTYPE::NOTHING;
+
+		// 명령어 조건 X
+		if (bufCount < 3)
+			return eMsgType;
+
+		// 로그인 명령
+		if (message[1] == COMMAND::LOGIN)
+		{
+			strcpy_s(m_mapClientInfo[sock]->name, NAMESIZE, message + 3);
+			m_mapClientInfo[sock]->name[bufCount - 4] = '\0';
+			m_mapClientInfo[sock]->nameSize = bufCount - 4;
+			m_mapClientInfo[sock]->roomNumber = 0;
+		}
+	}
+
+	return eMsgType;
 }
 
 BOOL CNetwork::AddSocketInfo(SOCKET sock)
@@ -214,10 +270,21 @@ BOOL CNetwork::AddSocketInfo(SOCKET sock)
 	ptr->sendBytes = 0;
 	ptr->bufCount = 0;
 
+	CLIENTINFO* clientptr = new CLIENTINFO;
+	if (clientptr == NULL)
+	{
+		printf("[오류] 메모리가 부족합니다\n");
+		return FALSE;
+	}
+
+	// Client ID 및 시작 방 번호 초기화
+	clientptr->name[0] = '\0';
+	clientptr->roomNumber = -1;
+
 	m_mapClient[ptr->sock] = ptr;
+	m_mapClientInfo[ptr->sock] = clientptr;
 
-	char msg[BUFSIZE]{ "채팅 서버에 접속하였습니다\n\n" };
-
+	char msg[BUFSIZE]{ "================================\n\r로그인 명령어(/l)을 사용해주세요.\n\r================================\n\r[Me] " };
 	send(ptr->sock, msg, BUFSIZE, 0);
 
 	return TRUE;
@@ -234,5 +301,6 @@ void CNetwork::RemoveSocketInfo(SOCKET socket)
 	printf("[TCP 서버] 클라이언트 종료: IP 주소 = %s, 포트 번호 = %d\n", buf, ntohs(clientAddr.sin_port));
 
 	m_mapClient.erase(socket);
+	m_mapClientInfo.erase(socket);
 	closesocket(socket);
 }

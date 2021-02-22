@@ -11,3 +11,4 @@ using namespace std;
 #include <list>
 
 #include "Define.h"
+#include "Enum.h"
