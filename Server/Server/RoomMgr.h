@@ -14,7 +14,7 @@ class CRoomMgr
 public:
 	void Init();
 
-	bool CreateRoom(int number, int maxUser);
+	bool CreateRoom(const char* strRoomName, int maxUser);
 	bool DestroyRoom(int number);
 	void ShowRoomInfo(int number);
 

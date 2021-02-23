@@ -2,7 +2,7 @@
 #include "Room.h"
 
 
-CRoom::CRoom(int number, int maxUser) : m_nNumber(number), m_nMaxUser(maxUser), m_nCurrentUser(0)
+CRoom::CRoom(const char* strName, int roomNumber, int maxUser) : m_strName(strName), m_nNumber(roomNumber), m_nMaxUser(maxUser), m_nCurrentUser(0)
 {
 }
 
@@ -23,4 +23,9 @@ int CRoom::GetMaxUser() const
 int CRoom::GetCurrentUser() const
 {
 	return m_nCurrentUser;
+}
+
+const char* CRoom::GetRoomName() const
+{
+	return m_strName.c_str();
 }

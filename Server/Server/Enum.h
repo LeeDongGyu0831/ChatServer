@@ -4,6 +4,15 @@ enum COMMAND
 {
 	LOGIN = 'l',
 	HELP = 'h',
+	SHOWROOM = 's',
+	SHOWROOMALL = 'o',
+	SHOWUSER = 'u',
+	SHOWUSERALL = 'p',
+	SENDMSG = 't',
+	CREATEROOM = 'c',
+	JOINROOM = 'j',
+	DESTROYROOM = 'd',
+	CLOSE = 'x',
 };
 
 enum MSGTYPE

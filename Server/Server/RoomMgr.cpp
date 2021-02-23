@@ -26,18 +26,20 @@ void CRoomMgr::Init()
 
 	cout << "RoomManager Init" << endl;
 
-	CreateRoom(0, 64);
+	CreateRoom("Main Room", 64);
 }
 
-bool CRoomMgr::CreateRoom(int number, int maxUser)
+bool CRoomMgr::CreateRoom(const char* strRoomName, int maxUser)
 {
-	CRoom* room = new CRoom(0, 64);
+	CRoom* room = new CRoom(strRoomName, m_nRoomCount, 64);
 	list<CClient*> clients;
-	m_mapRoom[number] = room;
-	m_mapClient[number] = clients;
+	m_mapRoom[m_nRoomCount] = room;
+	m_mapClient[m_nRoomCount] = clients;
+
+	cout << "(" << m_nRoomCount <<") " << strRoomName << " (" << maxUser << ") Create" << endl;
+
 	m_nRoomCount++;
 
-	cout << "Create " << number <<" Room (" << maxUser << ") Finish" << endl;
 	return TRUE;
 }
 
@@ -106,7 +108,8 @@ bool CRoomMgr::AddClient(int id, int roomNumber)
 	{
 		// 있으니 기존 리스트에 추가
 		p->second.emplace_back(client);
-		cout << roomNumber << " Room Join " << endl;
+		const char* roomName = m_mapRoom.find(roomNumber)->second->GetRoomName();
+		cout << roomNumber << " " << roomName << " Join " << endl;
 	}
 	return TRUE;
 }

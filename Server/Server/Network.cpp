@@ -236,7 +236,7 @@ bool CNetwork::Send(CClient * client, int roomNumber)
 			}
 			else
 			{
-				// 브로드캐스팅
+				// 기본적으로 같은 방에 있는 사람들에게만 브로드캐스팅
 
 				// 아이디가 없다 == 로그인이 되어있지 않는 상태
 				if (name[0] == '\0')
@@ -246,6 +246,9 @@ bool CNetwork::Send(CClient * client, int roomNumber)
 					continue;
 				}
 
+				// 일반 채팅(명령어는 보이지 않는다)
+				if (m_eMsgType != MSGTYPE::NORMAL)
+					continue;
 
 				string msg = "[";
 				msg += name;
@@ -295,7 +298,59 @@ MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roo
 			name.assign(message, 3, bufCount - 4);
 			client->SetName(name.c_str());
 			//m_mapClientInfo[sock]->roomNumber = 0;
+			eMsgType = MSGTYPE::LOGIN_MSG;
 		}
+
+		else if (message[1] == COMMAND::HELP)
+		{
+			// Enum.h 에 정의한 명령어 키에 대응되어 출력되게끔
+			string command = "/";
+			string msg = "=========================================\n\r";
+
+			msg += command + char(COMMAND::HELP);
+			msg += "\t\t\t명령어 안내\n\r";
+
+			msg += command + char(COMMAND::LOGIN);
+			msg += "\t\t\t로그인\n\r";
+
+			msg += command + char(COMMAND::SHOWUSERALL);
+			msg += "\t\t\t이용자 목록 보기\n\r";
+
+			msg += command + char(COMMAND::SHOWROOMALL);
+			msg += "\t\t\t대화방 목록 보기\n\r";
+
+			msg += command + char(COMMAND::SHOWROOM);
+			msg += " [방번호]";
+			msg += "\t\t대화방 정보 보기\n\r";
+
+			msg += command + char(COMMAND::SHOWUSER);
+			msg += " [상대방ID]";
+			msg += "\t\t이용자 정보 보기\n\r";
+
+			msg += command + char(COMMAND::SENDMSG);
+			msg += " [방번호] [메시지]";
+			msg += "\t쪽지 보내기\n\r";
+
+			msg += command + char(COMMAND::CREATEROOM);
+			msg += " [방제목] [최대인원]";
+			msg += "\t대화방 만들기\n\r";
+
+			msg += command + char(COMMAND::JOINROOM);
+			msg += " [방번호]";
+			msg += "\t\t대화방 참여하기\n\r";
+
+			msg += command + char(COMMAND::DESTROYROOM);
+			msg += "\t\t\t대화방 끝내기\n\r";
+
+			msg += command + char(COMMAND::CLOSE);
+			msg += "\t\t\t끝내기\n\r";
+
+			msg += "=========================================\n\r";
+			send(sock, msg.c_str(), msg.size(), 0);
+			eMsgType = MSGTYPE::HELP_MSG;
+		}
+
+
 	}
 
 	return eMsgType;
@@ -326,8 +381,8 @@ BOOL CNetwork::AddSocketInfo(SOCKET sock)
 
 	m_mapClient[ptr->sock] = ptr;
 
-	char msg[BUFSIZE]{ "================================\n\r환영합니다 채팅서버 입니다.\n\r로그인 명령어(/l)을 사용해주세요.\n\r================================\n\r[Me] " };
-	send(ptr->sock, msg, BUFSIZE, 0);
+	string msg { "=========================================\n\r\t환영합니다 채팅서버 입니다.\n\n\r   로그인 명령어(/l)을 사용해주세요.\n\n\n\r\t명령어 안내(/h)\n\r=========================================\n\r[Me] " };
+	send(ptr->sock, msg.c_str(), msg.size(), 0);
 
 	return TRUE;
 }
