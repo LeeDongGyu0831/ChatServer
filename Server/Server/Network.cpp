@@ -64,6 +64,8 @@ bool CNetwork::Init(int nPortNum = SERVERPORT)
 		return FALSE;
 	}
 
+
+	cout << "Network Init" << endl;
 	return TRUE;
 }
 
@@ -284,7 +286,7 @@ BOOL CNetwork::AddSocketInfo(SOCKET sock)
 
 	m_mapClient[ptr->sock] = ptr;
 
-	char msg[BUFSIZE]{ "================================\n\r로그인 명령어(/l)을 사용해주세요.\n\r================================\n\r[Me] " };
+	char msg[BUFSIZE]{ "================================\n\r환영합니다 채팅서버 입니다.\n\r로그인 명령어(/l)을 사용해주세요.\n\r================================\n\r[Me] " };
 	send(ptr->sock, msg, BUFSIZE, 0);
 
 	return TRUE;

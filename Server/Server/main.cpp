@@ -4,7 +4,7 @@
 
 int main()
 {
-
+	// 9000 포트 이용
 	CNetwork::GetInst()->Init(SERVERPORT);
 	CRoomMgr::GetInst()->Init();
 

@@ -24,6 +24,8 @@ void CRoomMgr::Init()
 	m_mapRoom.clear();
 	m_nRoomCount = 0;
 
+	cout << "RoomManager Init" << endl;
+
 	CreateRoom(0, 64);
 }
 
@@ -34,6 +36,8 @@ bool CRoomMgr::CreateRoom(int number, int maxUser)
 	m_mapRoom[number] = room;
 	m_mapClient[number] = clients;
 	m_nRoomCount++;
+
+	cout << "Create " << number <<" Room (" << maxUser << ") Finish" << endl;
 	return TRUE;
 }
 
@@ -87,6 +91,7 @@ bool CRoomMgr::AddClient(int id, int roomNumber)
 	{
 		// 있으니 기존 리스트에 추가
 		p->second.emplace_back(client);
+		cout << roomNumber << " Room Join " << endl;
 	}
 	return TRUE;
 }
