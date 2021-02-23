@@ -76,6 +76,20 @@ CClient * CRoomMgr::GetClient(int id, int roomNumber) const
 	return (*client);
 }
 
+CClient * CRoomMgr::GetClientByName(const char * name) const
+{
+	/*for (auto& clients : m_mapClient)
+	auto client = find_if(clients->second.begin(), clients->second.end(), [&](const CClient* cl) {
+		if (cl->GetName() == name)
+			return true;
+		return false;
+	});
+	if (client == clients->second.end())
+		return NULL;
+	return (*client);*/
+	return NULL;
+}
+
 const char * CRoomMgr::GetClientName(int id, int roomNumber) const
 {
 	auto clients = m_mapClient.find(roomNumber);
