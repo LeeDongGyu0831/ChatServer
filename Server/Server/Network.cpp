@@ -71,14 +71,40 @@ bool CNetwork::Init(int nPortNum = SERVERPORT)
 
 bool CNetwork::Update()
 {
-	int retVal;
+	FD_Set();
 
-	// 데이터 통신에 사용할 변수
-	FD_SET rset, wset;
-	SOCKET clientSock;
-	SOCKADDR_IN clientAddr;
-	int addrLen;
+	Select();
 
+	Accept();
+
+	// 소켓 셋 검사(2) : 데이터 통신
+	// 각 방을 순회하면서 방에 있는 클라이언트들과 통신
+	for (int i = 0; i < CRoomMgr::GetInst()->GetRoomCount(); ++i)
+	{
+		for (auto& client : CRoomMgr::GetInst()->GetClient(i))
+		{
+			bool result = Recv(client, i);
+			if (FALSE == result)
+				continue;
+
+			result = Send(client, i);
+			if (FALSE == result)
+				continue;
+		}
+	}
+
+	return TRUE;
+}
+
+void CNetwork::Close()
+{
+	// 윈속 종료
+	WSACleanup();
+	return;
+}
+
+bool CNetwork::FD_Set()
+{
 	// 소켓 셋 초기화
 	FD_ZERO(&rset);
 	FD_ZERO(&wset);
@@ -90,15 +116,23 @@ bool CNetwork::Update()
 		else
 			FD_SET(client.second->sock, &rset);
 	}
+	return TRUE;
+}
 
+bool CNetwork::Select()
+{
 	// select()
-	retVal = select(0, &rset, &wset, NULL, NULL);
+	int retVal = select(0, &rset, &wset, NULL, NULL);
 	if (retVal == SOCKET_ERROR)
 	{
 		printf("error select()\n");
 		return FALSE;
 	}
+	return TRUE;
+}
 
+bool CNetwork::Accept()
+{
 	// 소켓 셋 검사(1) : 클라이언트 접속 수용
 	if (FD_ISSET(m_Sock, &rset))
 	{
@@ -120,122 +154,128 @@ bool CNetwork::Update()
 				return FALSE;
 		}
 	}
+	return TRUE;
+}
 
-	// 소켓 셋 검사(2) : 데이터 통신
-	for (int i = 0; i < CRoomMgr::GetInst()->GetRoomCount(); ++i)
+bool CNetwork::Recv(CClient* client, int roomNumber)
+{
+	SOCKETINFO* ptr = m_mapClient.find(client->GetID())->second;
+	const char* name = CRoomMgr::GetInst()->GetClientName(ptr->sock, roomNumber);
+	if (FD_ISSET(ptr->sock, &rset))
 	{
-		for (auto& client : CRoomMgr::GetInst()->GetClient(i))
+		// 데이터 받기
+		char temp;
+		int retVal = recv(ptr->sock, &temp, 1, 0);
+		if (retVal == SOCKET_ERROR)
 		{
-			SOCKETINFO* ptr = m_mapClient.find(client->GetID())->second;
-			const char* name = CRoomMgr::GetInst()->GetClientName(ptr->sock, i);
-			if (FD_ISSET(ptr->sock, &rset))
-			{
-				// 데이터 받기
-				char temp;
-				retVal = recv(ptr->sock, &temp, 1, 0);
-				if (retVal == SOCKET_ERROR)
-				{
-					printf("recv SOCKET_ERROR\n");
-					RemoveSocketInfo(ptr->sock);
-					CRoomMgr::GetInst()->RemoveClient(ptr->sock, i);
-					break;
-				}
-				else if (retVal == 0)
-				{
-					printf("recv 0\n");
-					RemoveSocketInfo(ptr->sock);
-					CRoomMgr::GetInst()->RemoveClient(ptr->sock, i);
-					break;
-				}
-				if (temp == '\n')
-				{
-					// 지금까지 모은 문자열을 바탕으로 명령어 체크
-					m_eMsgType = CheckMessage(ptr->sock, ptr->buf, ptr->bufCount);
+			printf("recv SOCKET_ERROR\n");
+			RemoveSocketInfo(ptr->sock);
+			CRoomMgr::GetInst()->RemoveClient(ptr->sock, roomNumber);
+			return FALSE;
+		}
+		else if (retVal == 0)
+		{
+			printf("recv 0\n");
+			RemoveSocketInfo(ptr->sock);
+			CRoomMgr::GetInst()->RemoveClient(ptr->sock, roomNumber);
+			return FALSE;
+		}
+		if (temp == '\n')
+		{
+			// 지금까지 모은 문자열을 바탕으로 명령어 체크
+			m_eMsgType = CheckMessage(ptr->sock, ptr->buf, ptr->bufCount, roomNumber);
 
-					ptr->buf[ptr->bufCount++] = temp;
-					ptr->buf[ptr->bufCount] = '\0';
+			ptr->buf[ptr->bufCount++] = temp;
+			ptr->buf[ptr->bufCount] = '\0';
 
-					// 초기화
-					ptr->recvBytes = ptr->bufCount;
-					ptr->bufCount = 0;
+			// 초기화
+			ptr->recvBytes = ptr->bufCount;
+			ptr->bufCount = 0;
 
-					// 받은 데이터 출력
-					addrLen = sizeof(clientAddr);
-					getpeername(ptr->sock, (SOCKADDR*)&clientAddr, &addrLen);
-					//ptr->buf[retVal] = '\0';
-					char buf[16];
-					inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
-					printf("[TCP %s:%d] [%s] %s", buf, ntohs(clientAddr.sin_port), name, ptr->buf);
+			// 받은 데이터 출력
+			addrLen = sizeof(clientAddr);
+			getpeername(ptr->sock, (SOCKADDR*)&clientAddr, &addrLen);
+			//ptr->buf[retVal] = '\0';
+			char buf[16];
+			inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
+			printf("[TCP %s:%d] [%s] %s", buf, ntohs(clientAddr.sin_port), name, ptr->buf);
 
-				}
-				else
-				{
-					// 조립
-					ptr->buf[ptr->bufCount++] = temp;
-					ptr->buf[ptr->bufCount] = '\0';
-				}
-			}
-
-			if (FD_ISSET(ptr->sock, &wset))
-			{
-				// 데이터 보내기
-				for (auto& otherClient : m_mapClient)
-				{
-					// 자기자신
-					if (otherClient.first == ptr->sock)
-					{
-						string msg{ "[Me] " };
-						retVal = send(otherClient.first, msg.c_str(), msg.size(), 0);
-						if (retVal == SOCKET_ERROR)
-						{
-							printf("send() SOCKET_ERROR\n");
-							RemoveSocketInfo(ptr->sock);
-							CRoomMgr::GetInst()->RemoveClient(ptr->sock, i);
-							break;
-						}
-						continue;
-					}
-					else
-					{
-						// 브로드캐스팅
-						string msg = "[";
-						msg += name;
-						msg += "] ";
-						retVal = send(otherClient.first, msg.c_str(), msg.size(), 0);
-						if (retVal == SOCKET_ERROR)
-						{
-							printf("send() SOCKET_ERROR\n");
-							RemoveSocketInfo(ptr->sock);
-							CRoomMgr::GetInst()->RemoveClient(ptr->sock, i);
-							break;
-						}
-						retVal = send(otherClient.first, ptr->buf, ptr->recvBytes - ptr->sendBytes, 0);
-						if (retVal == SOCKET_ERROR)
-						{
-							printf("send() SOCKET_ERROR\n");
-							RemoveSocketInfo(ptr->sock);
-							CRoomMgr::GetInst()->RemoveClient(ptr->sock, i);
-							break;
-						}
-					}
-				}
-
-				ptr->recvBytes = 0;
-				ptr->sendBytes = 0;
-			}
+		}
+		else
+		{
+			// 조립
+			ptr->buf[ptr->bufCount++] = temp;
+			ptr->buf[ptr->bufCount] = '\0';
 		}
 	}
 	return TRUE;
 }
 
-void CNetwork::Close()
+bool CNetwork::Send(CClient * client, int roomNumber)
 {
-	// 윈속 종료
-	WSACleanup();
-	return;
+	SOCKETINFO* ptr = m_mapClient.find(client->GetID())->second;
+	const char* name = CRoomMgr::GetInst()->GetClientName(ptr->sock, roomNumber);
+	if (FD_ISSET(ptr->sock, &wset))
+	{
+		// 데이터 보내기
+		for (auto& otherClient : m_mapClient)
+		{
+			// 자기자신
+			if (otherClient.first == ptr->sock)
+			{
+				string msg{ "[Me] " };
+				int retVal = send(otherClient.first, msg.c_str(), msg.size(), 0);
+				if (retVal == SOCKET_ERROR)
+				{
+					printf("send() SOCKET_ERROR\n");
+					RemoveSocketInfo(ptr->sock);
+					CRoomMgr::GetInst()->RemoveClient(ptr->sock, roomNumber);
+					break;
+				}
+				continue;
+			}
+			else
+			{
+				// 브로드캐스팅
+
+				// 아이디가 없다 == 로그인이 되어있지 않는 상태
+				if (name[0] == '\0')
+				{
+					ptr->recvBytes = 0;
+					ptr->sendBytes = 0;
+					continue;
+				}
+
+
+				string msg = "[";
+				msg += name;
+				msg += "] ";
+				int retVal = send(otherClient.first, msg.c_str(), msg.size(), 0);
+				if (retVal == SOCKET_ERROR)
+				{
+					printf("send() SOCKET_ERROR\n");
+					RemoveSocketInfo(ptr->sock);
+					CRoomMgr::GetInst()->RemoveClient(ptr->sock, roomNumber);
+					break;
+				}
+				retVal = send(otherClient.first, ptr->buf, ptr->recvBytes - ptr->sendBytes, 0);
+				if (retVal == SOCKET_ERROR)
+				{
+					printf("send() SOCKET_ERROR\n");
+					RemoveSocketInfo(ptr->sock);
+					CRoomMgr::GetInst()->RemoveClient(ptr->sock, roomNumber);
+					break;
+				}
+			}
+		}
+
+		ptr->recvBytes = 0;
+		ptr->sendBytes = 0;
+	}
+	return TRUE;
 }
 
-MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount)
+MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roomNumber)
 {
 	MSGTYPE eMsgType = MSGTYPE::NORMAL;
 
@@ -250,10 +290,10 @@ MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount)
 		// 로그인 명령
 		if (message[1] == COMMAND::LOGIN)
 		{
-			//CRoomMgr::GetInst()->GetClient()
-			//strcpy_s(m_mapClientInfo[sock]->name, NAMESIZE, message + 3);
-			//m_mapClientInfo[sock]->name[bufCount - 4] = '\0';
-			//m_mapClientInfo[sock]->nameSize = bufCount - 4;
+			CClient* client = CRoomMgr::GetInst()->GetClient(sock, roomNumber);
+			string name;
+			name.assign(message, 3, bufCount - 4);
+			client->SetName(name.c_str());
 			//m_mapClientInfo[sock]->roomNumber = 0;
 		}
 	}

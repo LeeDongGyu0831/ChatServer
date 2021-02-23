@@ -56,6 +56,19 @@ list<CClient*> CRoomMgr::GetClient(int roomNumber) const
 	return m_mapClient.find(roomNumber)->second;
 }
 
+CClient * CRoomMgr::GetClient(int id, int roomNumber) const
+{
+	auto clients = m_mapClient.find(roomNumber);
+	auto client = find_if(clients->second.begin(), clients->second.end(), [&](const CClient* cl) {
+		if (cl->GetID() == id)
+			return true;
+		return false;
+	});
+	if (client == clients->second.end())
+		return NULL;
+	return (*client);
+}
+
 const char * CRoomMgr::GetClientName(int id, int roomNumber) const
 {
 	auto clients = m_mapClient.find(roomNumber);
@@ -64,6 +77,8 @@ const char * CRoomMgr::GetClientName(int id, int roomNumber) const
 			return true;
 		return false;
 	});
+	if (client == clients->second.end())
+		return NULL;
 	return (*client)->GetName();
 }
 
@@ -96,14 +111,35 @@ bool CRoomMgr::AddClient(int id, int roomNumber)
 	return TRUE;
 }
 
-bool CRoomMgr::RemoveClient(int id) const
+bool CRoomMgr::RemoveClient(int id)
 {
-	return false;
+	for (auto& clientList : m_mapClient)
+	{
+		auto p = find_if(clientList.second.begin(), clientList.second.end(), [&](const CClient* cl) {
+			if (cl->GetID() == id)
+				return true;
+			return false;
+		});
+		if (p != clientList.second.end()) {
+			clientList.second.erase(p);
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
-bool CRoomMgr::RemoveClient(int id, int roomNumber) const
+bool CRoomMgr::RemoveClient(int id, int roomNumber)
 {
-	return false;
+	auto p = find_if(m_mapClient.find(roomNumber)->second.begin(), m_mapClient.find(roomNumber)->second.end(), [&](const CClient* cl) {
+		if (cl->GetID() == id)
+			return true;
+		return false;
+	});
+	if (p != m_mapClient.find(roomNumber)->second.end()) {
+		m_mapClient.find(roomNumber)->second.erase(p);
+		return TRUE;
+	}
+	return FALSE;
 }
 
 int CRoomMgr::GetRoomCount() const

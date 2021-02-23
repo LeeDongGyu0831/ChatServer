@@ -9,6 +9,8 @@ struct SOCKETINFO
 	int bufCount;
 };
 
+class CClient;
+
 class CNetwork
 {
 	SOCKET m_Sock;
@@ -17,6 +19,11 @@ class CNetwork
 
 	MSGTYPE m_eMsgType;
 
+	// 데이터 통신에 사용할 변수
+	FD_SET rset, wset;
+	SOCKET clientSock;
+	SOCKADDR_IN clientAddr;
+	int addrLen;
 
 	SINGLE(CNetwork);
 
@@ -26,14 +33,16 @@ public:
 	void Close();
 
 	// Network 함수
-	bool Bind();
+	bool FD_Set();
+	bool Select();
 	bool Accept();
-	bool Listen();
+	bool Recv(CClient* client, int roomNumber);
+	bool Send(CClient* client, int roomNumber);
 
 	// 소켓 관리 함수
 	BOOL AddSocketInfo(SOCKET sock);
 	void RemoveSocketInfo(SOCKET socket);
 
-	MSGTYPE CheckMessage(SOCKET sock, char* message, int bufCount);
+	MSGTYPE CheckMessage(SOCKET sock, char* message, int bufCount, int roomNumber);
 };
 

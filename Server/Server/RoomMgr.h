@@ -19,12 +19,13 @@ public:
 	void ShowRoomInfo(int number);
 
 	list<CClient*> GetClient(int roomNumber) const;
+	CClient* GetClient(int id, int roomNumber) const;
 	const char* GetClientName(int id, int roomNumber) const;
 	CRoom* GetRoom(int roomNumber) const;
 
 	bool AddClient(int id, int roomNumber);
-	bool RemoveClient(int id) const;
-	bool RemoveClient(int id, int roomNumber) const;
+	bool RemoveClient(int id);
+	bool RemoveClient(int id, int roomNumber);
 
 	int GetRoomCount() const;
 };
