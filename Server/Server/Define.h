@@ -1,6 +1,7 @@
 #pragma once
 #define SERVERPORT 9000
 #define BUFSIZE 512
+#define NAMESIZE 10
 
 #define SINGLE(type) private: type(); ~type();\
 public:\

@@ -25,6 +25,9 @@
     <Filter Include="Room">
       <UniqueIdentifier>{4e36becb-04e2-4fd1-8d7c-c697229d5710}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Client">
+      <UniqueIdentifier>{310ca9cd-406c-4a1f-b6a5-578c554ddf9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -51,6 +54,9 @@
     <ClInclude Include="Room.h">
       <Filter>Room</Filter>
     </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>Client</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -73,6 +79,9 @@
     </ClCompile>
     <ClCompile Include="Room.cpp">
       <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>Client</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

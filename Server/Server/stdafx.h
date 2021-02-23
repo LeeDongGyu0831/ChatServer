@@ -11,5 +11,8 @@ using namespace std;
 #include <vector>
 #include <list>
 
+#include <algorithm>
+
 #include "Define.h"
 #include "Enum.h"
+#include "Func.h"
