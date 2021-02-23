@@ -15,6 +15,7 @@ public:
 	void Init();
 
 	bool CreateRoom(const char* strRoomName, int maxUser);
+	bool JoinRoom(int id, int roomNumber);
 	bool DestroyRoom(int number);
 	void ShowRoomInfo(int number);
 

@@ -43,6 +43,11 @@ bool CRoomMgr::CreateRoom(const char* strRoomName, int maxUser)
 	return TRUE;
 }
 
+bool CRoomMgr::JoinRoom(int id, int roomNumber)
+{
+	return false;
+}
+
 bool CRoomMgr::DestroyRoom(int number)
 {
 	return false;
@@ -107,9 +112,18 @@ bool CRoomMgr::AddClient(int id, int roomNumber)
 	else
 	{
 		// 있으니 기존 리스트에 추가
+
+		CRoom* room = m_mapRoom.find(roomNumber)->second;
+		// 해당 방이 다 차버렸을 경우
+		if (FALSE == room->GetState())
+			return FALSE;
+
 		p->second.emplace_back(client);
-		const char* roomName = m_mapRoom.find(roomNumber)->second->GetRoomName();
+		room->ChangeCount(1);
+
+		const char* roomName = room->GetRoomName();
 		cout << roomNumber << " " << roomName << " Join " << endl;
+
 	}
 	return TRUE;
 }

@@ -2,6 +2,7 @@
 #include "Network.h"
 #include "RoomMgr.h"
 #include "Client.h"
+#include "Room.h"
 
 CNetwork::CNetwork()
 {
@@ -290,6 +291,12 @@ MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roo
 		if (bufCount < 3)
 			return eMsgType;
 
+		// 메시지 공백 기준으로 분할
+		vector<string> msg = SplitString(message, ' ');
+		cout << "명령어 분할\n\r";
+		for (auto& str : msg)
+			cout << str.c_str() << "\n\r";
+
 		// 로그인 명령
 		if (message[1] == COMMAND::LOGIN)
 		{
@@ -301,6 +308,7 @@ MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roo
 			eMsgType = MSGTYPE::LOGIN_MSG;
 		}
 
+		// 명령어 안내 출력
 		else if (message[1] == COMMAND::HELP)
 		{
 			// Enum.h 에 정의한 명령어 키에 대응되어 출력되게끔
@@ -350,6 +358,12 @@ MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roo
 			eMsgType = MSGTYPE::HELP_MSG;
 		}
 
+		// 대화방 목록 출력
+		else if (message[1] == COMMAND::SHOWROOM)
+		{
+			CRoom* room = CRoomMgr::GetInst()->GetRoom(roomNumber);
+		}
+
 
 	}
 
@@ -381,7 +395,7 @@ BOOL CNetwork::AddSocketInfo(SOCKET sock)
 
 	m_mapClient[ptr->sock] = ptr;
 
-	string msg { "=========================================\n\r\t환영합니다 채팅서버 입니다.\n\n\r   로그인 명령어(/l)을 사용해주세요.\n\n\n\r\t명령어 안내(/h)\n\r=========================================\n\r[Me] " };
+	string msg { "=========================================\n\r\t환영합니다 채팅서버 입니다.\n\n\r\t로그인 명령어(/l)을 사용해주세요.\n\n\n\r\t명령어 안내(/h)\n\r=========================================\n\r[Me] " };
 	send(ptr->sock, msg.c_str(), msg.size(), 0);
 
 	return TRUE;

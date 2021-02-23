@@ -12,6 +12,9 @@ public:
 	int GetNumber() const;
 	int GetMaxUser() const;
 	int GetCurrentUser() const;
+	bool GetState() const;
 	const char* GetRoomName() const;
+
+	bool ChangeCount(int count);
 };
 

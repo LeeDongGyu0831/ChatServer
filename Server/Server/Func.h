@@ -47,3 +47,7 @@ void Safe_Delete_List(list<T*> _list)
 		SAFE_DELETE(data);
 	}
 }
+
+const char* DeleteChr(char str[], char word);
+
+vector<string> SplitString(string str, char word);
