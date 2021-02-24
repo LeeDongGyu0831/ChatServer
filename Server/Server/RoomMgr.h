@@ -28,11 +28,13 @@ public:
 
 	// 각 조건을 바탕으로 클라이언트 검색 및 반환
 	CClient* GetClient(const int& id, const int& roomNumber);
+	CClient* GetClientByID(const int& id);
 	CClient* GetClientByName(const char * name);
 	const char* GetClientName(const int& id, const int& roomNumber);
 	
 	// 대화방 반환
 	CRoom* GetRoom(const int& roomNumber);
+	bool FindRoom(const int& roomNumber);
 
 	// 각 방들의 방 번호를 vector로 묶어 반환
 	vector<int> GetRoomNumberArray() const;
@@ -47,5 +49,7 @@ public:
 
 	// 대화방 갯수 반환
 	int GetRoomCount() const;
+	// 클라이언트 아이디를 바탕으로 대화방 번호 반환
+	int GetRoomNumber(const int& id);
 };
 

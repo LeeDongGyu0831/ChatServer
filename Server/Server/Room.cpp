@@ -93,6 +93,7 @@ const char * CRoom::GetClientName(const int & id)
 void CRoom::AddClient(const int& id, CClient * client)
 {
 	m_mapClient[id] = client;
+	m_mapClient[id]->SetRoomNumber(m_nNumber);
 	ChangeCount(1); // 인원 1명 증가
 }
 

@@ -80,18 +80,16 @@ bool CNetwork::Update()
 
 	// 소켓 셋 검사(2) : 데이터 통신
 	// 각 방을 순회하면서 방에 있는 클라이언트들과 통신
-	for (int i = 0; i < CRoomMgr::GetInst()->GetRoomCount(); ++i)
-	{
-		for (auto& client : CRoomMgr::GetInst()->GetClients(i))
-		{
-			bool result = DataRecv(client.second, i);
-			if (FALSE == result)
-				continue;
 
-			result = BroadCast(client.second, i);
-			if (FALSE == result)
-				continue;
-		}
+	for (auto& clientSock : m_mapClient)
+	{
+		bool result = DataRecv(clientSock.second);
+		if (FALSE == result)
+			continue;
+
+		result = BroadCast(clientSock.second);
+		if (FALSE == result)
+			continue;
 	}
 
 	return TRUE;
@@ -158,72 +156,72 @@ bool CNetwork::Accept()
 	return TRUE;
 }
 
-bool CNetwork::DataRecv(const CClient* client, const int& roomNumber)
+bool CNetwork::DataRecv(SOCKETINFO* sock)
 {
-	SOCKETINFO* ptr = m_mapClient.find(client->GetID())->second;
-	const char* name = CRoomMgr::GetInst()->GetClientName(ptr->sock, roomNumber);
-	if (FD_ISSET(ptr->sock, &rset))
+	int roomNumber = CRoomMgr::GetInst()->GetRoomNumber(sock->sock);
+	const char* name = CRoomMgr::GetInst()->GetClientName(sock->sock, roomNumber);
+	if (FD_ISSET(sock->sock, &rset))
 	{
 		// 데이터 받기
 		char temp;
-		int retVal = recv(ptr->sock, &temp, 1, 0);
+		int retVal = recv(sock->sock, &temp, 1, 0);
 		if (retVal == SOCKET_ERROR)
 		{
 			printf("recv SOCKET_ERROR\n");
-			RemoveSocketInfo(ptr->sock);
-			CRoomMgr::GetInst()->RemoveClient(ptr->sock, roomNumber);
+			RemoveSocketInfo(sock->sock);
+			CRoomMgr::GetInst()->RemoveClient(sock->sock, roomNumber);
 			return FALSE;
 		}
 		else if (retVal == 0)
 		{
 			printf("recv 0\n");
-			RemoveSocketInfo(ptr->sock);
-			CRoomMgr::GetInst()->RemoveClient(ptr->sock, roomNumber);
+			RemoveSocketInfo(sock->sock);
+			CRoomMgr::GetInst()->RemoveClient(sock->sock, roomNumber);
 			return FALSE;
 		}
 		if (temp == '\n')
 		{
 			// 지금까지 모은 문자열을 바탕으로 명령어 체크
-			m_eMsgType = CheckMessage(ptr->sock, ptr->buf, ptr->bufCount, roomNumber);
+			m_eMsgType = CheckMessage(sock->sock, sock->buf, sock->bufCount, roomNumber);
 
-			ptr->buf[ptr->bufCount++] = temp;
-			ptr->buf[ptr->bufCount] = '\0';
+			sock->buf[sock->bufCount++] = temp;
+			sock->buf[sock->bufCount] = '\0';
 
 			// 초기화
-			ptr->recvBytes = ptr->bufCount;
-			ptr->bufCount = 0;
+			sock->recvBytes = sock->bufCount;
+			sock->bufCount = 0;
 
 			// 받은 데이터 출력
 			addrLen = sizeof(clientAddr);
-			getpeername(ptr->sock, (SOCKADDR*)&clientAddr, &addrLen);
+			getpeername(sock->sock, (SOCKADDR*)&clientAddr, &addrLen);
 			//ptr->buf[retVal] = '\0';
 
 			char buf[16]; // 클라이언트 IP 주소
 			inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
-			printf("[TCP %s:%d] [%s] %s", buf, ntohs(clientAddr.sin_port), name, ptr->buf);
+			printf("[TCP %s:%d] [%s] %s", buf, ntohs(clientAddr.sin_port), name, sock->buf);
 
 		}
 		else
 		{
 			// 조립
-			ptr->buf[ptr->bufCount++] = temp;
-			ptr->buf[ptr->bufCount] = '\0';
+			sock->buf[sock->bufCount++] = temp;
+			sock->buf[sock->bufCount] = '\0';
 		}
 	}
 	return TRUE;
 }
 
-bool CNetwork::BroadCast(const CClient * client, const int& roomNumber)
+bool CNetwork::BroadCast(SOCKETINFO* sock)
 {
-	SOCKETINFO* ptr = m_mapClient.find(client->GetID())->second;
-	const char* name = CRoomMgr::GetInst()->GetClientName(ptr->sock, roomNumber);
-	if (FD_ISSET(ptr->sock, &wset))
+	int roomNumber = CRoomMgr::GetInst()->GetRoomNumber(sock->sock);
+	const char* name = CRoomMgr::GetInst()->GetClientName(sock->sock, roomNumber);
+	if (FD_ISSET(sock->sock, &wset))
 	{
 		// 데이터 보내기
 		for (auto& otherClient : m_mapClient)
 		{
 			// 자기자신
-			if (otherClient.first == ptr->sock)
+			if (otherClient.first == sock->sock)
 			{
 				string msg{ "[Me] " };
 				Send(otherClient.first, msg.c_str(), msg.size(), 0);
@@ -232,12 +230,18 @@ bool CNetwork::BroadCast(const CClient * client, const int& roomNumber)
 			else
 			{
 				// 기본적으로 같은 방에 있는 사람들에게만 브로드캐스팅
+				if (CRoomMgr::GetInst()->GetRoomNumber(otherClient.first) != roomNumber)
+				{
+					sock->recvBytes = 0;
+					sock->sendBytes = 0;
+					continue;
+				}
 
 				// 아이디가 없다 == 로그인이 되어있지 않는 상태
 				if (name[0] == '\0')
 				{
-					ptr->recvBytes = 0;
-					ptr->sendBytes = 0;
+					sock->recvBytes = 0;
+					sock->sendBytes = 0;
 					continue;
 				}
 
@@ -249,12 +253,12 @@ bool CNetwork::BroadCast(const CClient * client, const int& roomNumber)
 				msg += name;
 				msg += "] ";
 				Send(otherClient.first, msg.c_str(), msg.size(), 0);
-				Send(otherClient.first, ptr->buf, ptr->recvBytes - ptr->sendBytes, 0);
+				Send(otherClient.first, sock->buf, sock->recvBytes - sock->sendBytes, 0);
 			}
 		}
 
-		ptr->recvBytes = 0;
-		ptr->sendBytes = 0;
+		sock->recvBytes = 0;
+		sock->sendBytes = 0;
 	}
 	return TRUE;
 }

@@ -37,8 +37,8 @@ public:
 	bool FD_Set();
 	bool Select();
 	bool Accept();
-	bool DataRecv(const CClient* client, const int& roomNumber);
-	bool BroadCast(const CClient* client, const int& roomNumber); // 
+	bool DataRecv(SOCKETINFO* sock);
+	bool BroadCast(SOCKETINFO* sock); // 
 
 	// 해당 소켓에 메시지 전송
 	bool Send(const SOCKET& sock, const char* msg, const int& size, const int& roomNumber);
