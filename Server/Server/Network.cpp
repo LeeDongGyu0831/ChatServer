@@ -285,74 +285,78 @@ MSG_TYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const i
 {
 	MSG_TYPE eMsgType = MSG_TYPE::NORMAL;
 
+	// 명령어가 아니라면 바로 리턴하여 브로드캐스팅을 할 수 있도록
 	if (message[0] != '/')
 		return eMsgType;
 
 	// 명령어 조건 X
-	if (bufCount < 3)
+	// 명령어는 /r, /l 등등으로 시작하기 때문에 MINIMUM 보다 작으면 성립이 불가능
+	if (bufCount < MINIMUM_LEN)
 		return eMsgType;
 
 	eMsgType = MSG_TYPE::NOTHING;
 
 	// 메시지 공백 기준으로 분할
 	vector<string> vecMsg = SplitString(message, ' ');
+	// 0번 인덱스에는 /r, /l, /c 등등..
+	// 1번 인덱스부터 단어들 나열
 
 	// 로그인 명령
-	if (message[1] == COMMAND_TYPE::LOGIN)
+	if (message[COMMAND] == COMMAND_TYPE::LOGIN)
 	{
 		eMsgType = Login(sock, vecMsg, roomNumber);
 	}
 
 	// 명령어 안내 출력
-	else if (message[1] == COMMAND_TYPE::HELP)
+	else if (message[COMMAND] == COMMAND_TYPE::HELP)
 	{
 		eMsgType = Help(sock, vecMsg, roomNumber);
 	}
 
 	// 대화방 목록 출력
-	else if (message[1] == COMMAND_TYPE::SHOWROOMALL)
+	else if (message[COMMAND] == COMMAND_TYPE::SHOWROOMALL)
 	{
 		eMsgType = ShowRoomAll(sock, vecMsg, roomNumber);
 	}
 
 	// 대화방 정보 출력
-	else if (message[1] == COMMAND_TYPE::SHOWROOM)
+	else if (message[COMMAND] == COMMAND_TYPE::SHOWROOM)
 	{
 		eMsgType = ShowRoom(sock, vecMsg, roomNumber);
 	}
 
 	// 대화방 생성
-	else if (message[1] == COMMAND_TYPE::CREATEROOM)
+	else if (message[COMMAND] == COMMAND_TYPE::CREATEROOM)
 	{
 		eMsgType = CreateRoom(sock, vecMsg, roomNumber);
 	}
 	
 	// 대화방 참가
-	else if (message[1] == COMMAND_TYPE::JOINROOM)
+	else if (message[COMMAND] == COMMAND_TYPE::JOINROOM)
 	{
 		eMsgType = JoinRoom(sock, vecMsg, roomNumber);
 	}
 
 	// 대화방 폭파
-	else if (message[1] == COMMAND_TYPE::DESTROYROOM)
+	else if (message[COMMAND] == COMMAND_TYPE::DESTROYROOM)
 	{
 		eMsgType = DestoryRoom(sock, vecMsg, roomNumber);
 	}
 
 	// 이용자 목록 출력
-	else if (message[1] == COMMAND_TYPE::SHOWUSERALL)
+	else if (message[COMMAND] == COMMAND_TYPE::SHOWUSERALL)
 	{
 		eMsgType = ShowUserAll(sock, vecMsg, roomNumber);
 	}
 
 	// 이용자 검색
-	else if (message[1] == COMMAND_TYPE::SHOWUSER)
+	else if (message[COMMAND] == COMMAND_TYPE::SHOWUSER)
 	{
 		eMsgType = ShowUser(sock, vecMsg, roomNumber);
 	}
 
 	// 쪽지 보내기
-	else if (message[1] == COMMAND_TYPE::SENDMSG)
+	else if (message[COMMAND] == COMMAND_TYPE::SENDMSG)
 	{
 		eMsgType = SendMsg(sock, vecMsg, roomNumber);
 	}
@@ -452,11 +456,12 @@ MSG_TYPE CNetwork::ShowRoomAll(const SOCKET & sock, const vector<string>& vecMsg
 	}
 	Send(sock, msg.c_str(), msg.size(), 0);
 
-	return MSG_TYPE::SHOWROOMALL_MSG;
+	return MSG_TYPE::SHOWROOMALL_MSG;;
 }
 
 MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
+	// /명령어 [방번호]
 	int number = atoi(vecMsg[1].c_str());
 	const CRoom* room = CRoomMgr::GetInst()->GetRoom(number);
 	if (NULL == room)
@@ -496,19 +501,21 @@ MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 
 MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
+	// /명령어 [최대인원] [방제목] 이기 때문에 1번 인덱스에 최대인원 문자열이 담겨있음
 	int maxUser = atoi(vecMsg[1].c_str());
 	string strRoomName = "";
-	for (int i = 2; i < vecMsg.size(); ++i)
+	for (size_t i = 2; i < vecMsg.size(); ++i)
 	{
+		// 띄어쓰기도 포함하여 제목을 달기 위해서
 		strRoomName += vecMsg[i];
 		if (i + 1 < vecMsg.size())
 			strRoomName += " ";
 	}
-	cout << strRoomName.c_str() << endl;
-	string msg;
+	
 	// 문자열이 섞이는 등 이상하게 입력 받은 경우
 	if (maxUser == 0)
 	{
+		string msg;
 		msg = "잘못된 명령어 입니다. 다시 확인해주세요.\n\r";
 		Send(sock, msg.c_str(), msg.size(), roomNumber);
 		return MSG_TYPE::NOTHING;
@@ -518,11 +525,12 @@ MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg,
 	// 방 생성 실패
 	if (FALSE == result)
 	{
+		string msg;
 		msg = "대화방을 생성할 수 없습니다.\n\r";
 		Send(sock, msg.c_str(), msg.size(), roomNumber);
 		return MSG_TYPE::NOTHING;
 	}
-
+	string msg;
 	msg += strRoomName;
 	msg += " [";
 	msg += to_string(maxUser);
@@ -534,6 +542,7 @@ MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg,
 
 MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
+	// /명령어 [방번호]
 	int newRoomNumber = atoi(vecMsg[1].c_str());
 	bool result = CRoomMgr::GetInst()->JoinRoom(sock, roomNumber, newRoomNumber);
 	// 정원 초과

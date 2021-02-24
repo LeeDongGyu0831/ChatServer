@@ -50,7 +50,6 @@ CClient * CRoom::GetClient(const int & id)
 	if (iter == m_mapClient.end())
 	{
 		// 여기에는 해당 클라가 없음
-		cout << "Wrong Search Client [" << m_nNumber << "]\n";
 		return NULL;
 	}
 	return m_mapClient.find(id)->second;
@@ -94,7 +93,7 @@ void CRoom::AddClient(const int& id, CClient * client)
 {
 	m_mapClient[id] = client;
 	m_mapClient[id]->SetRoomNumber(m_nNumber);
-	ChangeCount(1); // 인원 1명 증가
+	ChangeCurrentUserCount(1); // 인원 1명 증가
 }
 
 bool CRoom::RemoveClient(const int & id)
@@ -104,15 +103,16 @@ bool CRoom::RemoveClient(const int & id)
 	{
 		return FALSE;
 	}
-	ChangeCount(-count);
+	ChangeCurrentUserCount(-count);
 	return TRUE;
 }
 
-bool CRoom::ChangeCount(int count)
+bool CRoom::ChangeCurrentUserCount(int count)
 {
-	m_nCurrentUser += count;
+	// 정원 초과 or 0명 보다 떨어지는 경우 체크
 	if (m_nCurrentUser + count > m_nMaxUser || m_nCurrentUser + count < 0)
-		cout << m_nCurrentUser + count << " in (" << m_nNumber << ") " << m_strName.c_str() << endl;
+		return FALSE;
 
+	m_nCurrentUser += count;
 	return TRUE;
 }

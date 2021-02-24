@@ -49,6 +49,6 @@ public:
 	// 해당 클라이언트 제거
 	bool RemoveClient(const int& id);
 
-	bool ChangeCount(int count);
+	bool ChangeCurrentUserCount(int count);
 };
 
