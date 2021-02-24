@@ -16,6 +16,7 @@ class CNetwork
 	SOCKET m_Sock;
 
 	unordered_map<SOCKET, SOCKETINFO*> m_mapClient;
+	int m_nClientCount;
 
 	// 받은 메시지가 일반 채팅 메시지인지 명령어 커맨드인지 Enum값
 	MSG_TYPE m_eMsgType;

@@ -4,8 +4,9 @@
 #include "Client.h"
 #include "Room.h"
 
-CNetwork::CNetwork()
+CNetwork::CNetwork() : m_nClientCount(0)
 {
+	m_mapClient.clear();
 }
 
 
@@ -132,6 +133,10 @@ bool CNetwork::Select()
 
 bool CNetwork::Accept()
 {
+	// 한계 초과
+	if (m_nClientCount >= MAXUSER)
+		return FALSE;
+
 	// 소켓 셋 검사(1) : 클라이언트 접속 수용
 	if (FD_ISSET(m_Sock, &m_rset))
 	{
@@ -154,6 +159,7 @@ bool CNetwork::Accept()
 				return FALSE;
 		}
 	}
+	m_nClientCount++;
 	return TRUE;
 }
 
@@ -184,7 +190,12 @@ bool CNetwork::DataRecv(SOCKETINFO* sock)
 		{
 			// 지금까지 모은 문자열을 바탕으로 명령어 체크
 			m_eMsgType = CheckMessage(sock->sock, sock->buf, sock->bufCount, roomNumber);
-
+			if (MSG_TYPE::NOTHING == m_eMsgType)
+			{
+				string msg;
+				msg = "잘못된 명령어 입니다. 다시 확인해주세요.\n\r";
+				Send(sock->sock, msg.c_str(), msg.size(), roomNumber);
+			}
 			sock->buf[sock->bufCount++] = temp;
 			sock->buf[sock->bufCount] = '\0';
 
@@ -516,9 +527,6 @@ MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg,
 	// 문자열이 섞이는 등 이상하게 입력 받은 경우
 	if (maxUser == 0)
 	{
-		string msg;
-		msg = "잘못된 명령어 입니다. 다시 확인해주세요.\n\r";
-		Send(sock, msg.c_str(), msg.size(), roomNumber);
 		return MSG_TYPE::NOTHING;
 	}
 
@@ -526,9 +534,9 @@ MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg,
 	// 방 생성 실패
 	if (FALSE == result)
 	{
-		string msg;
-		msg = "대화방을 생성할 수 없습니다.\n\r";
-		Send(sock, msg.c_str(), msg.size(), roomNumber);
+		//string msg;
+		//msg = "대화방을 생성할 수 없습니다.\n\r";
+		//Send(sock, msg.c_str(), msg.size(), roomNumber);
 		return MSG_TYPE::NOTHING;
 	}
 	string msg;
@@ -549,14 +557,22 @@ MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 	// 정원 초과
 	if (FALSE == result)
 	{
-		cout << "정원 초과\n\r" << endl;
-		return MSG_TYPE::JOINROOM_MSG;
+
+		return MSG_TYPE::NOTHING;
 	}
 	return MSG_TYPE::JOINROOM_MSG;
 }
 
 MSG_TYPE CNetwork::DestoryRoom(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
+	// /명령어 [방번호]
+	int destoryNumber = atoi(vecMsg[KEYWORD].c_str());
+	bool result = CRoomMgr::GetInst()->DestroyRoom(destoryNumber);
+	// 폭파 실패
+	if (FALSE == result)
+	{
+		return MSG_TYPE::NOTHING;
+	}
 	return MSG_TYPE::DESTROYROOM_MSG;
 }
 
@@ -619,4 +635,5 @@ void CNetwork::RemoveSocketInfo(const SOCKET& socket)
 	m_mapClient.erase(socket);
 	CRoomMgr::GetInst()->RemoveClient(socket);
 	closesocket(socket);
+	m_nClientCount--;
 }

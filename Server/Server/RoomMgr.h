@@ -21,7 +21,6 @@ public:
 	bool JoinRoom(const int& id, const int& roomNumber, const int& newRoomNumber);
 	// 대화방 폭파
 	bool DestroyRoom(const int& number);
-	void ShowRoomInfo(const int& number); // 미구현, 삭제예정
 
 	// 해당 방번호 클라이언트 목록 반환
 	unordered_map<int, CClient*> GetClients(const int& roomNumber);
@@ -42,7 +41,7 @@ public:
 	// 해당 대화방에 클라이언트 추가
 	bool AddClient(const int& id, const int& roomNumber);
 	// 클라이언트 대화방 이동
-	bool MoveClient(const CClient* client, const int& currentRoomNumber, const int& destRoomNumber);
+	// bool MoveClient(const CClient* client, const int& currentRoomNumber, const int& destRoomNumber);
 	// 클라이언트 삭제
 	bool RemoveClient(const int& id);
 	bool RemoveClient(const int& id, const int& roomNumber);

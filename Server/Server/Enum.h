@@ -31,17 +31,25 @@ namespace _MSG
 		JOINROOM_MSG,
 		DESTROYROOM_MSG,
 		NOTHING,
-
 		END,
 	};
 };
-using MSG_TYPE = _MSG::TYPE;
 
-//enum ROOM_TYPE 
-//{
-//	LOGIN_ROOM,
-//	MAIN_ROOM,
-//};
+namespace _ROOM
+{
+	enum class TYPE
+	{
+		LOGIN_ROOM,
+		MAIN_ROOM,
+
+		NORMAL_ROOM,
+
+		END,
+	};
+}
+
+using MSG_TYPE = _MSG::TYPE;
+using ROOM_TYPE = _ROOM::TYPE;
 
 enum class EVENT_TYPE
 {

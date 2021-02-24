@@ -1,5 +1,7 @@
 #pragma once
 #define SERVERPORT 9000
+#define MAXUSER 1000
+
 #define BUFSIZE 512
 #define COMMAND 1
 #define IP_ADDR_LEN 16

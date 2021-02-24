@@ -21,7 +21,8 @@ void CRoomMgr::Init()
 
 	cout << "RoomManager Init" << endl;
 
-	CreateRoom("MainRoom", 64);
+	CreateRoom("LoginRoom", MAXUSER);
+	CreateRoom("MainRoom", MAXUSER);
 }
 
 bool CRoomMgr::CreateRoom(const char* strRoomName, const int& maxUser)
@@ -43,8 +44,10 @@ bool CRoomMgr::CreateRoom(const char* strRoomName, const int& maxUser)
 
 bool CRoomMgr::JoinRoom(const int& id, const int& roomNumber, const int& newRoomNumber)
 {
-	int currentUser = m_mapRoom.find(newRoomNumber)->second->GetCurrentUser();
-	int maxUser = m_mapRoom.find(newRoomNumber)->second->GetMaxUser();
+	// 참가하려는 대화방
+	CRoom* pDestRoom = m_mapRoom.find(newRoomNumber)->second;
+	int currentUser = pDestRoom->GetCurrentUser();
+	int maxUser = pDestRoom->GetMaxUser();
 
 	// 정원 초과
 	if (currentUser >= maxUser)
@@ -55,7 +58,7 @@ bool CRoomMgr::JoinRoom(const int& id, const int& roomNumber, const int& newRoom
 		return FALSE;
 
 	CClient* client = GetClient(id, roomNumber);
-	m_mapRoom.find(newRoomNumber)->second->AddClient(id, client);
+	pDestRoom->AddClient(id, client);
 	m_mapRoom.find(roomNumber)->second->RemoveClient(id);
 
 	return TRUE;
@@ -63,11 +66,29 @@ bool CRoomMgr::JoinRoom(const int& id, const int& roomNumber, const int& newRoom
 
 bool CRoomMgr::DestroyRoom(const int& number)
 {
-	return false;
-}
+	// NORMAL_ROOM은 유저가 생성한 방
+	// 그 이하는 기본적으로 서버에서 필수로 들고있어야 하는 방
+	if (number < int(ROOM_TYPE::NORMAL_ROOM))
+		return FALSE;
+	// 없는 방인가?
+	if (FALSE == FindRoom(number))
+		return FALSE;
 
-void CRoomMgr::ShowRoomInfo(const int& number)
-{
+	int currentUser = m_mapRoom.find(number)->second->GetCurrentUser();
+
+	// 메인 대화방으로 이동
+	CRoom* pMainRoom = m_mapRoom.find(int(ROOM_TYPE::MAIN_ROOM))->second;
+	unordered_map<int, CClient*> mapClient = GetRoom(number)->GetClients();
+	for (auto& client : mapClient)
+	{
+		int id = client.second->GetID();
+		pMainRoom->AddClient(id, client.second);
+
+		// 기존 대화방 클라이언트 모두 삭제
+		m_mapRoom.find(number)->second->RemoveClient(id);
+	}
+	m_mapRoom.erase(number);
+	return TRUE;
 }
 
 unordered_map<int, CClient*> CRoomMgr::GetClients(const int& roomNumber)
@@ -203,11 +224,11 @@ bool CRoomMgr::AddClient(const int& id, const int& roomNumber)
 	return TRUE;
 }
 
-bool CRoomMgr::MoveClient(const CClient * client, const int& currentRoomNumber, const int& destRoomNumber)
-{
-	// 클라이언트 대화방 이동
-	return TRUE;
-}
+//bool CRoomMgr::MoveClient(const CClient * client, const int& currentRoomNumber, const int& destRoomNumber)
+//{
+//	// 클라이언트 대화방 이동
+//	return TRUE;
+//}
 
 bool CRoomMgr::RemoveClient(const int& id)
 {
