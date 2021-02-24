@@ -608,17 +608,84 @@ MSG_TYPE CNetwork::DestoryRoom(const SOCKET & sock, const vector<string>& vecMsg
 
 MSG_TYPE CNetwork::ShowUserAll(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
+	vector<int> vecNum = CRoomMgr::GetInst()->GetRoomNumberArray();
+	for (auto& num : vecNum)
+	{
+		if (num == int(ROOM_TYPE::LOGIN_ROOM))
+			continue;
+		unordered_map<int, CClient*> mapClient = CRoomMgr::GetInst()->GetClients(num);
+		CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
+		for (auto& client : mapClient)
+		{
+			string msg;
+			msg += "아이디 : [";
+			msg += client.second->GetName();
+			msg += "] \t\t대화방 번호 : [";
+			msg += to_string(num);
+			msg += "] ";
+			msg += room->GetRoomName();
+			msg += " (";
+			msg += to_string(room->GetCurrentUser());
+			msg += "/";
+			msg += to_string(room->GetMaxUser());
+			msg += ")\n\r";
 
+			Send(sock, msg.c_str(), msg.size());
+		}
+	}
 	return MSG_TYPE::SHOWUSERALL_MSG;
 }
 
 MSG_TYPE CNetwork::ShowUser(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
+	CClient* client = CRoomMgr::GetInst()->GetClientByName(vecMsg[KEYWORD].c_str());
+	if (NULL == client)
+	{
+		// 해당 유저를 찾을 수 없음
+		return  MSG_TYPE::SHOWUSER_MSG;
+	}
+	int num = client->GetRoomNumber();
+	CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
+	string msg;
+	msg += "아이디 : [";
+	msg += client->GetName();
+	msg += "] \t\t대화방 번호 : [";
+	msg += to_string(num);
+	msg += "] ";
+	msg += room->GetRoomName();
+	msg += " (";
+	msg += to_string(room->GetCurrentUser());
+	msg += "/";
+	msg += to_string(room->GetMaxUser());
+	msg += ")\n\r";
+
+	Send(sock, msg.c_str(), msg.size());
 	return MSG_TYPE::SHOWUSER_MSG;
 }
 
 MSG_TYPE CNetwork::SendMsg(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
+	CClient* client = CRoomMgr::GetInst()->GetClientByName(vecMsg[KEYWORD].c_str());
+	if (NULL == client)
+	{
+		// 해당 유저를 찾을 수 없음
+		return  MSG_TYPE::NOTHING;
+	}
+	int num = client->GetRoomNumber();
+	CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
+	
+	string msg = "[";
+	msg += client->GetName();
+	msg += "] ";
+	for (int i = KEYWORD + 1; i < vecMsg.size(); ++i)
+	{
+		msg += vecMsg[i];
+		if (i + 1 < vecMsg.size())
+			msg += " ";
+	}
+	msg += "\n\r";
+	Send(client->GetID(), msg.c_str(), msg.size());
+
 	return MSG_TYPE::SENDMSG_MSG;
 }
 

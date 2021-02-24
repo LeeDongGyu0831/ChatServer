@@ -6,10 +6,10 @@ class CClient;
 class CRoomMgr
 {
 	// 방 번호를 Key로 매핑하여 Hash로 관리함
-	unordered_map<int, CRoom*> m_mapRoom;
-	list<int> m_listRoomNumber;
+	unordered_map<int, CRoom*>		m_mapRoom;
 
-	int m_nRoomCount; // 대화방 갯수
+	stack<int>						m_stackNumberPool; // 빈 번호를 빠르게 받을 수 있는 Pool
+	int								m_nMaxRoomNumber; // Pool이 없을 경우 해당 변수를 이용하여 번호 부여
 
 	SINGLE(CRoomMgr);
 

@@ -17,7 +17,6 @@ CRoomMgr::~CRoomMgr()
 void CRoomMgr::Init()
 {
 	m_mapRoom.clear();
-	m_nRoomCount = 0;
 
 	cout << "\tRoomManager Init" << endl;
 
@@ -27,17 +26,28 @@ void CRoomMgr::Init()
 
 bool CRoomMgr::CreateRoom(const char* strRoomName, const int& maxUser)
 {
-	CRoom* room = new CRoom(strRoomName, m_nRoomCount, maxUser);
+	int nRoomCount;
+	// Pool이 비어있을 경우 맨 뒤에서 이어붙이면서 시작
+	if (m_stackNumberPool.empty())
+	{
+		m_nMaxRoomNumber = m_mapRoom.size();
+		nRoomCount = m_nMaxRoomNumber;
+	}
+	else
+	{
+		nRoomCount = m_stackNumberPool.top();
+		m_stackNumberPool.pop();
+	}
+
+	CRoom* room = new CRoom(strRoomName, nRoomCount, maxUser);
 	if (NULL == room)
 	{
 		cout << "[오류] 메모리가 부족합니다! \n";
 		exit(1);
 	}
-	m_mapRoom[m_nRoomCount] = room;
 
-	cout << "(" << m_nRoomCount <<") " << strRoomName << " (" << maxUser << ") Create" << endl;
-
-	m_nRoomCount++;
+	m_mapRoom[nRoomCount] = room;
+	cout << "(" << nRoomCount <<") " << strRoomName << " (" << maxUser << ") Create" << endl;
 
 	return TRUE;
 }
@@ -88,6 +98,7 @@ bool CRoomMgr::DestroyRoom(const int& number)
 		m_mapRoom.find(number)->second->RemoveClient(id);
 	}
 	m_mapRoom.erase(number);
+	m_stackNumberPool.push(number);
 	return TRUE;
 }
 
@@ -188,7 +199,7 @@ bool CRoomMgr::FindRoom(const int & roomNumber)
 vector<int> CRoomMgr::GetRoomNumberArray() const
 {
 	vector<int> vecNumber;
-	vecNumber.reserve(m_nRoomCount);
+	vecNumber.reserve(m_mapRoom.size());
 	for (auto& room : m_mapRoom)
 	{
 		vecNumber.emplace_back(room.second->GetNumber());
@@ -280,7 +291,7 @@ bool CRoomMgr::RemoveClient(const int& id, const int& roomNumber)
 
 int CRoomMgr::GetRoomCount() const
 {
-	return m_nRoomCount;
+	return m_mapRoom.size();
 }
 
 int CRoomMgr::GetRoomNumber(const int & id)

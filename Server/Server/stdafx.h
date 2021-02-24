@@ -11,6 +11,7 @@ using namespace std;
 #include <vector>
 #include <list>
 #include <string>
+#include <stack>
 
 #include <algorithm>
 
