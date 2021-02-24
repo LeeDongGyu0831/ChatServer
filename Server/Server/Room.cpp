@@ -12,7 +12,7 @@ CRoom::~CRoom()
 
 int CRoom::GetNumber() const
 {
-	return m_nMaxUser;
+	return m_nNumber;
 }
 
 int CRoom::GetMaxUser() const

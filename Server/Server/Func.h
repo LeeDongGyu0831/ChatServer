@@ -49,5 +49,4 @@ void Safe_Delete_List(list<T*> _list)
 }
 
 const char* DeleteChr(char str[], char word);
-
 vector<string> SplitString(string str, char word);

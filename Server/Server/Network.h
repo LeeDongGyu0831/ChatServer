@@ -36,8 +36,9 @@ public:
 	bool FD_Set();
 	bool Select();
 	bool Accept();
-	bool Recv(CClient* client, int roomNumber);
-	bool Send(CClient* client, int roomNumber);
+	bool DataRecv(CClient* client, int roomNumber);
+	bool BroadCast(CClient* client, int roomNumber);
+	bool Send(const SOCKET& sock, const char* msg, const int size, int roomNumber);
 
 	// 家南 包府 窃荐
 	BOOL AddSocketInfo(SOCKET sock);

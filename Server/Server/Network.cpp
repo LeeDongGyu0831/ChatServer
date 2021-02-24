@@ -82,13 +82,13 @@ bool CNetwork::Update()
 	// 각 방을 순회하면서 방에 있는 클라이언트들과 통신
 	for (int i = 0; i < CRoomMgr::GetInst()->GetRoomCount(); ++i)
 	{
-		for (auto& client : CRoomMgr::GetInst()->GetClient(i))
+		for (auto& client : CRoomMgr::GetInst()->GetClientList(i))
 		{
-			bool result = Recv(client, i);
+			bool result = DataRecv(client, i);
 			if (FALSE == result)
 				continue;
 
-			result = Send(client, i);
+			result = BroadCast(client, i);
 			if (FALSE == result)
 				continue;
 		}
@@ -158,7 +158,7 @@ bool CNetwork::Accept()
 	return TRUE;
 }
 
-bool CNetwork::Recv(CClient* client, int roomNumber)
+bool CNetwork::DataRecv(CClient* client, int roomNumber)
 {
 	SOCKETINFO* ptr = m_mapClient.find(client->GetID())->second;
 	const char* name = CRoomMgr::GetInst()->GetClientName(ptr->sock, roomNumber);
@@ -212,7 +212,7 @@ bool CNetwork::Recv(CClient* client, int roomNumber)
 	return TRUE;
 }
 
-bool CNetwork::Send(CClient * client, int roomNumber)
+bool CNetwork::BroadCast(CClient * client, int roomNumber)
 {
 	SOCKETINFO* ptr = m_mapClient.find(client->GetID())->second;
 	const char* name = CRoomMgr::GetInst()->GetClientName(ptr->sock, roomNumber);
@@ -225,14 +225,7 @@ bool CNetwork::Send(CClient * client, int roomNumber)
 			if (otherClient.first == ptr->sock)
 			{
 				string msg{ "[Me] " };
-				int retVal = send(otherClient.first, msg.c_str(), msg.size(), 0);
-				if (retVal == SOCKET_ERROR)
-				{
-					printf("send() SOCKET_ERROR\n");
-					RemoveSocketInfo(ptr->sock);
-					CRoomMgr::GetInst()->RemoveClient(ptr->sock, roomNumber);
-					break;
-				}
+				Send(otherClient.first, msg.c_str(), msg.size(), 0);
 				continue;
 			}
 			else
@@ -254,27 +247,31 @@ bool CNetwork::Send(CClient * client, int roomNumber)
 				string msg = "[";
 				msg += name;
 				msg += "] ";
-				int retVal = send(otherClient.first, msg.c_str(), msg.size(), 0);
-				if (retVal == SOCKET_ERROR)
-				{
-					printf("send() SOCKET_ERROR\n");
-					RemoveSocketInfo(ptr->sock);
-					CRoomMgr::GetInst()->RemoveClient(ptr->sock, roomNumber);
-					break;
-				}
-				retVal = send(otherClient.first, ptr->buf, ptr->recvBytes - ptr->sendBytes, 0);
-				if (retVal == SOCKET_ERROR)
-				{
-					printf("send() SOCKET_ERROR\n");
-					RemoveSocketInfo(ptr->sock);
-					CRoomMgr::GetInst()->RemoveClient(ptr->sock, roomNumber);
-					break;
-				}
+				Send(otherClient.first, msg.c_str(), msg.size(), 0);
+				Send(otherClient.first, ptr->buf, ptr->recvBytes - ptr->sendBytes, 0);
 			}
 		}
 
 		ptr->recvBytes = 0;
 		ptr->sendBytes = 0;
+	}
+	return TRUE;
+}
+
+bool CNetwork::Send(const SOCKET& sock, const char * msg, const int size, int roomNumber = -1)
+{
+	int retVal = send(sock, msg, size, 0);
+	if (retVal == SOCKET_ERROR)
+	{
+		printf("send() SOCKET_ERROR\n");
+		RemoveSocketInfo(sock);
+		
+		if(roomNumber != -1)
+			CRoomMgr::GetInst()->RemoveClient(sock, roomNumber);
+		// 해당 클라이언트 검색 후 제거
+		else
+			CRoomMgr::GetInst()->RemoveClient(sock);
+		return FALSE;
 	}
 	return TRUE;
 }
@@ -292,9 +289,9 @@ MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roo
 			return eMsgType;
 
 		// 메시지 공백 기준으로 분할
-		vector<string> msg = SplitString(message, ' ');
+		vector<string> vecMsg = SplitString(message, ' ');
 		cout << "명령어 분할\n\r";
-		for (auto& str : msg)
+		for (auto& str : vecMsg)
 			cout << str.c_str() << "\n\r";
 
 		// 로그인 명령
@@ -314,6 +311,7 @@ MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roo
 			// Enum.h 에 정의한 명령어 키에 대응되어 출력되게끔
 			string command = "/";
 			string msg = "=========================================\n\r";
+			msg.reserve(50);
 
 			msg += command + char(COMMAND::HELP);
 			msg += "\t\t\t명령어 안내\n\r";
@@ -354,14 +352,62 @@ MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roo
 			msg += "\t\t\t끝내기\n\r";
 
 			msg += "=========================================\n\r";
-			send(sock, msg.c_str(), msg.size(), 0);
+			Send(sock, msg.c_str(), msg.size(), 0);
 			eMsgType = MSGTYPE::HELP_MSG;
 		}
 
 		// 대화방 목록 출력
+		else if (message[1] == COMMAND::SHOWROOMALL)
+		{
+			vector<int> vecNumber = CRoomMgr::GetInst()->GetRoomNumberArray();
+			string msg;
+			msg.reserve(50);
+			for (auto& num : vecNumber)
+			{
+				CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
+				msg += "[";
+				msg += to_string(room->GetNumber());
+				msg += "] ";
+				msg += room->GetRoomName();
+				msg += " [";
+				msg += to_string(room->GetCurrentUser());
+				msg += "/";
+				msg += to_string(room->GetMaxUser());
+				msg += "]\n\r";
+			}
+			Send(sock, msg.c_str(), msg.size(), 0);
+			eMsgType = MSGTYPE::SHOWROOMALL_MSG;
+		}
+
+		// 대화방 정보 출력
 		else if (message[1] == COMMAND::SHOWROOM)
 		{
-			CRoom* room = CRoomMgr::GetInst()->GetRoom(roomNumber);
+			int number = atoi(vecMsg[1].c_str());
+			CRoom* room = CRoomMgr::GetInst()->GetRoom(number);
+
+			string msg;
+			msg.reserve(50);
+
+			msg += "[";
+			msg += to_string(room->GetNumber());
+			msg += "] ";
+			msg += room->GetRoomName();
+			msg += " [";
+			msg += to_string(room->GetCurrentUser());
+			msg += "/";
+			msg += to_string(room->GetMaxUser());
+			msg += "]\n\r";
+
+			list<CClient*> listClient = CRoomMgr::GetInst()->GetClientList(number);
+			for (auto& client : listClient)
+			{
+				msg += "[";
+				msg += client->GetName();
+				msg += "]\n\r";
+			}
+
+			Send(sock, msg.c_str(), msg.size(), 0);
+			eMsgType = MSGTYPE::SHOWROOM_MSG;
 		}
 
 
@@ -396,7 +442,7 @@ BOOL CNetwork::AddSocketInfo(SOCKET sock)
 	m_mapClient[ptr->sock] = ptr;
 
 	string msg { "=========================================\n\r\t환영합니다 채팅서버 입니다.\n\n\r\t로그인 명령어(/l)을 사용해주세요.\n\n\n\r\t명령어 안내(/h)\n\r=========================================\n\r[Me] " };
-	send(ptr->sock, msg.c_str(), msg.size(), 0);
+	Send(ptr->sock, msg.c_str(), msg.size(), 0);
 
 	return TRUE;
 }

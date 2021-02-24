@@ -26,7 +26,7 @@ void CRoomMgr::Init()
 
 	cout << "RoomManager Init" << endl;
 
-	CreateRoom("Main Room", 64);
+	CreateRoom("MainRoom", 64);
 }
 
 bool CRoomMgr::CreateRoom(const char* strRoomName, int maxUser)
@@ -57,7 +57,7 @@ void CRoomMgr::ShowRoomInfo(int number)
 {
 }
 
-list<CClient*> CRoomMgr::GetClient(int roomNumber) const
+list<CClient*> CRoomMgr::GetClientList(int roomNumber) const
 {
 	// TODO: 여기에 반환 구문을 삽입합니다.
 	return m_mapClient.find(roomNumber)->second;
@@ -78,15 +78,17 @@ CClient * CRoomMgr::GetClient(int id, int roomNumber) const
 
 CClient * CRoomMgr::GetClientByName(const char * name) const
 {
-	/*for (auto& clients : m_mapClient)
-	auto client = find_if(clients->second.begin(), clients->second.end(), [&](const CClient* cl) {
-		if (cl->GetName() == name)
-			return true;
-		return false;
-	});
-	if (client == clients->second.end())
-		return NULL;
-	return (*client);*/
+	//for (auto& clients : m_mapClient)
+	//{
+	//	auto client = find_if(clients->second.begin(), clients->second.end(), [&](const CClient* cl) {
+	//		if (cl->GetName() == name)
+	//			return true;
+	//		return false;
+	//	});
+	//	if (client == clients->second.end())
+	//		return NULL;
+	//	return (*client);
+	//}
 	return NULL;
 }
 
@@ -106,6 +108,17 @@ const char * CRoomMgr::GetClientName(int id, int roomNumber) const
 CRoom * CRoomMgr::GetRoom(int roomNumber) const
 {
 	return m_mapRoom.find(roomNumber)->second;
+}
+
+vector<int> CRoomMgr::GetRoomNumberArray() const
+{
+	vector<int> vecNumber;
+	vecNumber.reserve(m_nRoomCount);
+	for (auto& room : m_mapRoom)
+	{
+		vecNumber.emplace_back(room.second->GetNumber());
+	}
+	return vecNumber;
 }
 
 bool CRoomMgr::AddClient(int id, int roomNumber)

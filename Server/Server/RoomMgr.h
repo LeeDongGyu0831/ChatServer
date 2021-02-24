@@ -19,10 +19,13 @@ public:
 	bool DestroyRoom(int number);
 	void ShowRoomInfo(int number);
 
-	list<CClient*> GetClient(int roomNumber) const;
+	list<CClient*> GetClientList(int roomNumber) const;
 	CClient* GetClient(int id, int roomNumber) const;
+	CClient* GetClientByName(const char * name) const;
 	const char* GetClientName(int id, int roomNumber) const;
 	CRoom* GetRoom(int roomNumber) const;
+
+	vector<int> GetRoomNumberArray() const;
 
 	bool AddClient(int id, int roomNumber);
 	bool RemoveClient(int id);
