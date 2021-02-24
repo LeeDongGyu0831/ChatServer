@@ -221,8 +221,11 @@ bool CNetwork::DataRecv(SOCKETINFO* sock)
 		else
 		{
 			// Á¶¸³
-			sock->buf[sock->bufCount++] = temp;
-			sock->buf[sock->bufCount] = '\0';
+			if (sock->bufCount < BUFSIZE)
+			{
+				sock->buf[sock->bufCount++] = temp;
+				sock->buf[sock->bufCount] = '\0';
+			}
 		}
 	}
 	return TRUE;

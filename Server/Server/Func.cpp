@@ -5,7 +5,7 @@ const char* DeleteChr(char str[], char word)
 {
 	char *s = (char *)malloc(sizeof(str));
 
-	int i, k = 0;
+	size_t i, k = 0;
 
 	for (i = 0; i < strlen(s); i++)
 	{
