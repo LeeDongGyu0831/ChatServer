@@ -7,7 +7,8 @@ class CRoomMgr
 {
 	// 방 번호를 Key로 매핑하여 Hash로 관리함
 	unordered_map<int, CRoom*> m_mapRoom;
-	
+	list<int> m_listRoomNumber;
+
 	int m_nRoomCount; // 대화방 갯수
 
 	SINGLE(CRoomMgr);

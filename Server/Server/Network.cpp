@@ -66,8 +66,13 @@ bool CNetwork::Init(int nPortNum = SERVERPORT)
 		return FALSE;
 	}
 
+	IN_ADDR addr;
 
-	cout << "Network Init" << endl;
+	addr = GetDefaultMyIP();//디폴트 IPv4 주소 얻어오기
+	cout << "IP\t[" << inet_ntoa(addr) << "]\n";
+
+	cout << "Port\t[" << nPortNum << "]\n";
+	cout << "MaxUser\t[" << MAXUSER << "]\n\tNetwork Init\n";
 	return TRUE;
 }
 
@@ -86,11 +91,11 @@ bool CNetwork::Update()
 	{
 		bool result = DataRecv(clientSocket.second);
 		if (FALSE == result)
-			continue;
+			break;
 
 		result = BroadCast(clientSocket.second);
 		if (FALSE == result)
-			continue;
+			break;
 	}
 
 	return TRUE;
@@ -261,7 +266,7 @@ bool CNetwork::BroadCast(SOCKETINFO* sock)
 				if (m_eMsgType != MSG_TYPE::NORMAL)
 					continue;
 
-				string msg = "[";
+				string msg = "\r[";
 				msg += name;
 				msg += "] ";
 				Send(otherClient.first, msg.c_str(), msg.size(), 0);
@@ -273,6 +278,28 @@ bool CNetwork::BroadCast(SOCKETINFO* sock)
 		sock->sendBytes = 0;
 	}
 	return TRUE;
+}
+
+IN_ADDR CNetwork::GetDefaultMyIP()
+{
+	char localhostname[MAX_PATH];
+	IN_ADDR addr = { 0, };
+
+	if (gethostname(localhostname, MAX_PATH) == SOCKET_ERROR)//호스트 이름 얻어오기
+	{
+		return addr;
+	}
+	HOSTENT *ptr = gethostbyname(localhostname);//호스트 엔트리 얻어오기
+	while (ptr && ptr->h_name)
+	{
+		if (ptr->h_addrtype == PF_INET)//IPv4 주소 타입일 때
+		{
+			memcpy(&addr, ptr->h_addr_list[0], ptr->h_length);//메모리 복사
+			break;
+		}
+		ptr++;
+	}
+	return addr;
 }
 
 bool CNetwork::Send(const SOCKET& sock, const char * msg, const int& size, const int& roomNumber = NONE)
@@ -578,6 +605,7 @@ MSG_TYPE CNetwork::DestoryRoom(const SOCKET & sock, const vector<string>& vecMsg
 
 MSG_TYPE CNetwork::ShowUserAll(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
+
 	return MSG_TYPE::SHOWUSERALL_MSG;
 }
 

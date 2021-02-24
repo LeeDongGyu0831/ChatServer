@@ -19,7 +19,7 @@ void CRoomMgr::Init()
 	m_mapRoom.clear();
 	m_nRoomCount = 0;
 
-	cout << "RoomManager Init" << endl;
+	cout << "\tRoomManager Init" << endl;
 
 	CreateRoom("LoginRoom", MAXUSER);
 	CreateRoom("MainRoom", MAXUSER);

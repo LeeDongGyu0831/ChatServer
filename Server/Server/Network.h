@@ -39,7 +39,10 @@ public:
 	bool Select();
 	bool Accept();
 	bool DataRecv(SOCKETINFO* sock);
-	bool BroadCast(SOCKETINFO* sock); // 
+	bool BroadCast(SOCKETINFO* sock);
+
+	// IP 주소 얻어오기
+	IN_ADDR GetDefaultMyIP();
 
 	// 해당 소켓에 메시지 전송
 	bool Send(const SOCKET& sock, const char* msg, const int& size, const int& roomNumber);
