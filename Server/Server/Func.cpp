@@ -41,5 +41,8 @@ vector<string> SplitString(string str, char word)
 		iter++;
 	}
 	
+	// 마지막 문자열에 들어있는 \r 제거
+	splitStr[splitStr.size() - 1].erase(splitStr[splitStr.size() - 1].size() - 1);
+	splitStr[splitStr.size() - 1].shrink_to_fit();
 	return splitStr;
 }

@@ -276,7 +276,7 @@ bool CNetwork::Send(const SOCKET& sock, const char * msg, const int size, int ro
 	return TRUE;
 }
 
-MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roomNumber)
+MSGTYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const int bufCount, const int roomNumber)
 {
 	MSGTYPE eMsgType = MSGTYPE::NORMAL;
 
@@ -290,9 +290,6 @@ MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roo
 
 		// 메시지 공백 기준으로 분할
 		vector<string> vecMsg = SplitString(message, ' ');
-		cout << "명령어 분할\n\r";
-		for (auto& str : vecMsg)
-			cout << str.c_str() << "\n\r";
 
 		// 로그인 명령
 		if (message[1] == COMMAND::LOGIN)
@@ -338,7 +335,7 @@ MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roo
 			msg += "\t쪽지 보내기\n\r";
 
 			msg += command + char(COMMAND::CREATEROOM);
-			msg += " [방제목] [최대인원]";
+			msg += " [최대인원] [방제목]";
 			msg += "\t대화방 만들기\n\r";
 
 			msg += command + char(COMMAND::JOINROOM);
@@ -399,24 +396,113 @@ MSGTYPE CNetwork::CheckMessage(SOCKET sock, char* message, int bufCount, int roo
 			msg += "]\n\r";
 
 			list<CClient*> listClient = CRoomMgr::GetInst()->GetClientList(number);
+			int index = 0;
 			for (auto& client : listClient)
 			{
 				msg += "[";
+				msg += to_string(index);
+				msg += "] ";
 				msg += client->GetName();
-				msg += "]\n\r";
+				msg += "\n\r";
 			}
 
 			Send(sock, msg.c_str(), msg.size(), 0);
 			eMsgType = MSGTYPE::SHOWROOM_MSG;
 		}
 
+		// 대화방 생성
+		else if (message[1] == COMMAND::CREATEROOM)
+		{
+			int maxUser = atoi(vecMsg[1].c_str());
+			string strRoomName = "";
+			for (int i = 2; i < vecMsg.size(); ++i)
+			{
+				strRoomName += vecMsg[i];
+				if(i + 1 < vecMsg.size())
+					strRoomName += " ";
+			}
+			cout << strRoomName.c_str() << endl;
+			string msg;
+			// 문자열이 섞이는 등 이상하게 입력 받은 경우
+			if (maxUser == 0)
+			{
+				msg = "잘못된 명령어 입니다. 다시 확인해주세요.\n\r";
+				Send(sock, msg.c_str(), msg.size(), roomNumber);
+				return eMsgType;
+			}
 
+			bool result = CRoomMgr::GetInst()->CreateRoom(strRoomName.c_str(), maxUser);
+			// 방 생성 실패
+			if (FALSE == result)
+			{
+				msg = "대화방을 생성할 수 없습니다.\n\r";
+				Send(sock, msg.c_str(), msg.size(), roomNumber);
+				return eMsgType;
+			}
+
+			msg += strRoomName;
+			msg += " [";
+			msg += to_string(maxUser);
+			msg += "] 가 생성되었습니다.\n\r";
+			Send(sock, msg.c_str(), msg.size(), roomNumber);
+			return eMsgType;
+		}
 	}
 
 	return eMsgType;
 }
 
-BOOL CNetwork::AddSocketInfo(SOCKET sock)
+MSGTYPE CNetwork::Login(const SOCKET & sock, const char * message, const int roomNumber)
+{
+	return MSGTYPE::LOGIN_MSG;
+}
+
+MSGTYPE CNetwork::Help(const SOCKET & sock, const char * message, const int roomNumber)
+{
+	return MSGTYPE::HELP_MSG;
+}
+
+MSGTYPE CNetwork::ShowRoomAll(const SOCKET & sock, const char * message, const int roomNumber)
+{
+	return MSGTYPE::SHOWROOMALL_MSG;
+}
+
+MSGTYPE CNetwork::ShowRoom(const SOCKET & sock, const char * message, const int roomNumber)
+{
+	return MSGTYPE::SHOWROOM_MSG;
+}
+
+MSGTYPE CNetwork::CreateRoom(const SOCKET & sock, const char * message, const int roomNumber)
+{
+	return MSGTYPE::CREATEROOM_MSG;
+}
+
+MSGTYPE CNetwork::JoinRoom(const SOCKET & sock, const char * message, const int roomNumber)
+{
+	return MSGTYPE::JOINROOM_MSG;
+}
+
+MSGTYPE CNetwork::DestoryRoom(const SOCKET & sock, const char * message, const int roomNumber)
+{
+	return MSGTYPE::DESTROYROOM_MSG;
+}
+
+MSGTYPE CNetwork::ShowUserAll(const SOCKET & sock, const char * message, const int roomNumber)
+{
+	return MSGTYPE::SHOWUSERALL_MSG;
+}
+
+MSGTYPE CNetwork::ShowUser(const SOCKET & sock, const char * message, const int roomNumber)
+{
+	return MSGTYPE::SHOWUSER_MSG;
+}
+
+MSGTYPE CNetwork::SendMsg(const SOCKET & sock, const char * message, const int roomNumber)
+{
+	return MSGTYPE::SENDMSG_MSG;
+}
+
+BOOL CNetwork::AddSocketInfo(const SOCKET& sock)
 {
 	if (m_mapClient.size() > FD_SETSIZE)
 	{
@@ -447,7 +533,7 @@ BOOL CNetwork::AddSocketInfo(SOCKET sock)
 	return TRUE;
 }
 
-void CNetwork::RemoveSocketInfo(SOCKET socket)
+void CNetwork::RemoveSocketInfo(const SOCKET& socket)
 {
 	// 클라이언트 정보 얻기
 	SOCKADDR_IN clientAddr;

@@ -31,7 +31,7 @@ void CRoomMgr::Init()
 
 bool CRoomMgr::CreateRoom(const char* strRoomName, int maxUser)
 {
-	CRoom* room = new CRoom(strRoomName, m_nRoomCount, 64);
+	CRoom* room = new CRoom(strRoomName, m_nRoomCount, maxUser);
 	list<CClient*> clients;
 	m_mapRoom[m_nRoomCount] = room;
 	m_mapClient[m_nRoomCount] = clients;
