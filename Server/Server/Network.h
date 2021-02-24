@@ -41,9 +41,21 @@ public:
 	bool Send(const SOCKET& sock, const char* msg, const int size, int roomNumber);
 
 	// 소켓 관리 함수
-	BOOL AddSocketInfo(SOCKET sock);
-	void RemoveSocketInfo(SOCKET socket);
+	BOOL AddSocketInfo(const SOCKET& sock);
+	void RemoveSocketInfo(const SOCKET& socket);
 
-	MSGTYPE CheckMessage(SOCKET sock, char* message, int bufCount, int roomNumber);
+	MSGTYPE CheckMessage(const SOCKET& sock, const char* message, const int bufCount, const int roomNumber);
+
+	// 명령어 처리 함수
+	MSGTYPE Login(const SOCKET& sock, const vector<string>& vecMsg, const int roomNumber);
+	MSGTYPE Help(const SOCKET& sock, const vector<string>& vecMsg, const int roomNumber);
+	MSGTYPE ShowRoomAll(const SOCKET& sock, const vector<string>& vecMsg, const int roomNumber);
+	MSGTYPE ShowRoom(const SOCKET& sock, const vector<string>& vecMsg, const int roomNumber);
+	MSGTYPE CreateRoom(const SOCKET& sock, const vector<string>& vecMsg, const int roomNumber);
+	MSGTYPE JoinRoom(const SOCKET& sock, const vector<string>& vecMsg, const int roomNumber);
+	MSGTYPE DestoryRoom(const SOCKET& sock, const vector<string>& vecMsg, const int roomNumber);
+	MSGTYPE ShowUserAll(const SOCKET& sock, const vector<string>& vecMsg, const int roomNumber);
+	MSGTYPE ShowUser(const SOCKET& sock, const vector<string>& vecMsg, const int roomNumber);
+	MSGTYPE SendMsg(const SOCKET& sock, const vector<string>& vecMsg, const int roomNumber);
 };
 
