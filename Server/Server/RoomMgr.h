@@ -14,22 +14,23 @@ class CRoomMgr
 public:
 	void Init();
 
-	bool CreateRoom(const char* strRoomName, int maxUser);
-	bool JoinRoom(int id, int roomNumber);
-	bool DestroyRoom(int number);
-	void ShowRoomInfo(int number);
+	bool CreateRoom(const char* strRoomName, const int& maxUser);
+	bool JoinRoom(const int& id, const int& roomNumber, const int& newRoomNumber);
+	bool DestroyRoom(const int& number);
+	void ShowRoomInfo(const int& number);
 
-	list<CClient*> GetClientList(int roomNumber) const;
-	CClient* GetClient(int id, int roomNumber) const;
+	list<CClient*> GetClientList(const int& roomNumber) const;
+	CClient* GetClient(const int& id, const int& roomNumber) const;
 	CClient* GetClientByName(const char * name) const;
-	const char* GetClientName(int id, int roomNumber) const;
-	CRoom* GetRoom(int roomNumber) const;
+	const char* GetClientName(const int& id, const int& roomNumber) const;
+	CRoom* GetRoom(const int& roomNumber) const;
 
 	vector<int> GetRoomNumberArray() const;
 
-	bool AddClient(int id, int roomNumber);
-	bool RemoveClient(int id);
-	bool RemoveClient(int id, int roomNumber);
+	bool AddClient(const int& id, const int& roomNumber);
+	bool MoveClient(const CClient* client, const int& currentRoomNumber, const int& destRoomNumber);
+	bool RemoveClient(const int& id);
+	bool RemoveClient(const int& id, const int& roomNumber);
 
 	int GetRoomCount() const;
 };
