@@ -295,13 +295,6 @@ MSGTYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const in
 	// 로그인 명령
 	if (message[1] == COMMAND::LOGIN)
 	{
-		//CClient* client = CRoomMgr::GetInst()->GetClient(sock, roomNumber);
-		//string name;
-		//name.assign(message, 3, bufCount - 4);
-		//client->SetName(name.c_str());
-		////m_mapClientInfo[sock]->roomNumber = 0;
-		//eMsgType = MSGTYPE::LOGIN_MSG;
-
 		eMsgType = Login(sock, vecMsg, roomNumber);
 	}
 
@@ -328,6 +321,37 @@ MSGTYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const in
 	{
 		eMsgType = CreateRoom(sock, vecMsg, roomNumber);
 	}
+	
+	// 대화방 참가
+	else if (message[1] == COMMAND::JOINROOM)
+	{
+		eMsgType = JoinRoom(sock, vecMsg, roomNumber);
+	}
+
+	// 대화방 폭파
+	else if (message[1] == COMMAND::DESTROYROOM)
+	{
+		eMsgType = DestoryRoom(sock, vecMsg, roomNumber);
+	}
+
+	// 이용자 목록 출력
+	else if (message[1] == COMMAND::SHOWUSERALL)
+	{
+		eMsgType = ShowUserAll(sock, vecMsg, roomNumber);
+	}
+
+	// 이용자 검색
+	else if (message[1] == COMMAND::SHOWUSER)
+	{
+		eMsgType = ShowUser(sock, vecMsg, roomNumber);
+	}
+
+	// 쪽지 보내기
+	else if (message[1] == COMMAND::SENDMSG)
+	{
+		eMsgType = SendMsg(sock, vecMsg, roomNumber);
+	}
+
 
 	return eMsgType;
 }
@@ -335,6 +359,11 @@ MSGTYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const in
 MSGTYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, const int roomNumber)
 {
 	CClient* client = CRoomMgr::GetInst()->GetClient(sock, roomNumber);
+	if (NULL == client)
+	{
+		cout << "Login Func Null Error! \n";
+		exit(1);
+	}
 
 	client->SetName(vecMsg[1].c_str());
 
@@ -400,6 +429,12 @@ MSGTYPE CNetwork::ShowRoomAll(const SOCKET & sock, const vector<string>& vecMsg,
 	for (auto& num : vecNumber)
 	{
 		CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
+		if (NULL == room)
+		{
+			cout << "ShowRoomAll Func Null Error! \n";
+			exit(1);
+		}
+
 		msg += "[";
 		msg += to_string(room->GetNumber());
 		msg += "] ";
@@ -419,6 +454,11 @@ MSGTYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, co
 {
 	int number = atoi(vecMsg[1].c_str());
 	CRoom* room = CRoomMgr::GetInst()->GetRoom(number);
+	if (NULL == room)
+	{
+		cout << "ShowRoom Func Null Error! \n";
+		exit(1);
+	}
 
 	string msg;
 	msg.reserve(50);
@@ -489,6 +529,14 @@ MSGTYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg, 
 
 MSGTYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, const int roomNumber)
 {
+	int newRoomNumber = atoi(vecMsg[1].c_str());
+	bool result = CRoomMgr::GetInst()->JoinRoom(sock, roomNumber, newRoomNumber);
+	// 정원 초과
+	if (FALSE == result)
+	{
+		cout << "정원 초과\n\r" << endl;
+		return MSGTYPE::JOINROOM_MSG;
+	}
 	return MSGTYPE::JOINROOM_MSG;
 }
 
