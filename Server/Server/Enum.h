@@ -1,6 +1,6 @@
 #pragma once
 
-enum COMMAND
+enum COMMAND_TYPE
 {
 	LOGIN = 'l',
 	HELP = 'h',
@@ -15,7 +15,7 @@ enum COMMAND
 	CLOSE = 'x',
 };
 
-enum MSGTYPE
+enum MSG_TYPE
 {
 	NORMAL,
 	LOGIN_MSG,
@@ -30,6 +30,12 @@ enum MSGTYPE
 	DESTROYROOM_MSG,
 	NOTHING,
 	END,
+};
+
+enum ROOM_TYPE 
+{
+	LOGIN_ROOM,
+	MAIN_ROOM,
 };
 
 enum class EVENT_TYPE

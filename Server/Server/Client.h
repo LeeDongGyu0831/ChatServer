@@ -2,20 +2,21 @@
 
 class CClient
 {
-	int m_nID;
-	string m_strName;
-	int m_nNameSize;
+	int m_nID; // 소켓번호 == 아이디
+	string m_strName; // 이름
+	int m_nNameSize; // 이름 길이 size()함수와 겹침
 
+	// 현재 접속해있는 대화방 번호
 	int m_nRoomNumber;
 
 public:
 	CClient(int id, int roomNumber);
 	~CClient();
 
-	int GetRoomNumber() const;
-	const char* GetName() const;
-	int GetNameSize() const;
-	int GetID() const;
+	int GetRoomNumber() const; // 현재 클라이언트가 접속중인 방 번호
+	const char* GetName() const; // 클라이언트의 이름, 닉네임
+	int GetNameSize() const; // 사이즈
+	int GetID() const; // 아이디
 
 	void SetName(const char* name);
 	void SetRoomNumber(int roomNumber);

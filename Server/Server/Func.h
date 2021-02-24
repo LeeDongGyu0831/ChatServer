@@ -11,6 +11,19 @@ void Safe_Delete_Unordered_Map(unordered_map<T1, T2*>& _map)
 }
 
 template<typename T1, typename T2>
+T2* Find_Unordered_Map(unordered_map<T1, T2*>& _map, const T1& _key)
+{
+	unordered_map<T1, T2*>::iterator iter = _map.find(_key);
+	if (iter == _map.end())
+	{
+		// 해당 원소가 없음
+		return NULL;
+	}
+
+	return iter->second;
+}
+
+template<typename T1, typename T2>
 void Safe_Delete_Map(map<T1, T2*>& _map)
 {
 	for (auto& pair : _map)

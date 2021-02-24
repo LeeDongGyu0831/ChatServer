@@ -1,13 +1,15 @@
 #include "stdafx.h"
 #include "Room.h"
-
+#include "Client.h"
 
 CRoom::CRoom(const char* strName, int roomNumber, int maxUser) : m_strName(strName), m_nNumber(roomNumber), m_nMaxUser(maxUser), m_nCurrentUser(0)
 {
+	m_mapClient.clear();
 }
 
 CRoom::~CRoom()
 {
+	Safe_Delete_Unordered_Map(m_mapClient);
 }
 
 int CRoom::GetNumber() const
@@ -35,6 +37,74 @@ bool CRoom::GetState() const
 const char* CRoom::GetRoomName() const
 {
 	return m_strName.c_str();
+}
+
+unordered_map<int, CClient*> CRoom::GetClients()
+{
+	return m_mapClient;
+}
+
+CClient * CRoom::GetClient(const int & id)
+{
+	unordered_map<int, CClient*>::iterator iter = m_mapClient.find(id);
+	if (iter == m_mapClient.end())
+	{
+		// 여기에는 해당 클라가 없음
+		cout << "Wrong Search Client [" << m_nNumber << "]\n";
+		return NULL;
+	}
+	return m_mapClient.find(id)->second;
+}
+
+bool CRoom::FindClient(const int & id)
+{
+	if (m_mapClient.find(id) == m_mapClient.end())
+	{
+		// 여기에는 해당 클라가 없음
+		return FALSE;
+	}
+	return TRUE;
+}
+
+CClient * CRoom::GetClientByName(const char * name)
+{
+	for (auto& client : m_mapClient)
+	{
+		if (0 == strcmp(client.second->GetName(), name))
+		{
+			return client.second;
+		}
+	}
+	return NULL;
+}
+
+const char * CRoom::GetClientName(const int & id)
+{
+	unordered_map<int, CClient*>::iterator iter = m_mapClient.find(id);
+	if (iter == m_mapClient.end())
+	{
+		// 여기에는 해당 클라가 없음
+		cout << "Wrong Search ClientName [" << m_nNumber << "]\n";
+		return NULL;
+	}
+	return iter->second->GetName();
+}
+
+void CRoom::AddClient(const int& id, CClient * client)
+{
+	m_mapClient[id] = client;
+	ChangeCount(1); // 인원 1명 증가
+}
+
+bool CRoom::RemoveClient(const int & id)
+{
+	int count = m_mapClient.erase(id);
+	if (0 == count) // 하나도 못찾은 경우 == 삭제된게 없다
+	{
+		return FALSE;
+	}
+	ChangeCount(-count);
+	return TRUE;
 }
 
 bool CRoom::ChangeCount(int count)

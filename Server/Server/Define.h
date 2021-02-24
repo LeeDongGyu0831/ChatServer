@@ -1,8 +1,8 @@
 #pragma once
 #define SERVERPORT 9000
 #define BUFSIZE 512
-#define NAMESIZE 10
 
+// Singleton 매크로 함수
 #define SINGLE(type) private: type(); ~type();\
 public:\
 static type* GetInst()\
