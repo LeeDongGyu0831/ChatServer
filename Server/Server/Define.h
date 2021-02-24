@@ -2,7 +2,11 @@
 #define SERVERPORT 9000
 #define BUFSIZE 512
 #define COMMAND 1
+#define IP_ADDR_LEN 16
 #define MINIMUM_LEN 3
+
+#define NONE -1
+#define KEYWORD 1
 
 // Singleton 매크로 함수
 #define SINGLE(type) private: type(); ~type();\

@@ -31,6 +31,7 @@ namespace _MSG
 		JOINROOM_MSG,
 		DESTROYROOM_MSG,
 		NOTHING,
+
 		END,
 	};
 };

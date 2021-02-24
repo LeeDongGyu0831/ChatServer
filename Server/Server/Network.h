@@ -21,10 +21,10 @@ class CNetwork
 	MSG_TYPE m_eMsgType;
 
 	// 데이터 통신에 사용할 변수
-	FD_SET rset, wset;
-	SOCKET clientSock;
-	SOCKADDR_IN clientAddr;
-	int addrLen;
+	FD_SET m_rset, m_wset;
+	SOCKET m_sockClient;
+	SOCKADDR_IN m_addrClientSock;
+	int m_nAddrLen;
 
 	SINGLE(CNetwork);
 

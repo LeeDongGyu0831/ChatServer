@@ -39,7 +39,7 @@ bool CNetwork::Init(int nPortNum = SERVERPORT)
 	SOCKADDR_IN serverAddr;
 	ZeroMemory(&serverAddr, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons(nPortNum);
+	serverAddr.sin_port = htons(u_short(nPortNum));
 	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	retVal = bind(m_Sock, (SOCKADDR*)&serverAddr, sizeof(serverAddr));
 	if (retVal == SOCKET_ERROR)
@@ -81,13 +81,13 @@ bool CNetwork::Update()
 	// 소켓 셋 검사(2) : 데이터 통신
 	// 각 방을 순회하면서 방에 있는 클라이언트들과 통신
 
-	for (auto& clientSock : m_mapClient)
+	for (auto& clientSocket : m_mapClient)
 	{
-		bool result = DataRecv(clientSock.second);
+		bool result = DataRecv(clientSocket.second);
 		if (FALSE == result)
 			continue;
 
-		result = BroadCast(clientSock.second);
+		result = BroadCast(clientSocket.second);
 		if (FALSE == result)
 			continue;
 	}
@@ -105,15 +105,15 @@ void CNetwork::Close()
 bool CNetwork::FD_Set()
 {
 	// 소켓 셋 초기화
-	FD_ZERO(&rset);
-	FD_ZERO(&wset);
-	FD_SET(m_Sock, &rset);
+	FD_ZERO(&m_rset);
+	FD_ZERO(&m_wset);
+	FD_SET(m_Sock, &m_rset);
 	for (auto& client : m_mapClient)
 	{
 		if (client.second->recvBytes > client.second->sendBytes)
-			FD_SET(client.second->sock, &wset);
+			FD_SET(client.second->sock, &m_wset);
 		else
-			FD_SET(client.second->sock, &rset);
+			FD_SET(client.second->sock, &m_rset);
 	}
 	return TRUE;
 }
@@ -121,7 +121,7 @@ bool CNetwork::FD_Set()
 bool CNetwork::Select()
 {
 	// select()
-	int retVal = select(0, &rset, &wset, NULL, NULL);
+	int retVal = select(0, &m_rset, &m_wset, NULL, NULL);
 	if (retVal == SOCKET_ERROR)
 	{
 		printf("error select()\n");
@@ -133,23 +133,24 @@ bool CNetwork::Select()
 bool CNetwork::Accept()
 {
 	// 소켓 셋 검사(1) : 클라이언트 접속 수용
-	if (FD_ISSET(m_Sock, &rset))
+	if (FD_ISSET(m_Sock, &m_rset))
 	{
-		addrLen = sizeof(clientAddr);
-		clientSock = accept(m_Sock, (SOCKADDR*)&clientAddr, &addrLen);
-		if (clientSock == INVALID_SOCKET)
+		m_nAddrLen = sizeof(m_addrClientSock);
+		m_sockClient = accept(m_Sock, (SOCKADDR*)&m_addrClientSock, &m_nAddrLen);
+		if (m_sockClient == INVALID_SOCKET)
 		{
 			printf("error accept()\n");
 			return FALSE;
 		}
 		else
 		{
-			char buf[16];
-			inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
-			printf("[TCP 서버] 클라이언트 접속 : IP 주소 = %s, 포트 번호 = %d\n", buf, ntohs(clientAddr.sin_port));
+			// 클라이언트 IP 주소
+			char buf[IP_ADDR_LEN];
+			inet_ntop(AF_INET, &m_addrClientSock.sin_addr, buf, sizeof(buf));
+			printf("[TCP 서버] 클라이언트 접속 : IP 주소 = %s, 포트 번호 = %d\n", buf, ntohs(m_addrClientSock.sin_port));
 
 			// 소켓 정보 추가
-			if (FALSE == AddSocketInfo(clientSock))
+			if (FALSE == AddSocketInfo(m_sockClient))
 				return FALSE;
 		}
 	}
@@ -160,7 +161,7 @@ bool CNetwork::DataRecv(SOCKETINFO* sock)
 {
 	int roomNumber = CRoomMgr::GetInst()->GetRoomNumber(sock->sock);
 	const char* name = CRoomMgr::GetInst()->GetClientName(sock->sock, roomNumber);
-	if (FD_ISSET(sock->sock, &rset))
+	if (FD_ISSET(sock->sock, &m_rset))
 	{
 		// 데이터 받기
 		char temp;
@@ -192,13 +193,13 @@ bool CNetwork::DataRecv(SOCKETINFO* sock)
 			sock->bufCount = 0;
 
 			// 받은 데이터 출력
-			addrLen = sizeof(clientAddr);
-			getpeername(sock->sock, (SOCKADDR*)&clientAddr, &addrLen);
+			m_nAddrLen = sizeof(m_addrClientSock);
+			getpeername(sock->sock, (SOCKADDR*)&m_addrClientSock, &m_nAddrLen);
 			//ptr->buf[retVal] = '\0';
 
-			char buf[16]; // 클라이언트 IP 주소
-			inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
-			printf("[TCP %s:%d] [%s] %s", buf, ntohs(clientAddr.sin_port), name, sock->buf);
+			char buf[IP_ADDR_LEN]; // 클라이언트 IP 주소
+			inet_ntop(AF_INET, &m_addrClientSock.sin_addr, buf, sizeof(buf));
+			printf("[TCP %s:%d] [%s] %s", buf, ntohs(m_addrClientSock.sin_port), name, sock->buf);
 
 		}
 		else
@@ -215,7 +216,7 @@ bool CNetwork::BroadCast(SOCKETINFO* sock)
 {
 	int roomNumber = CRoomMgr::GetInst()->GetRoomNumber(sock->sock);
 	const char* name = CRoomMgr::GetInst()->GetClientName(sock->sock, roomNumber);
-	if (FD_ISSET(sock->sock, &wset))
+	if (FD_ISSET(sock->sock, &m_wset))
 	{
 		// 데이터 보내기
 		for (auto& otherClient : m_mapClient)
@@ -263,7 +264,7 @@ bool CNetwork::BroadCast(SOCKETINFO* sock)
 	return TRUE;
 }
 
-bool CNetwork::Send(const SOCKET& sock, const char * msg, const int& size, const int& roomNumber = -1)
+bool CNetwork::Send(const SOCKET& sock, const char * msg, const int& size, const int& roomNumber = NONE)
 {
 	int retVal = send(sock, msg, size, 0);
 	if (retVal == SOCKET_ERROR)
@@ -271,7 +272,7 @@ bool CNetwork::Send(const SOCKET& sock, const char * msg, const int& size, const
 		printf("send() SOCKET_ERROR\n");
 		RemoveSocketInfo(sock);
 		
-		if(roomNumber != -1)
+		if(roomNumber != NONE)
 			CRoomMgr::GetInst()->RemoveClient(sock, roomNumber);
 		// 해당 클라이언트 검색 후 제거
 		else
@@ -374,7 +375,7 @@ MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, cons
 		exit(1);
 	}
 
-	client->SetName(vecMsg[1].c_str());
+	client->SetName(vecMsg[KEYWORD].c_str());
 
 	return MSG_TYPE::LOGIN_MSG;
 }
@@ -462,7 +463,7 @@ MSG_TYPE CNetwork::ShowRoomAll(const SOCKET & sock, const vector<string>& vecMsg
 MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
 	// /명령어 [방번호]
-	int number = atoi(vecMsg[1].c_str());
+	int number = atoi(vecMsg[KEYWORD].c_str());
 	const CRoom* room = CRoomMgr::GetInst()->GetRoom(number);
 	if (NULL == room)
 	{
@@ -502,7 +503,7 @@ MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
 	// /명령어 [최대인원] [방제목] 이기 때문에 1번 인덱스에 최대인원 문자열이 담겨있음
-	int maxUser = atoi(vecMsg[1].c_str());
+	int maxUser = atoi(vecMsg[KEYWORD].c_str());
 	string strRoomName = "";
 	for (size_t i = 2; i < vecMsg.size(); ++i)
 	{
@@ -543,7 +544,7 @@ MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg,
 MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
 	// /명령어 [방번호]
-	int newRoomNumber = atoi(vecMsg[1].c_str());
+	int newRoomNumber = atoi(vecMsg[KEYWORD].c_str());
 	bool result = CRoomMgr::GetInst()->JoinRoom(sock, roomNumber, newRoomNumber);
 	// 정원 초과
 	if (FALSE == result)
@@ -611,7 +612,7 @@ void CNetwork::RemoveSocketInfo(const SOCKET& socket)
 	SOCKADDR_IN clientAddr;
 	int addrLen = sizeof(clientAddr);
 	getpeername(socket, (SOCKADDR*)&clientAddr, &addrLen);
-	char buf[16];
+	char buf[IP_ADDR_LEN];
 	inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
 	printf("[TCP 서버] 클라이언트 종료: IP 주소 = %s, 포트 번호 = %d\n", buf, ntohs(clientAddr.sin_port));
 
