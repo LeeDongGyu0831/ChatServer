@@ -16,6 +16,8 @@ class CNetwork
 	SOCKET m_Sock;
 
 	unordered_map<SOCKET, SOCKETINFO*> m_mapClient;
+	// 아이디 중복체크를 위한 맵
+	unordered_map<string, SOCKET> m_mapNamePool;
 	uint m_nClientCount;
 
 	// 받은 메시지가 일반 채팅 메시지인지 명령어 커맨드인지 Enum값

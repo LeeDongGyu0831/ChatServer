@@ -21,8 +21,8 @@ void CRoomMgr::Init()
 
 	cout << "\tRoomManager Init" << endl;
 
-	CreateRoom("LoginRoom", MAXUSER);
-	CreateRoom("MainRoom", MAXUSER);
+	CreateRoom("Login Room", MAXUSER);
+	CreateRoom("Main Room", MAXUSER);
 }
 
 bool CRoomMgr::CreateRoom(const char* strRoomName, const uint& maxUser)
@@ -37,6 +37,11 @@ bool CRoomMgr::CreateRoom(const char* strRoomName, const uint& maxUser)
 	else
 	{
 		nRoomCount = m_stackNumberPool.top();
+		if (nRoomCount > m_nMaxRoomNumber)
+		{
+			cout << "StackPoolNumber bigger than MaxRoomNumber\n";
+			exit(1);
+		}
 		m_stackNumberPool.pop();
 	}
 
@@ -106,7 +111,7 @@ bool CRoomMgr::DestroyRoom(const uint& number)
 	CRoom* pRoom = GetRoom(number);
 	{
 		string msg;
-		msg += "[";
+		msg += "\r      [";
 		msg += pRoom->GetRoomName();
 		msg += "] 대화방이 파괴되었습니다.\n\r";
 		CNetwork::GetInst()->BroadCastMessage(NONE, msg.c_str(), msg.size(), number);

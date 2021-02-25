@@ -103,7 +103,7 @@ void CRoom::AddClient(const uint& id, CClient * client)
 
 	{
 		string msg;
-		msg += "\r[";
+		msg += "\r      [";
 		msg += GetRoomName();
 		msg += "] 에 참가하였습니다.\n\r";
 		CNetwork::GetInst()->Send(id, msg.c_str(), msg.size(), m_nNumber);
@@ -111,7 +111,7 @@ void CRoom::AddClient(const uint& id, CClient * client)
 
 	{
 		string msg;
-		msg += "[";
+		msg += "\r      [";
 		msg += GetRoomName();
 		msg += "] 에 [";
 		msg += client->GetName();
@@ -133,7 +133,7 @@ bool CRoom::RemoveClient(const uint & id)
 
 	{
 		string msg;
-		msg += "[";
+		msg += "\r      [";
 		msg += GetRoomName();
 		msg += "] 에 [";
 		msg += name;
@@ -141,7 +141,7 @@ bool CRoom::RemoveClient(const uint & id)
 		CNetwork::GetInst()->BroadCastMessage(id, msg.c_str(), msg.size(), m_nNumber);
 	}
 
-	ChangeCurrentUserCount(-count);
+	ChangeCurrentUserCount(int(count) * -1);
 	return TRUE;
 }
 

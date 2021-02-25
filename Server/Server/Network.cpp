@@ -7,12 +7,14 @@
 CNetwork::CNetwork() : m_nClientCount(0)
 {
 	m_mapClient.clear();
+	m_mapNamePool.clear();
 }
 
 
 CNetwork::~CNetwork()
 {
 	Safe_Delete_Unordered_Map(m_mapClient);
+	m_mapNamePool.clear();
 }
 
 bool CNetwork::Init(int nPortNum = SERVERPORT)
@@ -159,7 +161,7 @@ bool CNetwork::Accept()
 			inet_ntop(AF_INET, &m_addrClientSock.sin_addr, buf, sizeof(buf));
 			printf("[TCP 서버] 클라이언트 접속 : IP 주소 = %s, 포트 번호 = %d\n", buf, ntohs(m_addrClientSock.sin_port));
 
-			string msg{ "=========================================\n\r\t환영합니다 채팅서버 입니다.\n\n\r\t로그인 명령어(/l)을 사용해주세요.\n\n\n\r\t명령어 안내(/h)\n\r=========================================\n\r>> " };
+			string msg{ "=================================================\n\r\t환영합니다 채팅서버 입니다.\n\n\r\t로그인 명령어(/l)을 사용해주세요.\n\n\n\r\t명령어 안내(/h)\n\r=================================================\n\r" };
 			Send(m_sockClient, msg.c_str(), msg.size(), 0);
 
 			// 소켓 정보 추가
@@ -201,7 +203,7 @@ bool CNetwork::DataRecv(SOCKETINFO* sock)
 			if (MSG_TYPE::NOTHING == m_eMsgType)
 			{
 				string msg;
-				msg = "잘못된 명령어 입니다. 다시 확인해주세요.\n\r";
+				msg = "      잘못된 명령어 입니다. 다시 확인해주세요.\n\r";
 				Send(sock->sock, msg.c_str(), msg.size(), roomNumber);
 			}
 			if (MSG_TYPE::CLOSE_MSG == m_eMsgType)
@@ -435,7 +437,8 @@ void CNetwork::BroadCastMessage(const SOCKET & sock, const char * message, const
 	unordered_map<uint, CClient*> mapClient = CRoomMgr::GetInst()->GetClients(roomNumber);
 	for (auto& client : mapClient)
 	{
-		if (sock == client.first)
+		if (sock == client.first ||
+			roomNumber == uint(ROOM_TYPE::LOGIN_ROOM))
 		{
 			continue;
 		}
@@ -459,10 +462,18 @@ MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, cons
 	{
 		return MSG_TYPE::NOTHING;
 	}
+	const char* name = vecMsg[KEYWORD].c_str();
+	if (m_mapNamePool.find(name) != m_mapNamePool.end()) // 중복체크
+	{
+		// 중복이 있다는 것
+		return MSG_TYPE::NOTHING;
+	}
+	m_mapNamePool[name] = sock;
+
 	client->SetName(vecMsg[KEYWORD].c_str());
 
 	string logMsg;
-	logMsg += "[";
+	logMsg += "\r      [";
 	logMsg += vecMsg[KEYWORD].c_str();
 	logMsg += "] 으로 로그인 하였습니다..\n\r";
 	Send(sock, logMsg.c_str(), logMsg.size(), roomNumber);
@@ -546,7 +557,7 @@ MSG_TYPE CNetwork::ShowRoomAll(const SOCKET & sock, const vector<string>& vecMsg
 			exit(1);
 		}
 
-		msg += "[";
+		msg += "\r      [";
 		msg += to_string(room->GetNumber());
 		msg += "] ";
 		msg += room->GetRoomName();
@@ -584,7 +595,7 @@ MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 	string msg;
 	msg.reserve(50);
 
-	msg += "[";
+	msg += "\r      [";
 	msg += to_string(room->GetNumber());
 	msg += "] ";
 	msg += room->GetRoomName();
@@ -592,13 +603,13 @@ MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 	msg += to_string(room->GetCurrentUser());
 	msg += "/";
 	msg += to_string(room->GetMaxUser());
-	msg += "]\n\r====대화방 이용자====\n\r";
+	msg += "]\n\r      ====대화방 이용자====\n\r";
 
 	unordered_map<uint, CClient*> mapClient = CRoomMgr::GetInst()->GetClients(number);
 	uint index = 0;
 	for (auto& client : mapClient)
 	{
-		msg += "[";
+		msg += "\r      [";
 		msg += to_string(index++);
 		msg += "] ";
 		msg += client.second->GetName();
@@ -647,7 +658,7 @@ MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg,
 		//Send(sock, msg.c_str(), msg.size(), roomNumber);
 		return MSG_TYPE::NOTHING;
 	}
-	string msg;
+	string msg = "\r      ";
 	msg += strRoomName;
 	msg += " [";
 	msg += to_string(maxUser);
@@ -731,7 +742,7 @@ MSG_TYPE CNetwork::ShowUserAll(const SOCKET & sock, const vector<string>& vecMsg
 		for (auto& client : mapClient)
 		{
 			string msg;
-			msg += "아이디 : [";
+			msg += "\r      아이디 : [";
 			msg += client.second->GetName();
 			msg += "] \t\t대화방 번호 : [";
 			msg += to_string(num);
@@ -771,7 +782,7 @@ MSG_TYPE CNetwork::ShowUser(const SOCKET & sock, const vector<string>& vecMsg, c
 		exit(1);
 	}
 	string msg;
-	msg += "아이디 : [";
+	msg += "\r      아이디 : [";
 	msg += client->GetName();
 	msg += "] \t\t대화방 번호 : [";
 	msg += to_string(num);
@@ -863,6 +874,15 @@ void CNetwork::RemoveSocketInfo(const SOCKET& socket)
 	inet_ntop(AF_INET, &clientAddr.sin_addr, buf, sizeof(buf));
 	printf("[TCP 서버] 클라이언트 종료: IP 주소 = %s, 포트 번호 = %d\n", buf, ntohs(clientAddr.sin_port));
 
+	CClient* pClient = CRoomMgr::GetInst()->GetClientByID(socket);
+	if (NULL == pClient)
+	{
+		cout << "Remove Client is NULL\n" << endl;
+		exit(1);
+	}
+	const char* name = pClient->GetName();
+	if('\0' != name[0])
+		m_mapNamePool.erase(name);
 	m_mapClient.erase(socket);
 	CRoomMgr::GetInst()->RemoveClient(socket);
 	closesocket(socket);
