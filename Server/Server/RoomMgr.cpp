@@ -69,6 +69,12 @@ bool CRoomMgr::JoinRoom(const int& id, const int& roomNumber, const int& newRoom
 
 
 	CClient* client = GetClient(id, roomNumber);
+	if (NULL == client)
+	{
+		// 해당 클라이언트가 없음
+		cout << roomNumber << " Room has not " << id << "\n";
+		return FALSE;
+	}
 	pDestRoom->AddClient(id, client);
 	m_mapRoom.find(roomNumber)->second->RemoveClient(id);
 
@@ -89,6 +95,11 @@ bool CRoomMgr::DestroyRoom(const int& number)
 
 	// 메인 대화방으로 이동
 	CRoom* pMainRoom = m_mapRoom.find(int(ROOM_TYPE::MAIN_ROOM))->second;
+	if (NULL == pMainRoom)
+	{
+		cout << "MainRoom is not exist! can't DestroyRoom\n";
+		exit(1);
+	}
 	unordered_map<int, CClient*> mapClient = GetRoom(number)->GetClients();
 	for (auto& client : mapClient)
 	{
@@ -131,7 +142,7 @@ CClient * CRoomMgr::GetClientByID(const int & id)
 {
 	for (auto& room : m_mapRoom)
 	{
-		CClient* client = room.second->GetClient(id);
+		CClient* client = room.second->GetClient(id);	
 		if (NULL != client)
 		{
 			return client;
