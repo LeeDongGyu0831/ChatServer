@@ -53,6 +53,7 @@ public:
 
 	// 전송받은 문자열을 바탕으로 명령어체크 or 브로드캐스팅 판단
 	MSG_TYPE CheckMessage(const SOCKET& sock, const char* message, const int& bufCount, const int& roomNumber);
+	void BroadCastMessage(const SOCKET& sock, const char* message, const int& bufCount, const int& roomNumber);
 
 	// 명령어 처리 함수
 	MSG_TYPE Login(const SOCKET& sock, const vector<string>& vecMsg, const int& roomNumber); // 로그인 처리

@@ -52,7 +52,7 @@ CClient * CRoom::GetClient(const int & id)
 		// 여기에는 해당 클라가 없음
 		return NULL;
 	}
-	return m_mapClient.find(id)->second;
+	return iter->second;
 }
 
 bool CRoom::FindClient(const int & id)
@@ -91,6 +91,11 @@ const char * CRoom::GetClientName(const int & id)
 
 void CRoom::AddClient(const int& id, CClient * client)
 {
+	if (NULL == client)
+	{
+		cout << "CRoom::AddClient Func Null Error [" << id << "] \n";
+		exit(1);
+	}
 	m_mapClient[id] = client;
 	m_mapClient[id]->SetRoomNumber(m_nNumber);
 	ChangeCurrentUserCount(1); // 인원 1명 증가

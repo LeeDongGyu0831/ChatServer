@@ -247,7 +247,7 @@ bool CNetwork::BroadCast(SOCKETINFO* sock)
 			// 자기자신
 			if (otherClient.first == sock->sock)
 			{
-				string msg{ "[Me] " };
+				string msg{ ">> " };
 				Send(otherClient.first, msg.c_str(), msg.size(), 0);
 				continue;
 			}
@@ -277,6 +277,7 @@ bool CNetwork::BroadCast(SOCKETINFO* sock)
 				msg += "] ";
 				Send(otherClient.first, msg.c_str(), msg.size(), 0);
 				Send(otherClient.first, sock->buf, sock->recvBytes - sock->sendBytes, 0);
+				Send(otherClient.first, ">> ", 3, 0);
 			}
 		}
 
@@ -407,6 +408,23 @@ MSG_TYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const i
 	return eMsgType;
 }
 
+void CNetwork::BroadCastMessage(const SOCKET & sock, const char * message, const int & bufCount, const int & roomNumber)
+{
+	// 해당 클라이언트 외에 방에 존재하는 다른 모든 클라이언트에게 뿌려주는 메시지 전송 함수
+	unordered_map<int, CClient*> mapClient = CRoomMgr::GetInst()->GetClients(roomNumber);
+	for (auto& client : mapClient)
+	{
+		if (sock == client.first)
+		{
+			continue;
+		}
+		Send(client.first, "\r", 1, roomNumber);
+		Send(client.first, message, bufCount, roomNumber);
+		Send(client.first, ">> ", 3, roomNumber);
+	}
+	cout << "[" << message << "] Message BroadCast\n";
+}
+
 MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
 {
 	CClient* client = CRoomMgr::GetInst()->GetClient(sock, roomNumber);
@@ -422,7 +440,38 @@ MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, cons
 	}
 	client->SetName(vecMsg[KEYWORD].c_str());
 
+	string logMsg;
+	logMsg += "[";
+	logMsg += vecMsg[KEYWORD].c_str();
+	logMsg += "] 으로 로그인 하였습니다..\n\r";
+	Send(sock, logMsg.c_str(), logMsg.size(), roomNumber);
+
 	CRoomMgr::GetInst()->JoinRoom(sock, int(ROOM_TYPE::LOGIN_ROOM), int(ROOM_TYPE::MAIN_ROOM));
+
+	CRoom* pMainRoom = CRoomMgr::GetInst()->GetRoom(int(ROOM_TYPE::MAIN_ROOM));
+	{
+		string msg;
+		msg += pMainRoom->GetRoomName();
+		msg += " [";
+		msg += to_string(pMainRoom->GetCurrentUser());
+		msg += "/";
+		msg += to_string(pMainRoom->GetMaxUser());
+		msg += "] 에 참가하였습니다.\n\r";
+		Send(sock, msg.c_str(), msg.size(), roomNumber);
+	}
+
+	{
+		string msg;
+		msg += pMainRoom->GetRoomName();
+		msg += " [";
+		msg += to_string(pMainRoom->GetCurrentUser());
+		msg += "/";
+		msg += to_string(pMainRoom->GetMaxUser());
+		msg += "] 에 [";
+		msg += vecMsg[KEYWORD].c_str();
+		msg += "] 님이 참가하였습니다.\n\r";
+		BroadCastMessage(sock, msg.c_str(), msg.size(), int(ROOM_TYPE::MAIN_ROOM));
+	}
 
 	return MSG_TYPE::LOGIN_MSG;
 }
@@ -590,6 +639,12 @@ MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 {
 	// /명령어 [방번호]
 	int newRoomNumber = atoi(vecMsg[KEYWORD].c_str());
+	// 들어가려는 방과 현재 내 방이 같은 상황
+	if (newRoomNumber == roomNumber)
+	{
+		return MSG_TYPE::NOTHING;
+	}
+
 	bool result = CRoomMgr::GetInst()->JoinRoom(sock, roomNumber, newRoomNumber);
 	// 정원 초과 or 해당 방이 없음
 	if (FALSE == result)
@@ -597,15 +652,44 @@ MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 
 		return MSG_TYPE::NOTHING;
 	}
+
 	CRoom* room = CRoomMgr::GetInst()->GetRoom(newRoomNumber);
+	{
+		string msg;
+		msg += room->GetRoomName();
+		msg += " [";
+		msg += to_string(room->GetCurrentUser());
+		msg += "/";
+		msg += to_string(room->GetMaxUser());
+		msg += "] 에 참가하였습니다.\n\r";
+		Send(sock, msg.c_str(), msg.size(), roomNumber);
+	}
 
-	//string msg;
-	//msg += strRoomName;
-	//msg += " [";
-	//msg += to_string(maxUser);
-	//msg += "] 가 생성되었습니다.\n\r";
+	{
+		string msg;
+		msg += room->GetRoomName();
+		msg += " [";
+		msg += to_string(room->GetCurrentUser());
+		msg += "/";
+		msg += to_string(room->GetMaxUser());
+		msg += "] 에 [";
+		msg += vecMsg[KEYWORD].c_str();
+		msg += "] 님이 퇴장하였습니다.\n\r";
+		BroadCastMessage(sock, msg.c_str(), msg.size(), roomNumber);
+	}
 
-	//Send(sock, msg.c_str(), msg.size(), roomNumber);
+	{
+		string msg;
+		msg += room->GetRoomName();
+		msg += " [";
+		msg += to_string(room->GetCurrentUser());
+		msg += "/";
+		msg += to_string(room->GetMaxUser());
+		msg += "] 에 [";
+		msg += vecMsg[KEYWORD].c_str();
+		msg += "] 님이 참가하였습니다.\n\r";
+		BroadCastMessage(sock, msg.c_str(), msg.size(), newRoomNumber);
+	}
 
 	return MSG_TYPE::JOINROOM_MSG;
 }
@@ -737,7 +821,7 @@ BOOL CNetwork::AddSocketInfo(const SOCKET& sock)
 
 	m_mapClient[ptr->sock] = ptr;
 
-	string msg { "=========================================\n\r\t환영합니다 채팅서버 입니다.\n\n\r\t로그인 명령어(/l)을 사용해주세요.\n\n\n\r\t명령어 안내(/h)\n\r=========================================\n\r[Me] " };
+	string msg { "=========================================\n\r\t환영합니다 채팅서버 입니다.\n\n\r\t로그인 명령어(/l)을 사용해주세요.\n\n\n\r\t명령어 안내(/h)\n\r=========================================\n\r>> " };
 	Send(ptr->sock, msg.c_str(), msg.size(), 0);
 
 	return TRUE;
