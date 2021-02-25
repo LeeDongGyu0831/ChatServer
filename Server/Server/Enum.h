@@ -52,20 +52,3 @@ namespace _ROOM
 using MSG_TYPE = _MSG::TYPE;
 using ROOM_TYPE = _ROOM::TYPE;
 using uint = unsigned int;
-
-enum class EVENT_TYPE
-{
-	CREATE_OBJECT,	// wParam : GameObject, lParam : Layer Idx
-	DELETE_OBJECT,	// wParam : GameObject,
-	ADD_CHILD,		// wParam : Parent Object, lParam : Child Object
-	CLEAR_PARENT,	// wParam : Target Object
-	TRANSFER_LAYER,	// wParam : Target Object, lParam : (HIWORD)Layer Index (LOWORD)bMoveAll
-	TRANSFER_SCENE,
-	ACTIVATE_GAMEOBJECT,	// wParam : GameObject Adress
-	DEACTIVATE_GAMEOBJECT,	// wParam : GameObject Adress
-
-	ACTIVATE_COMPONENT,		// wParam : Component Adress
-	DEACTIVATE_COMPONENT,	// wParam : Component Adress
-
-	END,
-};

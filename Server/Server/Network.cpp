@@ -346,6 +346,10 @@ MSG_TYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const u
 	vector<string> vecMsg = SplitString(message, ' ');
 	// 0번 인덱스에는 /r, /l, /c 등등..
 	// 1번 인덱스부터 단어들 나열
+	if (vecMsg[0].size() != 2)
+	{
+		return eMsgType;
+	}
 
 	if (roomNumber == uint(ROOM_TYPE::LOGIN_ROOM))
 	{
@@ -565,6 +569,11 @@ MSG_TYPE CNetwork::ShowRoomAll(const SOCKET & sock, const vector<string>& vecMsg
 
 MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
+	// 방번호가 입력되지 않은 경우
+	if (vecMsg.size() <= 1)
+	{
+		return MSG_TYPE::NOTHING;
+	}
 	// /명령어 [방번호]
 	int number = atoi(vecMsg[KEYWORD].c_str());
 	if (number < 0)
@@ -610,6 +619,11 @@ MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
 	// /명령어 [최대인원] [방제목] 이기 때문에 1번 인덱스에 최대인원 문자열이 담겨있음
+	// 최대인원 및 방제목이 입력되지 않은 경우
+	if (vecMsg.size() <= 2)
+	{
+		return MSG_TYPE::NOTHING;
+	}
 	int maxUser = atoi(vecMsg[KEYWORD].c_str());
 	if (maxUser < 0)
 	{
@@ -652,13 +666,16 @@ MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg,
 MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
 	// /명령어 [방번호]
-	int newRoomNumber = atoi(vecMsg[KEYWORD].c_str());
-	if (newRoomNumber < 0)
+	// 방번호가 입력되지 않은 경우
+	if (vecMsg.size() <= 1)
 	{
 		return MSG_TYPE::NOTHING;
 	}
-	// 들어가려는 방과 현재 내 방이 같은 상황
-	if (newRoomNumber == roomNumber)
+
+	int newRoomNumber = atoi(vecMsg[KEYWORD].c_str());
+	// 들어가려는 방과 현재 내 방이 같은 상황 or 음수 입력
+	if (newRoomNumber < 0 ||
+		uint(newRoomNumber) == roomNumber)
 	{
 		return MSG_TYPE::NOTHING;
 	}
@@ -717,8 +734,15 @@ MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 MSG_TYPE CNetwork::DestoryRoom(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
 	// /명령어 [방번호]
+	// 방번호가 입력되지 않은 경우
+	if (vecMsg.size() <= 1)
+	{
+		return MSG_TYPE::NOTHING;
+	}
+
 	int destroyNumber = atoi(vecMsg[KEYWORD].c_str());
-	if (destroyNumber < 0)
+	if (destroyNumber < 0 ||
+		destroyNumber == int(ROOM_TYPE::MAIN_ROOM))
 	{
 		return MSG_TYPE::NOTHING;
 	}
@@ -783,11 +807,17 @@ MSG_TYPE CNetwork::ShowUserAll(const SOCKET & sock, const vector<string>& vecMsg
 
 MSG_TYPE CNetwork::ShowUser(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
+	// 유저아이디가 입력되지 않은 경우
+	// /명령어 [아이디]
+	if (vecMsg.size() <= 1)
+	{
+		return MSG_TYPE::NOTHING;
+	}
 	CClient* client = CRoomMgr::GetInst()->GetClientByName(vecMsg[KEYWORD].c_str());
 	if (NULL == client)
 	{
 		// 해당 유저를 찾을 수 없음
-		return  MSG_TYPE::SHOWUSER_MSG;
+		return  MSG_TYPE::NOTHING;
 	}
 	uint num = client->GetRoomNumber();
 	CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
@@ -815,11 +845,17 @@ MSG_TYPE CNetwork::ShowUser(const SOCKET & sock, const vector<string>& vecMsg, c
 
 MSG_TYPE CNetwork::SendMsg(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
+	// /명령어 [아이디] [메시지]
+	// 제대로 입력되지 않은 경우
+	if (vecMsg.size() <= 2)
+	{
+		return MSG_TYPE::NOTHING;
+	}
 	CClient* client = CRoomMgr::GetInst()->GetClientByName(vecMsg[KEYWORD].c_str());
 	if (NULL == client)
 	{
 		// 해당 유저를 찾을 수 없음
-		return  MSG_TYPE::NOTHING;
+		return MSG_TYPE::NOTHING;
 	}
 	//int num = client->GetRoomNumber();
 	//CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
