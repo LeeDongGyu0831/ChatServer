@@ -201,6 +201,10 @@ bool CNetwork::DataRecv(SOCKETINFO* sock)
 				msg = "잘못된 명령어 입니다. 다시 확인해주세요.\n\r";
 				Send(sock->sock, msg.c_str(), msg.size(), roomNumber);
 			}
+			if (MSG_TYPE::CLOSE_MSG == m_eMsgType)
+			{
+				return FALSE;
+			}
 			sock->buf[sock->bufCount++] = temp;
 			sock->buf[sock->bufCount] = '\0';
 
@@ -391,6 +395,10 @@ MSG_TYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const i
 	case COMMAND_TYPE::SENDMSG:
 		// 귓속말
 		eMsgType = SendMsg(sock, vecMsg, roomNumber);
+		break;
+	case COMMAND_TYPE::CLOSE:
+		// 접속 종료
+		eMsgType = Close(sock, vecMsg, roomNumber);
 		break;
 	default:
 		break;
@@ -583,12 +591,22 @@ MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 	// /명령어 [방번호]
 	int newRoomNumber = atoi(vecMsg[KEYWORD].c_str());
 	bool result = CRoomMgr::GetInst()->JoinRoom(sock, roomNumber, newRoomNumber);
-	// 정원 초과
+	// 정원 초과 or 해당 방이 없음
 	if (FALSE == result)
 	{
 
 		return MSG_TYPE::NOTHING;
 	}
+	CRoom* room = CRoomMgr::GetInst()->GetRoom(newRoomNumber);
+
+	//string msg;
+	//msg += strRoomName;
+	//msg += " [";
+	//msg += to_string(maxUser);
+	//msg += "] 가 생성되었습니다.\n\r";
+
+	//Send(sock, msg.c_str(), msg.size(), roomNumber);
+
 	return MSG_TYPE::JOINROOM_MSG;
 }
 
@@ -670,13 +688,13 @@ MSG_TYPE CNetwork::SendMsg(const SOCKET & sock, const vector<string>& vecMsg, co
 		// 해당 유저를 찾을 수 없음
 		return  MSG_TYPE::NOTHING;
 	}
-	int num = client->GetRoomNumber();
-	CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
+	//int num = client->GetRoomNumber();
+	//CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
 	
-	string msg = "[귓속말] [";
+	string msg = "\r[귓속말] [";
 	msg += client->GetName();
 	msg += "] ";
-	for (int i = KEYWORD + 1; i < vecMsg.size(); ++i)
+	for (size_t i = KEYWORD + 1; i < vecMsg.size(); ++i)
 	{
 		msg += vecMsg[i];
 		if (i + 1 < vecMsg.size())
@@ -686,6 +704,12 @@ MSG_TYPE CNetwork::SendMsg(const SOCKET & sock, const vector<string>& vecMsg, co
 	Send(client->GetID(), msg.c_str(), msg.size());
 
 	return MSG_TYPE::SENDMSG_MSG;
+}
+
+MSG_TYPE CNetwork::Close(const SOCKET & sock, const vector<string>& vecMsg, const int & roomNumber)
+{
+	RemoveSocketInfo(sock);
+	return MSG_TYPE::CLOSE_MSG;
 }
 
 BOOL CNetwork::AddSocketInfo(const SOCKET& sock)

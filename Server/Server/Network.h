@@ -65,5 +65,6 @@ public:
 	MSG_TYPE ShowUserAll(const SOCKET& sock, const vector<string>& vecMsg, const int& roomNumber); // 유저 목록 출력
 	MSG_TYPE ShowUser(const SOCKET& sock, const vector<string>& vecMsg, const int& roomNumber); // 특정 유저 정보 출력
 	MSG_TYPE SendMsg(const SOCKET& sock, const vector<string>& vecMsg, const int& roomNumber); // 쪽지보내기(귓속말)
+	MSG_TYPE Close(const SOCKET& sock, const vector<string>& vecMsg, const int& roomNumber); // 접속 종료
 };
 

@@ -54,6 +54,10 @@ bool CRoomMgr::CreateRoom(const char* strRoomName, const int& maxUser)
 
 bool CRoomMgr::JoinRoom(const int& id, const int& roomNumber, const int& newRoomNumber)
 {
+	// 해당 대화방 존재X
+	if (FALSE == FindRoom(newRoomNumber))
+		return FALSE;
+
 	// 참가하려는 대화방
 	CRoom* pDestRoom = m_mapRoom.find(newRoomNumber)->second;
 	int currentUser = pDestRoom->GetCurrentUser();
@@ -63,9 +67,6 @@ bool CRoomMgr::JoinRoom(const int& id, const int& roomNumber, const int& newRoom
 	if (currentUser >= maxUser)
 		return FALSE;
 
-	// 해당 대화방 존재X
-	if (FALSE == FindRoom(newRoomNumber))
-		return FALSE;
 
 	CClient* client = GetClient(id, roomNumber);
 	pDestRoom->AddClient(id, client);
@@ -84,7 +85,7 @@ bool CRoomMgr::DestroyRoom(const int& number)
 	if (FALSE == FindRoom(number))
 		return FALSE;
 
-	int currentUser = m_mapRoom.find(number)->second->GetCurrentUser();
+	//int currentUser = m_mapRoom.find(number)->second->GetCurrentUser();
 
 	// 메인 대화방으로 이동
 	CRoom* pMainRoom = m_mapRoom.find(int(ROOM_TYPE::MAIN_ROOM))->second;
