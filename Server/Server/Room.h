@@ -5,28 +5,28 @@ class CClient;
 class CRoom
 {
 	// 대화방 이름
-	string m_strName;
+	string							m_strName;
 
 	// 대화방 번호
-	uint m_nNumber;
+	uint							m_nNumber;
 
 	// 대화방 최대 접속 인원
-	uint m_nMaxUser;
+	uint							m_nMaxUser;
 
 	// 대화방 현재 접속 인원
-	uint m_nCurrentUser;
+	uint							m_nCurrentUser;
 
 	// 대화방 접속 클라이언트
-	unordered_map<uint, CClient*> m_mapClient;
+	unordered_map<uint, CClient*>	m_mapClient;
 
 public:
 	CRoom(const char* strName, const uint& roomNumber, const uint& maxUser);
 	~CRoom();
 
-	uint GetNumber() const; // 방 번호
-	uint GetMaxUser() const; // 최대 인원
-	uint GetCurrentUser() const; // 현재 인원
-	bool GetState() const; // 현재 접속 인원이 여유가 있는지
+	uint GetNumber() const;			// 방 번호
+	uint GetMaxUser() const;		// 최대 인원
+	uint GetCurrentUser() const;	// 현재 인원
+	bool GetState() const;			// 현재 접속 인원이 여유가 있는지
 
 	const char* GetRoomName() const;
 

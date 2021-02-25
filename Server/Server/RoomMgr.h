@@ -8,8 +8,8 @@ class CRoomMgr
 	// 방 번호를 Key로 매핑하여 Hash로 관리함
 	unordered_map<uint, CRoom*>			m_mapRoom;
 
-	stack<uint>							m_stackNumberPool; // 빈 번호를 빠르게 받을 수 있는 Pool
-	uint								m_nMaxRoomNumber; // Pool이 없을 경우 해당 변수를 이용하여 번호 부여
+	stack<uint>							m_stackNumberPool;	// 빈 번호를 빠르게 받을 수 있는 Pool
+	uint								m_nMaxRoomNumber;	// Pool이 없을 경우 해당 변수를 이용하여 번호 부여
 
 	SINGLE(CRoomMgr);
 
@@ -41,8 +41,10 @@ public:
 
 	// 해당 대화방에 클라이언트 추가
 	bool AddClient(const uint& id, const uint& roomNumber);
+
 	// 클라이언트 대화방 이동
 	// bool MoveClient(const CClient* client, const int& currentRoomNumber, const int& destRoomNumber);
+
 	// 클라이언트 삭제
 	bool RemoveClient(const uint& id);
 	bool RemoveClient(const uint& id, const uint& roomNumber);

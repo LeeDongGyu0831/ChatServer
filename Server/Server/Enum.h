@@ -2,17 +2,17 @@
 
 namespace COMMAND_TYPE
 {
-	constexpr static char LOGIN = 'l';
-	constexpr static char HELP = 'h';
-	constexpr static char SHOWROOM = 's';
+	constexpr static char LOGIN =		'l';
+	constexpr static char HELP =		'h';
+	constexpr static char SHOWROOM =	's';
 	constexpr static char SHOWROOMALL = 'o';
-	constexpr static char SHOWUSER = 'u';
+	constexpr static char SHOWUSER =	'u';
 	constexpr static char SHOWUSERALL = 'p';
-	constexpr static char SENDMSG = 't';
-	constexpr static char CREATEROOM = 'c';
-	constexpr static char JOINROOM = 'j';
+	constexpr static char SENDMSG =		't';
+	constexpr static char CREATEROOM =	'c';
+	constexpr static char JOINROOM =	'j';
 	constexpr static char DESTROYROOM = 'd';
-	constexpr static char CLOSE = 'x';
+	constexpr static char CLOSE =		'x';
 };
 
 namespace _MSG
@@ -20,6 +20,7 @@ namespace _MSG
 	enum class TYPE
 	{
 		NORMAL,
+
 		LOGIN_MSG,
 		HELP_MSG,
 		SHOWROOM_MSG,
@@ -31,7 +32,20 @@ namespace _MSG
 		JOINROOM_MSG,
 		DESTROYROOM_MSG,
 		CLOSE_MSG,
-		NOTHING,
+
+		// 에러 타입
+		ERROR_MSG,
+		CANT_LOGIN_MSG,
+		MUST_LOGIN_MSG,
+		DO_NOT_LOGIN_MSG,
+		CANT_USE_ID_MSG,
+		CANT_SEARCH_USER_MSG,
+		CANT_CREATE_ROOM_MSG,
+		CANT_SEARCH_ROOM_MSG,
+		CANT_JOIN_ROOM_MSG,
+		NO_MSG,
+		ERROR_END,
+
 		END,
 	};
 };

@@ -40,7 +40,8 @@ bool CRoomMgr::CreateRoom(const char* strRoomName, const uint& maxUser)
 		if (nRoomCount > m_nMaxRoomNumber)
 		{
 			cout << "StackPoolNumber bigger than MaxRoomNumber\n";
-			exit(1);
+			return FALSE;
+			//exit(1);
 		}
 		m_stackNumberPool.pop();
 	}
@@ -105,7 +106,8 @@ bool CRoomMgr::DestroyRoom(const uint& number)
 	if (NULL == pMainRoom)
 	{
 		cout << "MainRoom is not exist! can't DestroyRoom\n";
-		exit(1);
+		return FALSE;
+		//exit(1);
 	}
 
 	CRoom* pRoom = GetRoom(number);
@@ -138,7 +140,8 @@ unordered_map<uint, CClient*> CRoomMgr::GetClients(const uint& roomNumber)
 	{
 		// 해당 룸이 없음
 		cout << "RoomMgr GetClients Func Error \n";
-		exit(1);
+		return m_mapRoom.find(uint(ROOM_TYPE::MAIN_ROOM))->second->GetClients();
+		//exit(1);
 	}
 	return iter->second->GetClients();
 }
