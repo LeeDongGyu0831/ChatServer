@@ -250,15 +250,14 @@ bool CNetwork::BroadCast(SOCKETINFO* sock)
 			else
 			{
 				// 기본적으로 같은 방에 있는 사람들에게만 브로드캐스팅
+				// 로그인룸은 브로드캐스팅 X
 				if (CRoomMgr::GetInst()->GetRoomNumber(otherClient.first) != roomNumber)
 				{
 					sock->recvBytes = 0;
 					sock->sendBytes = 0;
 					continue;
 				}
-
-				// 아이디가 없다 == 로그인이 되어있지 않는 상태
-				if (name[0] == '\0')
+				if (roomNumber == int(ROOM_TYPE::LOGIN_ROOM))
 				{
 					sock->recvBytes = 0;
 					sock->sendBytes = 0;
@@ -343,66 +342,59 @@ MSG_TYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const i
 	// 0번 인덱스에는 /r, /l, /c 등등..
 	// 1번 인덱스부터 단어들 나열
 
-	// 로그인 명령
-	if (message[COMMAND] == COMMAND_TYPE::LOGIN)
+	if (roomNumber == int(ROOM_TYPE::LOGIN_ROOM))
 	{
+		// 로그인 룸에서는 로그인명령과 도움말명령만 인식
+		if (message[COMMAND] != int(COMMAND_TYPE::LOGIN) &&
+			message[COMMAND] != int(COMMAND_TYPE::HELP))
+			return eMsgType;
+	}
+
+	switch (message[COMMAND])
+	{
+	case COMMAND_TYPE::LOGIN:
+		// 로그인 명령
 		eMsgType = Login(sock, vecMsg, roomNumber);
-	}
-
-	// 명령어 안내 출력
-	else if (message[COMMAND] == COMMAND_TYPE::HELP)
-	{
+		break;
+	case COMMAND_TYPE::HELP:
+		// 명령어 안내 출력
 		eMsgType = Help(sock, vecMsg, roomNumber);
-	}
-
-	// 대화방 목록 출력
-	else if (message[COMMAND] == COMMAND_TYPE::SHOWROOMALL)
-	{
+		break;
+	case COMMAND_TYPE::SHOWROOMALL:
+		// 대화방 목록 출력
 		eMsgType = ShowRoomAll(sock, vecMsg, roomNumber);
-	}
-
-	// 대화방 정보 출력
-	else if (message[COMMAND] == COMMAND_TYPE::SHOWROOM)
-	{
+		break;
+	case COMMAND_TYPE::SHOWROOM:
+		// 대화방 정보 출력
 		eMsgType = ShowRoom(sock, vecMsg, roomNumber);
-	}
-
-	// 대화방 생성
-	else if (message[COMMAND] == COMMAND_TYPE::CREATEROOM)
-	{
+		break;
+	case COMMAND_TYPE::CREATEROOM:
+		// 대화방 생성
 		eMsgType = CreateRoom(sock, vecMsg, roomNumber);
-	}
-	
-	// 대화방 참가
-	else if (message[COMMAND] == COMMAND_TYPE::JOINROOM)
-	{
+		break;
+	case COMMAND_TYPE::JOINROOM:
+		// 대화방 참가
 		eMsgType = JoinRoom(sock, vecMsg, roomNumber);
-	}
-
-	// 대화방 폭파
-	else if (message[COMMAND] == COMMAND_TYPE::DESTROYROOM)
-	{
+		break;
+	case COMMAND_TYPE::DESTROYROOM:
+		// 대화방 폭파
 		eMsgType = DestoryRoom(sock, vecMsg, roomNumber);
-	}
-
-	// 이용자 목록 출력
-	else if (message[COMMAND] == COMMAND_TYPE::SHOWUSERALL)
-	{
+		break;
+	case COMMAND_TYPE::SHOWUSERALL:
+		// 이용자 목록 출력
 		eMsgType = ShowUserAll(sock, vecMsg, roomNumber);
-	}
-
-	// 이용자 검색
-	else if (message[COMMAND] == COMMAND_TYPE::SHOWUSER)
-	{
+		break;
+	case COMMAND_TYPE::SHOWUSER:
+		// 특정 이용자 검색
 		eMsgType = ShowUser(sock, vecMsg, roomNumber);
-	}
-
-	// 쪽지 보내기
-	else if (message[COMMAND] == COMMAND_TYPE::SENDMSG)
-	{
+		break;
+	case COMMAND_TYPE::SENDMSG:
+		// 귓속말
 		eMsgType = SendMsg(sock, vecMsg, roomNumber);
+		break;
+	default:
+		break;
 	}
-
 
 	return eMsgType;
 }
@@ -415,8 +407,14 @@ MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, cons
 		cout << "Login Func Null Error! \n";
 		exit(1);
 	}
-
+	// 로그인이 되어있는 상태에서 다시 로그인을 시도하는 경우
+	if (int(ROOM_TYPE::LOGIN_ROOM) != roomNumber)
+	{
+		return MSG_TYPE::NOTHING;
+	}
 	client->SetName(vecMsg[KEYWORD].c_str());
+
+	CRoomMgr::GetInst()->JoinRoom(sock, int(ROOM_TYPE::LOGIN_ROOM), int(ROOM_TYPE::MAIN_ROOM));
 
 	return MSG_TYPE::LOGIN_MSG;
 }
@@ -449,7 +447,7 @@ MSG_TYPE CNetwork::Help(const SOCKET & sock, const vector<string>& vecMsg, const
 	msg += "\t\t이용자 정보 보기\n\r";
 
 	msg += command + char(COMMAND_TYPE::SENDMSG);
-	msg += " [방번호] [메시지]";
+	msg += " [아이디] [메시지]";
 	msg += "\t쪽지 보내기\n\r";
 
 	msg += command + char(COMMAND_TYPE::CREATEROOM);
@@ -461,7 +459,8 @@ MSG_TYPE CNetwork::Help(const SOCKET & sock, const vector<string>& vecMsg, const
 	msg += "\t\t대화방 참여하기\n\r";
 
 	msg += command + char(COMMAND_TYPE::DESTROYROOM);
-	msg += "\t\t\t대화방 끝내기\n\r";
+	msg += " [방번호]";
+	msg += "\t\t대화방 끝내기\n\r";
 
 	msg += command + char(COMMAND_TYPE::CLOSE);
 	msg += "\t\t\t끝내기\n\r";
@@ -555,7 +554,7 @@ MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg,
 	}
 	
 	// 문자열이 섞이는 등 이상하게 입력 받은 경우
-	if (maxUser == 0)
+	if (maxUser <= 0)
 	{
 		return MSG_TYPE::NOTHING;
 	}
@@ -674,7 +673,7 @@ MSG_TYPE CNetwork::SendMsg(const SOCKET & sock, const vector<string>& vecMsg, co
 	int num = client->GetRoomNumber();
 	CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
 	
-	string msg = "[";
+	string msg = "[귓속말] [";
 	msg += client->GetName();
 	msg += "] ";
 	for (int i = KEYWORD + 1; i < vecMsg.size(); ++i)
@@ -710,7 +709,7 @@ BOOL CNetwork::AddSocketInfo(const SOCKET& sock)
 	ptr->bufCount = 0;
 
 	// Client ID 및 시작 방 번호 초기화
-	CRoomMgr::GetInst()->AddClient(ptr->sock, 0);
+	CRoomMgr::GetInst()->AddClient(ptr->sock, int(ROOM_TYPE::LOGIN_ROOM));
 
 	m_mapClient[ptr->sock] = ptr;
 

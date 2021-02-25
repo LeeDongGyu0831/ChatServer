@@ -31,7 +31,6 @@ public:
 	const char* GetRoomName() const;
 
 	// 현재 접속중인 클라이언트들 반환
-	// 이게 있어도 되는지 아직 잘 모르겠습니다..
 	unordered_map<int, CClient*> GetClients();
 
 	// 클라이언트 ID (소켓번호)를 바탕으로 검색
