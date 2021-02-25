@@ -295,6 +295,10 @@ bool CNetwork::BroadCast(SOCKETINFO* sock)
 				Send(otherClient.first, msg.c_str(), msg.size(), 0);
 				Send(otherClient.first, sock->buf, sock->recvBytes - sock->sendBytes, 0);
 				Send(otherClient.first, ">> ", 3, 0);
+				if (m_mapClient[otherClient.first]->bufCount > 0)
+				{
+					Send(otherClient.first, m_mapClient[otherClient.first]->buf, m_mapClient[otherClient.first]->bufCount, 0);
+				}
 			}
 		}
 
@@ -498,7 +502,8 @@ MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, cons
 	if (NULL == client)
 	{
 		cout << "Login Func Null Error! \n";
-		exit(1);
+		return MSG_TYPE::ERROR_END;
+		//exit(1);
 	}
 	// 로그인이 되어있는 상태에서 다시 로그인을 시도하는 경우
 	if (uint(ROOM_TYPE::LOGIN_ROOM) != roomNumber)
@@ -528,7 +533,8 @@ MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, cons
 	{
 		// 메인 룸이 없는 경우는 존재해서는 안됨
 		cout << "MainRoom is not exist! can't Login \n";
-		exit(1);
+		return MSG_TYPE::ERROR_END;
+		//exit(1);
 	}
 
 	return MSG_TYPE::LOGIN_MSG;

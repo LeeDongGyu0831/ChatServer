@@ -96,7 +96,8 @@ void CRoom::AddClient(const uint& id, CClient * client)
 	if (NULL == client)
 	{
 		cout << "CRoom::AddClient Func Null Error [" << id << "] \n";
-		exit(1);
+		return;
+		//exit(1);
 	}
 	m_mapClient[id] = client;
 	m_mapClient[id]->SetRoomNumber(m_nNumber);
