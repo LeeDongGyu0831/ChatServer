@@ -451,6 +451,8 @@ void CNetwork::BroadCastMessage(const SOCKET & sock, const char * message, const
 
 MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
+	if (vecMsg.size() < 2)
+		return MSG_TYPE::NOTHING;
 	CClient* client = CRoomMgr::GetInst()->GetClient(sock, roomNumber);
 	if (NULL == client)
 	{
@@ -679,7 +681,7 @@ MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 
 	int newRoomNumber = atoi(vecMsg[KEYWORD].c_str());
 	// 들어가려는 방과 현재 내 방이 같은 상황 or 음수 입력
-	if (newRoomNumber < 0 ||
+	if (newRoomNumber <= 0 ||
 		uint(newRoomNumber) == roomNumber)
 	{
 		return MSG_TYPE::NOTHING;
@@ -806,8 +808,14 @@ MSG_TYPE CNetwork::SendMsg(const SOCKET & sock, const vector<string>& vecMsg, co
 	{
 		return MSG_TYPE::NOTHING;
 	}
-	CClient* client = CRoomMgr::GetInst()->GetClientByName(vecMsg[KEYWORD].c_str());
-	if (NULL == client)
+	CClient* pToClient = CRoomMgr::GetInst()->GetClientByName(vecMsg[KEYWORD].c_str());
+	if (NULL == pToClient)
+	{
+		// 해당 유저를 찾을 수 없음
+		return MSG_TYPE::NOTHING;
+	}
+	CClient* pFromClient = CRoomMgr::GetInst()->GetClient(sock, roomNumber);
+	if (NULL == pFromClient)
 	{
 		// 해당 유저를 찾을 수 없음
 		return MSG_TYPE::NOTHING;
@@ -815,17 +823,32 @@ MSG_TYPE CNetwork::SendMsg(const SOCKET & sock, const vector<string>& vecMsg, co
 	//int num = client->GetRoomNumber();
 	//CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
 	
-	string msg = "\r[귓속말] [";
-	msg += client->GetName();
-	msg += "] ";
-	for (size_t i = KEYWORD + 1; i < vecMsg.size(); ++i)
 	{
-		msg += vecMsg[i];
-		if (i + 1 < vecMsg.size())
-			msg += " ";
+		string msg = "\r[귓속말] [";
+		msg += pFromClient->GetName();
+		msg += "] ";
+		for (size_t i = KEYWORD + 1; i < vecMsg.size(); ++i)
+		{
+			msg += vecMsg[i];
+			if (i + 1 < vecMsg.size())
+				msg += " ";
+		}
+		msg += "\n\r>> ";
+		Send(pToClient->GetID(), msg.c_str(), msg.size());
 	}
-	msg += "\n\r";
-	Send(client->GetID(), msg.c_str(), msg.size());
+	{
+		string msg = "\r[전송] [";
+		msg += pToClient->GetName();
+		msg += "] ";
+		for (size_t i = KEYWORD + 1; i < vecMsg.size(); ++i)
+		{
+			msg += vecMsg[i];
+			if (i + 1 < vecMsg.size())
+				msg += " ";
+		}
+		msg += "\n\r";
+		Send(pFromClient->GetID(), msg.c_str(), msg.size());
+	}
 
 	return MSG_TYPE::SENDMSG_MSG;
 }
