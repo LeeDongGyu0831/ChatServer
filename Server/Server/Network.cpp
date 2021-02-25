@@ -589,7 +589,7 @@ MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 	if (NULL == room)
 	{
 		cout << "ShowRoom Func Null Error! \n";
-		exit(1);
+		return MSG_TYPE::NOTHING;
 	}
 
 	string msg;
