@@ -10,6 +10,8 @@
 #define NONE 0
 #define KEYWORD 1
 
+#define BACKSPACE 8
+
 // Singleton 매크로 함수
 #define SINGLE(type) private: type(); ~type();\
 public:\

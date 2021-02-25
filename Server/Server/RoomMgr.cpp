@@ -2,6 +2,7 @@
 #include "RoomMgr.h"
 #include "Room.h"
 #include "Client.h"
+#include "Network.h"
 
 CRoomMgr::CRoomMgr()
 {
@@ -76,6 +77,7 @@ bool CRoomMgr::JoinRoom(const uint& id, const uint& roomNumber, const uint& newR
 		return FALSE;
 	}
 	pDestRoom->AddClient(id, client);
+
 	m_mapRoom.find(roomNumber)->second->RemoveClient(id);
 
 	return TRUE;
@@ -100,7 +102,17 @@ bool CRoomMgr::DestroyRoom(const uint& number)
 		cout << "MainRoom is not exist! can't DestroyRoom\n";
 		exit(1);
 	}
-	unordered_map<uint, CClient*> mapClient = GetRoom(number)->GetClients();
+
+	CRoom* pRoom = GetRoom(number);
+	{
+		string msg;
+		msg += "[";
+		msg += pRoom->GetRoomName();
+		msg += "] 대화방이 파괴되었습니다.\n\r";
+		CNetwork::GetInst()->BroadCastMessage(NONE, msg.c_str(), msg.size(), number);
+	}
+
+	unordered_map<uint, CClient*> mapClient = pRoom->GetClients();
 	for (auto& client : mapClient)
 	{
 		uint id = client.second->GetID();

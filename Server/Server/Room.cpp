@@ -2,6 +2,8 @@
 #include "Room.h"
 #include "Client.h"
 
+#include "Network.h"
+
 CRoom::CRoom(const char* strName, const uint& roomNumber, const uint& maxUser) : m_strName(strName), m_nNumber(roomNumber), m_nMaxUser(maxUser), m_nCurrentUser(0)
 {
 	m_mapClient.clear();
@@ -98,16 +100,47 @@ void CRoom::AddClient(const uint& id, CClient * client)
 	}
 	m_mapClient[id] = client;
 	m_mapClient[id]->SetRoomNumber(m_nNumber);
+
+	{
+		string msg;
+		msg += "\r[";
+		msg += GetRoomName();
+		msg += "] 에 참가하였습니다.\n\r";
+		CNetwork::GetInst()->Send(id, msg.c_str(), msg.size(), m_nNumber);
+	}
+
+	{
+		string msg;
+		msg += "[";
+		msg += GetRoomName();
+		msg += "] 에 [";
+		msg += client->GetName();
+		msg += "] 님이 참가하였습니다.\n\r";
+		CNetwork::GetInst()->BroadCastMessage(id, msg.c_str(), msg.size(), m_nNumber);
+	}
+
 	ChangeCurrentUserCount(1); // 인원 1명 증가
 }
 
 bool CRoom::RemoveClient(const uint & id)
 {
+	const char* name = GetClientName(id);
 	uint count = m_mapClient.erase(id);
 	if (0 == count) // 하나도 못찾은 경우 == 삭제된게 없다
 	{
 		return FALSE;
 	}
+
+	{
+		string msg;
+		msg += "[";
+		msg += GetRoomName();
+		msg += "] 에 [";
+		msg += name;
+		msg += "] 님이 퇴장하였습니다.\n\r";
+		CNetwork::GetInst()->BroadCastMessage(id, msg.c_str(), msg.size(), m_nNumber);
+	}
+
 	ChangeCurrentUserCount(-count);
 	return TRUE;
 }

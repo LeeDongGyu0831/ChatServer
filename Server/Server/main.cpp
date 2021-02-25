@@ -24,9 +24,11 @@ int main(int argc, char **argv)
 	CRoomMgr::GetInst()->Init();
 
 	cout << "====================================\n";
-	while (TRUE == CNetwork::GetInst()->Update())
+	while (1)
 	{
-
+		bool result = CNetwork::GetInst()->Update();
+		if (FALSE == result)
+			break;
 	}
 
 	CNetwork::GetInst()->Close();
