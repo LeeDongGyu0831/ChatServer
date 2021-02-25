@@ -170,7 +170,7 @@ bool CNetwork::Accept()
 
 bool CNetwork::DataRecv(SOCKETINFO* sock)
 {
-	int roomNumber = CRoomMgr::GetInst()->GetRoomNumber(sock->sock);
+	uint roomNumber = CRoomMgr::GetInst()->GetRoomNumber(sock->sock);
 	const char* name = CRoomMgr::GetInst()->GetClientName(sock->sock, roomNumber);
 	if (FD_ISSET(sock->sock, &m_rset))
 	{
@@ -237,7 +237,7 @@ bool CNetwork::DataRecv(SOCKETINFO* sock)
 
 bool CNetwork::BroadCast(SOCKETINFO* sock)
 {
-	int roomNumber = CRoomMgr::GetInst()->GetRoomNumber(sock->sock);
+	uint roomNumber = CRoomMgr::GetInst()->GetRoomNumber(sock->sock);
 	const char* name = CRoomMgr::GetInst()->GetClientName(sock->sock, roomNumber);
 	if (FD_ISSET(sock->sock, &m_wset))
 	{
@@ -261,7 +261,7 @@ bool CNetwork::BroadCast(SOCKETINFO* sock)
 					sock->sendBytes = 0;
 					continue;
 				}
-				if (roomNumber == int(ROOM_TYPE::LOGIN_ROOM))
+				if (roomNumber == uint(ROOM_TYPE::LOGIN_ROOM))
 				{
 					sock->recvBytes = 0;
 					sock->sendBytes = 0;
@@ -309,7 +309,7 @@ IN_ADDR CNetwork::GetDefaultMyIP()
 	return addr;
 }
 
-bool CNetwork::Send(const SOCKET& sock, const char * msg, const int& size, const int& roomNumber = NONE)
+bool CNetwork::Send(const SOCKET& sock, const char * msg, const uint& size, const uint& roomNumber = NONE)
 {
 	int retVal = send(sock, msg, size, 0);
 	if (retVal == SOCKET_ERROR)
@@ -327,7 +327,7 @@ bool CNetwork::Send(const SOCKET& sock, const char * msg, const int& size, const
 	return TRUE;
 }
 
-MSG_TYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const int& bufCount, const int& roomNumber)
+MSG_TYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const uint& bufCount, const uint& roomNumber)
 {
 	MSG_TYPE eMsgType = MSG_TYPE::NORMAL;
 
@@ -347,11 +347,11 @@ MSG_TYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const i
 	// 0번 인덱스에는 /r, /l, /c 등등..
 	// 1번 인덱스부터 단어들 나열
 
-	if (roomNumber == int(ROOM_TYPE::LOGIN_ROOM))
+	if (roomNumber == uint(ROOM_TYPE::LOGIN_ROOM))
 	{
 		// 로그인 룸에서는 로그인명령과 도움말명령만 인식
-		if (message[COMMAND] != int(COMMAND_TYPE::LOGIN) &&
-			message[COMMAND] != int(COMMAND_TYPE::HELP))
+		if (message[COMMAND] != uint(COMMAND_TYPE::LOGIN) &&
+			message[COMMAND] != uint(COMMAND_TYPE::HELP))
 			return eMsgType;
 	}
 
@@ -408,10 +408,10 @@ MSG_TYPE CNetwork::CheckMessage(const SOCKET& sock, const char* message, const i
 	return eMsgType;
 }
 
-void CNetwork::BroadCastMessage(const SOCKET & sock, const char * message, const int & bufCount, const int & roomNumber)
+void CNetwork::BroadCastMessage(const SOCKET & sock, const char * message, const uint & bufCount, const uint & roomNumber)
 {
 	// 해당 클라이언트 외에 방에 존재하는 다른 모든 클라이언트에게 뿌려주는 메시지 전송 함수
-	unordered_map<int, CClient*> mapClient = CRoomMgr::GetInst()->GetClients(roomNumber);
+	unordered_map<uint, CClient*> mapClient = CRoomMgr::GetInst()->GetClients(roomNumber);
 	for (auto& client : mapClient)
 	{
 		if (sock == client.first)
@@ -425,7 +425,7 @@ void CNetwork::BroadCastMessage(const SOCKET & sock, const char * message, const
 	cout << "[" << message << "] Message BroadCast\n";
 }
 
-MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
+MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
 	CClient* client = CRoomMgr::GetInst()->GetClient(sock, roomNumber);
 	if (NULL == client)
@@ -434,7 +434,7 @@ MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, cons
 		exit(1);
 	}
 	// 로그인이 되어있는 상태에서 다시 로그인을 시도하는 경우
-	if (int(ROOM_TYPE::LOGIN_ROOM) != roomNumber)
+	if (uint(ROOM_TYPE::LOGIN_ROOM) != roomNumber)
 	{
 		return MSG_TYPE::NOTHING;
 	}
@@ -446,9 +446,9 @@ MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, cons
 	logMsg += "] 으로 로그인 하였습니다..\n\r";
 	Send(sock, logMsg.c_str(), logMsg.size(), roomNumber);
 
-	CRoomMgr::GetInst()->JoinRoom(sock, int(ROOM_TYPE::LOGIN_ROOM), int(ROOM_TYPE::MAIN_ROOM));
+	CRoomMgr::GetInst()->JoinRoom(sock, uint(ROOM_TYPE::LOGIN_ROOM), uint(ROOM_TYPE::MAIN_ROOM));
 
-	CRoom* pMainRoom = CRoomMgr::GetInst()->GetRoom(int(ROOM_TYPE::MAIN_ROOM));
+	CRoom* pMainRoom = CRoomMgr::GetInst()->GetRoom(uint(ROOM_TYPE::MAIN_ROOM));
 	if (NULL == pMainRoom)
 	{
 		cout << "MainRoom is not exist! can't Login \n";
@@ -476,13 +476,13 @@ MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, cons
 		msg += "] 에 [";
 		msg += vecMsg[KEYWORD].c_str();
 		msg += "] 님이 참가하였습니다.\n\r";
-		BroadCastMessage(sock, msg.c_str(), msg.size(), int(ROOM_TYPE::MAIN_ROOM));
+		BroadCastMessage(sock, msg.c_str(), msg.size(), uint(ROOM_TYPE::MAIN_ROOM));
 	}
 
 	return MSG_TYPE::LOGIN_MSG;
 }
 
-MSG_TYPE CNetwork::Help(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
+MSG_TYPE CNetwork::Help(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
 	// Enum.h 에 정의한 명령어 키에 대응되어 출력되게끔
 	string command = "/";
@@ -534,9 +534,9 @@ MSG_TYPE CNetwork::Help(const SOCKET & sock, const vector<string>& vecMsg, const
 	return MSG_TYPE::HELP_MSG;
 }
 
-MSG_TYPE CNetwork::ShowRoomAll(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
+MSG_TYPE CNetwork::ShowRoomAll(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
-	vector<int> vecNumber = CRoomMgr::GetInst()->GetRoomNumberArray();
+	vector<uint> vecNumber = CRoomMgr::GetInst()->GetRoomNumberArray();
 	string msg;
 	msg.reserve(50);
 	for (auto& num : vecNumber)
@@ -563,10 +563,14 @@ MSG_TYPE CNetwork::ShowRoomAll(const SOCKET & sock, const vector<string>& vecMsg
 	return MSG_TYPE::SHOWROOMALL_MSG;;
 }
 
-MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
+MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
 	// /명령어 [방번호]
 	int number = atoi(vecMsg[KEYWORD].c_str());
+	if (number < 0)
+	{
+		return MSG_TYPE::NOTHING;
+	}
 	const CRoom* room = CRoomMgr::GetInst()->GetRoom(number);
 	if (NULL == room)
 	{
@@ -587,12 +591,12 @@ MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 	msg += to_string(room->GetMaxUser());
 	msg += "]\n\r";
 
-	unordered_map<int, CClient*> mapClient = CRoomMgr::GetInst()->GetClients(number);
-	int index = 0;
+	unordered_map<uint, CClient*> mapClient = CRoomMgr::GetInst()->GetClients(number);
+	uint index = 0;
 	for (auto& client : mapClient)
 	{
 		msg += "[";
-		msg += to_string(index);
+		msg += to_string(index++);
 		msg += "] ";
 		msg += client.second->GetName();
 		msg += "\n\r";
@@ -603,10 +607,14 @@ MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 	return MSG_TYPE::SHOWROOM_MSG;
 }
 
-MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
+MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
 	// /명령어 [최대인원] [방제목] 이기 때문에 1번 인덱스에 최대인원 문자열이 담겨있음
 	int maxUser = atoi(vecMsg[KEYWORD].c_str());
+	if (maxUser < 0)
+	{
+		return MSG_TYPE::NOTHING;
+	}
 	string strRoomName = "";
 	for (size_t i = 2; i < vecMsg.size(); ++i)
 	{
@@ -641,10 +649,14 @@ MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg,
 	return MSG_TYPE::CREATEROOM_MSG;
 }
 
-MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
+MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
 	// /명령어 [방번호]
 	int newRoomNumber = atoi(vecMsg[KEYWORD].c_str());
+	if (newRoomNumber < 0)
+	{
+		return MSG_TYPE::NOTHING;
+	}
 	// 들어가려는 방과 현재 내 방이 같은 상황
 	if (newRoomNumber == roomNumber)
 	{
@@ -702,11 +714,15 @@ MSG_TYPE CNetwork::JoinRoom(const SOCKET & sock, const vector<string>& vecMsg, c
 	return MSG_TYPE::JOINROOM_MSG;
 }
 
-MSG_TYPE CNetwork::DestoryRoom(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
+MSG_TYPE CNetwork::DestoryRoom(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
 	// /명령어 [방번호]
-	int destoryNumber = atoi(vecMsg[KEYWORD].c_str());
-	bool result = CRoomMgr::GetInst()->DestroyRoom(destoryNumber);
+	int destroyNumber = atoi(vecMsg[KEYWORD].c_str());
+	if (destroyNumber < 0)
+	{
+		return MSG_TYPE::NOTHING;
+	}
+	bool result = CRoomMgr::GetInst()->DestroyRoom(destroyNumber);
 	// 폭파 실패
 	if (FALSE == result)
 	{
@@ -730,14 +746,14 @@ MSG_TYPE CNetwork::DestoryRoom(const SOCKET & sock, const vector<string>& vecMsg
 	return MSG_TYPE::DESTROYROOM_MSG;
 }
 
-MSG_TYPE CNetwork::ShowUserAll(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
+MSG_TYPE CNetwork::ShowUserAll(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
-	vector<int> vecNum = CRoomMgr::GetInst()->GetRoomNumberArray();
+	vector<uint> vecNum = CRoomMgr::GetInst()->GetRoomNumberArray();
 	for (auto& num : vecNum)
 	{
 		if (num == int(ROOM_TYPE::LOGIN_ROOM))
 			continue;
-		unordered_map<int, CClient*> mapClient = CRoomMgr::GetInst()->GetClients(num);
+		unordered_map<uint, CClient*> mapClient = CRoomMgr::GetInst()->GetClients(num);
 		CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
 		if (NULL == room)
 		{
@@ -765,7 +781,7 @@ MSG_TYPE CNetwork::ShowUserAll(const SOCKET & sock, const vector<string>& vecMsg
 	return MSG_TYPE::SHOWUSERALL_MSG;
 }
 
-MSG_TYPE CNetwork::ShowUser(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
+MSG_TYPE CNetwork::ShowUser(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
 	CClient* client = CRoomMgr::GetInst()->GetClientByName(vecMsg[KEYWORD].c_str());
 	if (NULL == client)
@@ -773,7 +789,7 @@ MSG_TYPE CNetwork::ShowUser(const SOCKET & sock, const vector<string>& vecMsg, c
 		// 해당 유저를 찾을 수 없음
 		return  MSG_TYPE::SHOWUSER_MSG;
 	}
-	int num = client->GetRoomNumber();
+	uint num = client->GetRoomNumber();
 	CRoom* room = CRoomMgr::GetInst()->GetRoom(num);
 	if (NULL == room)
 	{
@@ -797,7 +813,7 @@ MSG_TYPE CNetwork::ShowUser(const SOCKET & sock, const vector<string>& vecMsg, c
 	return MSG_TYPE::SHOWUSER_MSG;
 }
 
-MSG_TYPE CNetwork::SendMsg(const SOCKET & sock, const vector<string>& vecMsg, const int& roomNumber)
+MSG_TYPE CNetwork::SendMsg(const SOCKET & sock, const vector<string>& vecMsg, const uint& roomNumber)
 {
 	CClient* client = CRoomMgr::GetInst()->GetClientByName(vecMsg[KEYWORD].c_str());
 	if (NULL == client)
@@ -823,7 +839,7 @@ MSG_TYPE CNetwork::SendMsg(const SOCKET & sock, const vector<string>& vecMsg, co
 	return MSG_TYPE::SENDMSG_MSG;
 }
 
-MSG_TYPE CNetwork::Close(const SOCKET & sock, const vector<string>& vecMsg, const int & roomNumber)
+MSG_TYPE CNetwork::Close(const SOCKET & sock, const vector<string>& vecMsg, const uint & roomNumber)
 {
 	RemoveSocketInfo(sock);
 	return MSG_TYPE::CLOSE_MSG;
@@ -850,7 +866,7 @@ BOOL CNetwork::AddSocketInfo(const SOCKET& sock)
 	ptr->bufCount = 0;
 
 	// Client ID 및 시작 방 번호 초기화
-	CRoomMgr::GetInst()->AddClient(ptr->sock, int(ROOM_TYPE::LOGIN_ROOM));
+	CRoomMgr::GetInst()->AddClient(ptr->sock, uint(ROOM_TYPE::LOGIN_ROOM));
 
 	m_mapClient[ptr->sock] = ptr;
 

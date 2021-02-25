@@ -7,7 +7,7 @@
 #define IP_ADDR_LEN 16
 #define MINIMUM_LEN 3
 
-#define NONE -1
+#define NONE 0
 #define KEYWORD 1
 
 // Singleton 매크로 함수

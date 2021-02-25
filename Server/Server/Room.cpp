@@ -2,7 +2,7 @@
 #include "Room.h"
 #include "Client.h"
 
-CRoom::CRoom(const char* strName, int roomNumber, int maxUser) : m_strName(strName), m_nNumber(roomNumber), m_nMaxUser(maxUser), m_nCurrentUser(0)
+CRoom::CRoom(const char* strName, const uint& roomNumber, const uint& maxUser) : m_strName(strName), m_nNumber(roomNumber), m_nMaxUser(maxUser), m_nCurrentUser(0)
 {
 	m_mapClient.clear();
 }
@@ -12,17 +12,17 @@ CRoom::~CRoom()
 	Safe_Delete_Unordered_Map(m_mapClient);
 }
 
-int CRoom::GetNumber() const
+uint CRoom::GetNumber() const
 {
 	return m_nNumber;
 }
 
-int CRoom::GetMaxUser() const
+uint CRoom::GetMaxUser() const
 {
 	return m_nMaxUser;
 }
 
-int CRoom::GetCurrentUser() const
+uint CRoom::GetCurrentUser() const
 {
 	return m_nCurrentUser;
 }
@@ -39,14 +39,14 @@ const char* CRoom::GetRoomName() const
 	return m_strName.c_str();
 }
 
-unordered_map<int, CClient*> CRoom::GetClients()
+unordered_map<uint, CClient*> CRoom::GetClients()
 {
 	return m_mapClient;
 }
 
-CClient * CRoom::GetClient(const int & id)
+CClient * CRoom::GetClient(const uint & id)
 {
-	unordered_map<int, CClient*>::iterator iter = m_mapClient.find(id);
+	unordered_map<uint, CClient*>::iterator iter = m_mapClient.find(id);
 	if (iter == m_mapClient.end())
 	{
 		// 여기에는 해당 클라가 없음
@@ -55,7 +55,7 @@ CClient * CRoom::GetClient(const int & id)
 	return iter->second;
 }
 
-bool CRoom::FindClient(const int & id)
+bool CRoom::FindClient(const uint & id)
 {
 	if (m_mapClient.find(id) == m_mapClient.end())
 	{
@@ -77,9 +77,9 @@ CClient * CRoom::GetClientByName(const char * name)
 	return NULL;
 }
 
-const char * CRoom::GetClientName(const int & id)
+const char * CRoom::GetClientName(const uint & id)
 {
-	unordered_map<int, CClient*>::iterator iter = m_mapClient.find(id);
+	unordered_map<uint, CClient*>::iterator iter = m_mapClient.find(id);
 	if (iter == m_mapClient.end())
 	{
 		// 여기에는 해당 클라가 없음
@@ -89,7 +89,7 @@ const char * CRoom::GetClientName(const int & id)
 	return iter->second->GetName();
 }
 
-void CRoom::AddClient(const int& id, CClient * client)
+void CRoom::AddClient(const uint& id, CClient * client)
 {
 	if (NULL == client)
 	{
@@ -101,9 +101,9 @@ void CRoom::AddClient(const int& id, CClient * client)
 	ChangeCurrentUserCount(1); // 인원 1명 증가
 }
 
-bool CRoom::RemoveClient(const int & id)
+bool CRoom::RemoveClient(const uint & id)
 {
-	int count = m_mapClient.erase(id);
+	uint count = m_mapClient.erase(id);
 	if (0 == count) // 하나도 못찾은 경우 == 삭제된게 없다
 	{
 		return FALSE;
@@ -112,7 +112,7 @@ bool CRoom::RemoveClient(const int & id)
 	return TRUE;
 }
 
-bool CRoom::ChangeCurrentUserCount(int count)
+bool CRoom::ChangeCurrentUserCount(const int& count)
 {
 	// 정원 초과 or 0명 보다 떨어지는 경우 체크
 	if (m_nCurrentUser + count > m_nMaxUser || m_nCurrentUser + count < 0)

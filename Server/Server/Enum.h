@@ -51,6 +51,7 @@ namespace _ROOM
 
 using MSG_TYPE = _MSG::TYPE;
 using ROOM_TYPE = _ROOM::TYPE;
+using uint = unsigned int;
 
 enum class EVENT_TYPE
 {

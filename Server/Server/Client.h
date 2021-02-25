@@ -4,10 +4,9 @@ class CClient
 {
 	int m_nID; // 소켓번호 == 아이디
 	string m_strName; // 이름
-	int m_nNameSize; // 이름 길이 size()함수와 겹침
 
 	// 현재 접속해있는 대화방 번호
-	int m_nRoomNumber;
+	uint m_nRoomNumber;
 
 public:
 	CClient(int id, int roomNumber);

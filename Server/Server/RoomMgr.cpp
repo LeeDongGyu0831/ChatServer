@@ -24,9 +24,9 @@ void CRoomMgr::Init()
 	CreateRoom("MainRoom", MAXUSER);
 }
 
-bool CRoomMgr::CreateRoom(const char* strRoomName, const int& maxUser)
+bool CRoomMgr::CreateRoom(const char* strRoomName, const uint& maxUser)
 {
-	int nRoomCount;
+	uint nRoomCount;
 	// Pool이 비어있을 경우 맨 뒤에서 이어붙이면서 시작
 	if (m_stackNumberPool.empty())
 	{
@@ -52,7 +52,7 @@ bool CRoomMgr::CreateRoom(const char* strRoomName, const int& maxUser)
 	return TRUE;
 }
 
-bool CRoomMgr::JoinRoom(const int& id, const int& roomNumber, const int& newRoomNumber)
+bool CRoomMgr::JoinRoom(const uint& id, const uint& roomNumber, const uint& newRoomNumber)
 {
 	// 해당 대화방 존재X
 	if (FALSE == FindRoom(newRoomNumber))
@@ -60,8 +60,8 @@ bool CRoomMgr::JoinRoom(const int& id, const int& roomNumber, const int& newRoom
 
 	// 참가하려는 대화방
 	CRoom* pDestRoom = m_mapRoom.find(newRoomNumber)->second;
-	int currentUser = pDestRoom->GetCurrentUser();
-	int maxUser = pDestRoom->GetMaxUser();
+	uint currentUser = pDestRoom->GetCurrentUser();
+	uint maxUser = pDestRoom->GetMaxUser();
 
 	// 정원 초과
 	if (currentUser >= maxUser)
@@ -81,29 +81,29 @@ bool CRoomMgr::JoinRoom(const int& id, const int& roomNumber, const int& newRoom
 	return TRUE;
 }
 
-bool CRoomMgr::DestroyRoom(const int& number)
+bool CRoomMgr::DestroyRoom(const uint& number)
 {
 	// NORMAL_ROOM은 유저가 생성한 방
 	// 그 이하는 기본적으로 서버에서 필수로 들고있어야 하는 방
-	if (number < int(ROOM_TYPE::NORMAL_ROOM))
+	if (number < uint(ROOM_TYPE::NORMAL_ROOM))
 		return FALSE;
 	// 없는 방인가?
 	if (FALSE == FindRoom(number))
 		return FALSE;
 
-	//int currentUser = m_mapRoom.find(number)->second->GetCurrentUser();
+	//uint currentUser = m_mapRoom.find(number)->second->GetCurrentUser();
 
 	// 메인 대화방으로 이동
-	CRoom* pMainRoom = m_mapRoom.find(int(ROOM_TYPE::MAIN_ROOM))->second;
+	CRoom* pMainRoom = m_mapRoom.find(uint(ROOM_TYPE::MAIN_ROOM))->second;
 	if (NULL == pMainRoom)
 	{
 		cout << "MainRoom is not exist! can't DestroyRoom\n";
 		exit(1);
 	}
-	unordered_map<int, CClient*> mapClient = GetRoom(number)->GetClients();
+	unordered_map<uint, CClient*> mapClient = GetRoom(number)->GetClients();
 	for (auto& client : mapClient)
 	{
-		int id = client.second->GetID();
+		uint id = client.second->GetID();
 		pMainRoom->AddClient(id, client.second);
 
 		// 기존 대화방 클라이언트 모두 삭제
@@ -114,9 +114,9 @@ bool CRoomMgr::DestroyRoom(const int& number)
 	return TRUE;
 }
 
-unordered_map<int, CClient*> CRoomMgr::GetClients(const int& roomNumber)
+unordered_map<uint, CClient*> CRoomMgr::GetClients(const uint& roomNumber)
 {
-	unordered_map<int, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
+	unordered_map<uint, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
 	if (iter == m_mapRoom.end())
 	{
 		// 해당 룸이 없음
@@ -126,9 +126,9 @@ unordered_map<int, CClient*> CRoomMgr::GetClients(const int& roomNumber)
 	return iter->second->GetClients();
 }
 
-CClient * CRoomMgr::GetClient(const int& id, const int& roomNumber)
+CClient * CRoomMgr::GetClient(const uint& id, const uint& roomNumber)
 {
-	unordered_map<int, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
+	unordered_map<uint, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
 	if (iter == m_mapRoom.end())
 	{
 		// 해당 룸이 없음
@@ -138,7 +138,7 @@ CClient * CRoomMgr::GetClient(const int& id, const int& roomNumber)
 	return iter->second->GetClient(id);
 }
 
-CClient * CRoomMgr::GetClientByID(const int & id)
+CClient * CRoomMgr::GetClientByID(const uint & id)
 {
 	for (auto& room : m_mapRoom)
 	{
@@ -165,9 +165,9 @@ CClient * CRoomMgr::GetClientByName(const char * name)
 	return NULL;
 }
 
-const char * CRoomMgr::GetClientName(const int& id, const int& roomNumber)
+const char * CRoomMgr::GetClientName(const uint& id, const uint& roomNumber)
 {
-	unordered_map<int, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
+	unordered_map<uint, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
 	if (iter == m_mapRoom.end())
 	{
 		// 해당 룸이 없음
@@ -186,9 +186,9 @@ const char * CRoomMgr::GetClientName(const int& id, const int& roomNumber)
 	return name;
 }
 
-CRoom * CRoomMgr::GetRoom(const int& roomNumber)
+CRoom * CRoomMgr::GetRoom(const uint& roomNumber)
 {
-	unordered_map<int, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
+	unordered_map<uint, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
 	if (iter == m_mapRoom.end())
 	{
 		// 해당 룸이 없음
@@ -198,9 +198,9 @@ CRoom * CRoomMgr::GetRoom(const int& roomNumber)
 	return iter->second;
 }
 
-bool CRoomMgr::FindRoom(const int & roomNumber)
+bool CRoomMgr::FindRoom(const uint & roomNumber)
 {
-	unordered_map<int, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
+	unordered_map<uint, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
 	if (iter == m_mapRoom.end())
 	{
 		return FALSE;
@@ -208,9 +208,9 @@ bool CRoomMgr::FindRoom(const int & roomNumber)
 	return TRUE;
 }
 
-vector<int> CRoomMgr::GetRoomNumberArray() const
+vector<uint> CRoomMgr::GetRoomNumberArray() const
 {
-	vector<int> vecNumber;
+	vector<uint> vecNumber;
 	vecNumber.reserve(m_mapRoom.size());
 	for (auto& room : m_mapRoom)
 	{
@@ -219,7 +219,7 @@ vector<int> CRoomMgr::GetRoomNumberArray() const
 	return vecNumber;
 }
 
-bool CRoomMgr::AddClient(const int& id, const int& roomNumber)
+bool CRoomMgr::AddClient(const uint& id, const uint& roomNumber)
 {
 	CClient* client = new CClient(id, roomNumber);
 	if (NULL == client)
@@ -228,7 +228,7 @@ bool CRoomMgr::AddClient(const int& id, const int& roomNumber)
 		exit(1);
 	}
 
-	unordered_map<int, CRoom*>::iterator roomIter = m_mapRoom.find(roomNumber);
+	unordered_map<uint, CRoom*>::iterator roomIter = m_mapRoom.find(roomNumber);
 	if (roomIter == m_mapRoom.end())
 	{
 		// 해당 룸이 없음
@@ -253,7 +253,7 @@ bool CRoomMgr::AddClient(const int& id, const int& roomNumber)
 //	return TRUE;
 //}
 
-bool CRoomMgr::RemoveClient(const int& id)
+bool CRoomMgr::RemoveClient(const uint& id)
 {
 	for (auto& room : m_mapRoom)
 	{
@@ -279,9 +279,9 @@ bool CRoomMgr::RemoveClient(const int& id)
 	//}
 }
 
-bool CRoomMgr::RemoveClient(const int& id, const int& roomNumber)
+bool CRoomMgr::RemoveClient(const uint& id, const uint& roomNumber)
 {
-	unordered_map<int, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
+	unordered_map<uint, CRoom*>::iterator iter = m_mapRoom.find(roomNumber);
 	if (iter == m_mapRoom.end())
 	{
 		// 해당 룸이 없음
@@ -301,12 +301,12 @@ bool CRoomMgr::RemoveClient(const int& id, const int& roomNumber)
 	//}
 }
 
-int CRoomMgr::GetRoomCount() const
+uint CRoomMgr::GetRoomCount() const
 {
 	return m_mapRoom.size();
 }
 
-int CRoomMgr::GetRoomNumber(const int & id)
+uint CRoomMgr::GetRoomNumber(const uint & id)
 {
 	return GetClientByID(id)->GetRoomNumber();
 }
