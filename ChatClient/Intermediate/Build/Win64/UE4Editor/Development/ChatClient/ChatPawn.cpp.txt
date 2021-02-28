@@ -1,0 +1,3 @@
+C:\Users\crow4\Documents\Unreal Projects\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\Definitions.ChatClient.h
+C:\Users\crow4\Documents\Unreal Projects\ChatClient\Source\ChatClient\ChatPawn.h
+C:\Users\crow4\Documents\Unreal Projects\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\ChatPawn.generated.h
