@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\ChatClient.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{0C53958A-4203-4400-B541-C80ECF09F4E0}</UniqueIdentifier>
+      <UniqueIdentifier>{FAAF2187-F529-4319-A5C1-B36CC793C824}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\ChatClient.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{CF9DE7B7-C8D2-410C-B957-7D216CD82CF6}</UniqueIdentifier>
+      <UniqueIdentifier>{38F9A36D-1887-427C-B772-60F41F198BB7}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -24,7 +24,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\ChatClient">
-      <UniqueIdentifier>{41BCD38A-33B4-4270-9424-B46EE873C3C2}</UniqueIdentifier>
+      <UniqueIdentifier>{8C528C22-A0BF-42AE-A0B2-22720A82C13A}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\ChatClient\ChatClient.Build.cs">
       <Filter>Source\ChatClient</Filter>
@@ -47,6 +47,12 @@
     <ClInclude Include="..\..\Source\ChatClient\ChatPawn.h">
       <Filter>Source\ChatClient</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\ChatClient\GI_Network.cpp">
+      <Filter>Source\ChatClient</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\ChatClient\GI_Network.h">
+      <Filter>Source\ChatClient</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\ChatClient\GM_ChatGameMode.cpp">
       <Filter>Source\ChatClient</Filter>
     </ClCompile>
@@ -59,14 +65,10 @@
     <ClInclude Include="..\..\Source\ChatClient\PC_ChatPlayerController.h">
       <Filter>Source\ChatClient</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\ChatClient\GI_Network.cpp">
+    <ClCompile Include="..\..\Source\ChatClient\PS_ChatState.cpp">
       <Filter>Source\ChatClient</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\ChatClient\GI_Network.h">
+    <ClInclude Include="..\..\Source\ChatClient\PS_ChatState.h">
       <Filter>Source\ChatClient</Filter>
     </ClInclude>
   </ItemGroup>

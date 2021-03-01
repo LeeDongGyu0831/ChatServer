@@ -3,6 +3,11 @@
 
 #include "PC_ChatPlayerController.h"
 
+APC_ChatPlayerController::APC_ChatPlayerController()
+{
+
+}
+
 void APC_ChatPlayerController::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();

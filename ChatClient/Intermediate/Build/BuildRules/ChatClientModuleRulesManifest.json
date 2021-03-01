@@ -1,8 +1,8 @@
 {
 	"SourceFiles": [
-		"C:\\Users\\crow4\\Documents\\Unreal Projects\\ChatClient\\Source\\ChatClient\\ChatClient.Build.cs",
-		"C:\\Users\\crow4\\Documents\\Unreal Projects\\ChatClient\\Source\\ChatClient.Target.cs",
-		"C:\\Users\\crow4\\Documents\\Unreal Projects\\ChatClient\\Source\\ChatClientEditor.Target.cs"
+		"D:\\Users\\crow4\\Desktop\\ChatServer\\ChatClient\\Source\\ChatClient\\ChatClient.Build.cs",
+		"D:\\Users\\crow4\\Desktop\\ChatServer\\ChatClient\\Source\\ChatClient.Target.cs",
+		"D:\\Users\\crow4\\Desktop\\ChatServer\\ChatClient\\Source\\ChatClientEditor.Target.cs"
 	],
 	"EngineVersion": "4.25.4"
 }

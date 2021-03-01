@@ -1,5 +1,5 @@
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\Definitions.ChatClient.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Source\ChatClient\GI_Network.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\Definitions.ChatClient.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Source\ChatClient\GI_Network.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Engine\Public\Engine.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Core\Public\Misc/MonolithicHeaderBoilerplate.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Core\Public\Core.h
@@ -681,4 +681,4 @@ D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking\Public\Comm
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking\Public\Common/UdpSocketReceiver.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking\Public\Common/UdpSocketSender.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking\Public\Common/UdpSocketBuilder.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\GI_Network.generated.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\GI_Network.generated.h

@@ -6,12 +6,13 @@
 #include "PC_ChatPlayerController.h"
 
 #include "GI_Network.h"
+#include "PS_ChatState.h"
 
 AGM_ChatGameMode::AGM_ChatGameMode()
 {
 	DefaultPawnClass = AChatPawn::StaticClass();
 	PlayerControllerClass = APC_ChatPlayerController::StaticClass();
-
+	PlayerStateClass = APS_ChatState::StaticClass();
 }
 
 void AGM_ChatGameMode::PostLogin(APlayerController* NewPlayer)
@@ -25,5 +26,4 @@ void AGM_ChatGameMode::PostLogin(APlayerController* NewPlayer)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Network GameInstance is NULL!!"));
 	}
-	GINetwork->ConnectToServer(TEXT("127.0.0.1"), 9000);
 }

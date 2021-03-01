@@ -2,12 +2,12 @@
 	"Targets": [
 		{
 			"Name": "ChatClient",
-			"Path": "C:\\Users\\crow4\\Documents\\Unreal Projects\\ChatClient\\Source\\ChatClient.Target.cs",
+			"Path": "D:\\Users\\crow4\\Desktop\\ChatServer\\ChatClient\\Source\\ChatClient.Target.cs",
 			"Type": "Game"
 		},
 		{
 			"Name": "ChatClientEditor",
-			"Path": "C:\\Users\\crow4\\Documents\\Unreal Projects\\ChatClient\\Source\\ChatClientEditor.Target.cs",
+			"Path": "D:\\Users\\crow4\\Desktop\\ChatServer\\ChatClient\\Source\\ChatClientEditor.Target.cs",
 			"Type": "Editor"
 		}
 	]

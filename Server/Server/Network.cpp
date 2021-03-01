@@ -243,6 +243,8 @@ bool CNetwork::DataRecv(SOCKETINFO* sock)
 
 					// 줄어든 문자열로 덮어쓰기
 					string msg = "\r>> ";
+					Send(sock->sock, msg.c_str(), msg.size(), roomNumber);
+					msg = "";
 					msg += sock->buf;
 					Send(sock->sock, msg.c_str(), msg.size(), roomNumber);
 				}
@@ -297,6 +299,7 @@ bool CNetwork::BroadCast(SOCKETINFO* sock)
 				Send(otherClient.first, ">> ", 3, 0);
 				if (m_mapClient[otherClient.first]->bufCount > 0)
 				{
+					// 입력하던거 마저 보내주는
 					Send(otherClient.first, m_mapClient[otherClient.first]->buf, m_mapClient[otherClient.first]->bufCount, 0);
 				}
 			}
@@ -333,6 +336,7 @@ IN_ADDR CNetwork::GetDefaultMyIP()
 bool CNetwork::Send(const SOCKET& sock, const char * msg, const uint& size, const uint& roomNumber = NONE)
 {
 	int retVal = send(sock, msg, size, 0);
+	cout << "\nSend : " << msg << endl;
 	if (retVal == SOCKET_ERROR)
 	{
 		printf("send() SOCKET_ERROR\n");
@@ -880,8 +884,9 @@ MSG_TYPE CNetwork::SendMsg(const SOCKET & sock, const vector<string>& vecMsg, co
 			if (i + 1 < vecMsg.size())
 				msg += " ";
 		}
-		msg += "\n\r>> ";
+		msg += "\n\r";
 		Send(pToClient->GetID(), msg.c_str(), msg.size());
+		Send(pToClient->GetID(), ">> ", 4);
 	}
 	{
 		string msg = "\r[전송] [";

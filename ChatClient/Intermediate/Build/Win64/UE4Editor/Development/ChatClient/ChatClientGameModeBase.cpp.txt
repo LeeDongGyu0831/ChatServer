@@ -1,7 +1,7 @@
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\Definitions.ChatClient.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Source\ChatClient\ChatClientGameModeBase.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\Definitions.ChatClient.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Source\ChatClient\ChatClientGameModeBase.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Engine\Classes\GameFramework/GameModeBase.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Engine\Classes\Engine/ServerStatReplicator.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\ServerStatReplicator.generated.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\GameModeBase.generated.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\ChatClientGameModeBase.generated.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\ChatClientGameModeBase.generated.h

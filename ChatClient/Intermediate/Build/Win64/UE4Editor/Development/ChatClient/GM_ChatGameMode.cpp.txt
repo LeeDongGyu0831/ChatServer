@@ -1,15 +1,15 @@
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\Definitions.ChatClient.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Source\ChatClient\GM_ChatGameMode.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\Definitions.ChatClient.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Source\ChatClient\GM_ChatGameMode.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Engine\Classes\GameFramework/GameModeBase.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Engine\Classes\Engine/ServerStatReplicator.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\ServerStatReplicator.generated.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\GameModeBase.generated.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\GM_ChatGameMode.generated.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Source\ChatClient\ChatPawn.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\ChatPawn.generated.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Source\ChatClient\PC_ChatPlayerController.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\PC_ChatPlayerController.generated.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Source\ChatClient\GI_Network.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\GM_ChatGameMode.generated.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Source\ChatClient\ChatPawn.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\ChatPawn.generated.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Source\ChatClient\PC_ChatPlayerController.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\PC_ChatPlayerController.generated.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Source\ChatClient\GI_Network.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Engine\Public\Engine.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Core\Public\Misc/MonolithicHeaderBoilerplate.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Core\Public\Core.h
@@ -687,4 +687,6 @@ D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking\Public\Comm
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking\Public\Common/UdpSocketReceiver.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking\Public\Common/UdpSocketSender.h
 D:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking\Public\Common/UdpSocketBuilder.h
-C:\Users\crow4\Documents\Unreal Projects\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\GI_Network.generated.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\GI_Network.generated.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Source\ChatClient\PS_ChatState.h
+D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\PS_ChatState.generated.h
