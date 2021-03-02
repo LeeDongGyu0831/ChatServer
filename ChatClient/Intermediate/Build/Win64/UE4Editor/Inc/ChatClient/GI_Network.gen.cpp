@@ -33,7 +33,7 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 		return MSG_TYPE_StaticEnum();
 	}
 	static FCompiledInDeferEnum Z_CompiledInDeferEnum_UEnum_MSG_TYPE(MSG_TYPE_StaticEnum, TEXT("/Script/ChatClient"), TEXT("MSG_TYPE"), false, nullptr, nullptr);
-	uint32 Get_Z_Construct_UEnum_ChatClient_MSG_TYPE_Hash() { return 2237848938U; }
+	uint32 Get_Z_Construct_UEnum_ChatClient_MSG_TYPE_Hash() { return 298377558U; }
 	UEnum* Z_Construct_UEnum_ChatClient_MSG_TYPE()
 	{
 #if WITH_HOT_RELOAD
@@ -52,17 +52,15 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 #if WITH_METADATA
 			const UE4CodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
 				{ "BlueprintType", "true" },
-				{ "CHAT.Comment", "/**\n * \n */" },
 				{ "CHAT.DisplayName", "CHAT" },
 				{ "CHAT.Name", "MSG_TYPE::CHAT" },
-				{ "Comment", "/**\n * \n */" },
-				{ "EXIT.Comment", "/**\n * \n */" },
+				{ "Comment", "/**\n * \xec\x82\xac\xec\x9a\xa9\xec\x9e\x90 \xec\xa0\x95\xec\x9d\x98 \xea\xb2\x8c\xec\x9e\x84 \xec\x9d\xb8\xec\x8a\xa4\xed\x84\xb4\xec\x8a\xa4\n * \xec\x9d\xb4\xea\xb3\xb3\xec\x97\x90\xec\x84\x9c \xeb\x84\xa4\xed\x8a\xb8\xec\x9b\x8c\xed\x81\xac \xec\x97\xb0\xea\xb2\xb0\xec\x9d\x84 \xea\xb4\x80\xeb\xa6\xac\xed\x95\xa9\xeb\x8b\x88\xeb\x8b\xa4.\n */// \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xeb\xa5\xbc \xeb\xb6\x84\xec\x84\x9d\xed\x95\x98\xea\xb3\xa0\xeb\x82\x9c \xed\x9b\x84 \xed\x95\xb4\xeb\x8b\xb9 \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xea\xb0\x80 \xec\x84\x9c\xeb\xb2\x84 \xeb\xaa\x85\xeb\xa0\xb9\xec\x9d\xb8\xec\xa7\x80 \xec\xb1\x84\xed\x8c\x85\xec\x9d\xb8\xec\xa7\x80 \xea\xb5\xac\xeb\xb6\x84\xed\x95\x98\xea\xb8\xb0 \xec\x9c\x84\xed\x95\xa8\n" },
 				{ "EXIT.DisplayName", "EXIT" },
 				{ "EXIT.Name", "MSG_TYPE::EXIT" },
-				{ "JOIN.Comment", "/**\n * \n */" },
 				{ "JOIN.DisplayName", "JOIN" },
 				{ "JOIN.Name", "MSG_TYPE::JOIN" },
 				{ "ModuleRelativePath", "GI_Network.h" },
+				{ "ToolTip", "\xec\x82\xac\xec\x9a\xa9\xec\x9e\x90 \xec\xa0\x95\xec\x9d\x98 \xea\xb2\x8c\xec\x9e\x84 \xec\x9d\xb8\xec\x8a\xa4\xed\x84\xb4\xec\x8a\xa4\n\xec\x9d\xb4\xea\xb3\xb3\xec\x97\x90\xec\x84\x9c \xeb\x84\xa4\xed\x8a\xb8\xec\x9b\x8c\xed\x81\xac \xec\x97\xb0\xea\xb2\xb0\xec\x9d\x84 \xea\xb4\x80\xeb\xa6\xac\xed\x95\xa9\xeb\x8b\x88\xeb\x8b\xa4.\n // \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xeb\xa5\xbc \xeb\xb6\x84\xec\x84\x9d\xed\x95\x98\xea\xb3\xa0\xeb\x82\x9c \xed\x9b\x84 \xed\x95\xb4\xeb\x8b\xb9 \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xea\xb0\x80 \xec\x84\x9c\xeb\xb2\x84 \xeb\xaa\x85\xeb\xa0\xb9\xec\x9d\xb8\xec\xa7\x80 \xec\xb1\x84\xed\x8c\x85\xec\x9d\xb8\xec\xa7\x80 \xea\xb5\xac\xeb\xb6\x84\xed\x95\x98\xea\xb8\xb0 \xec\x9c\x84\xed\x95\xa8" },
 			};
 #endif
 			static const UE4CodeGen_Private::FEnumParams EnumParams = {
@@ -175,9 +173,9 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::Function_MetaDataParams[] = {
 		{ "Category", "Socket" },
-		{ "Comment", "// ???? ?\xd5\xbf? /?? ?\xd9\xbe??\xd6\xb4? ?\xde\xbd??????? /?? ?\xd9\xbe??\xd6\xb4? ?\xde\xbd??????? ?\xcf\xb9? \xc3\xa4?? ?\xde\xbd????? ?\xc6\xb4?\n" },
+		{ "Comment", "// \xea\xb0\x80\xec\x9e\xa5 \xec\x95\x9e\xec\x97\x90 /\xea\xb0\x80 \xeb\xb6\x99\xec\x96\xb4\xec\x9e\x88\xeb\x8a\x94 \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xec\x9d\xb8\xec\xa7\x80 /\xea\xb0\x80 \xeb\xb6\x99\xec\x96\xb4\xec\x9e\x88\xeb\x8a\x94 \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xeb\x9d\xbc\xeb\xa9\xb4 \xec\x9d\xbc\xeb\xb0\x98 \xec\xb1\x84\xed\x8c\x85 \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xea\xb0\x80 \xec\x95\x84\xeb\x8b\x98\n" },
 		{ "ModuleRelativePath", "GI_Network.h" },
-		{ "ToolTip", "???? ?\xd5\xbf? /?? ?\xd9\xbe??\xd6\xb4? ?\xde\xbd??????? /?? ?\xd9\xbe??\xd6\xb4? ?\xde\xbd??????? ?\xcf\xb9? \xc3\xa4?? ?\xde\xbd????? ?\xc6\xb4?" },
+		{ "ToolTip", "\xea\xb0\x80\xec\x9e\xa5 \xec\x95\x9e\xec\x97\x90 /\xea\xb0\x80 \xeb\xb6\x99\xec\x96\xb4\xec\x9e\x88\xeb\x8a\x94 \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xec\x9d\xb8\xec\xa7\x80 /\xea\xb0\x80 \xeb\xb6\x99\xec\x96\xb4\xec\x9e\x88\xeb\x8a\x94 \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xeb\x9d\xbc\xeb\xa9\xb4 \xec\x9d\xbc\xeb\xb0\x98 \xec\xb1\x84\xed\x8c\x85 \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xea\xb0\x80 \xec\x95\x84\xeb\x8b\x98" },
 	};
 #endif
 	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UGI_Network, nullptr, "CheckMessage", nullptr, nullptr, sizeof(GI_Network_eventCheckMessage_Parms), Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::Function_MetaDataParams)) };
@@ -416,9 +414,9 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::Function_MetaDataParams[] = {
 		{ "Category", "Socket" },
-		{ "Comment", "// ?? ?? ???? + ?\xd9\xb9\xd9\xb2? ???? + >> ???? ???\xc5\xbf?\n" },
+		{ "Comment", "// \xec\x95\x9e \xeb\x92\xa4 \xea\xb3\xb5\xeb\xb0\xb1 + \xec\xa4\x84\xeb\xb0\x94\xea\xbf\x88 \xeb\xac\xb8\xec\x9e\x90 + >> \xeb\xac\xb8\xec\x9e\x90 \xec\xa0\x9c\xea\xb1\xb0\xec\x9a\xa9\n" },
 		{ "ModuleRelativePath", "GI_Network.h" },
-		{ "ToolTip", "?? ?? ???? + ?\xd9\xb9\xd9\xb2? ???? + >> ???? ???\xc5\xbf?" },
+		{ "ToolTip", "\xec\x95\x9e \xeb\x92\xa4 \xea\xb3\xb5\xeb\xb0\xb1 + \xec\xa4\x84\xeb\xb0\x94\xea\xbf\x88 \xeb\xac\xb8\xec\x9e\x90 + >> \xeb\xac\xb8\xec\x9e\x90 \xec\xa0\x9c\xea\xb1\xb0\xec\x9a\xa9" },
 	};
 #endif
 	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UGI_Network, nullptr, "TrimMessage", nullptr, nullptr, sizeof(GI_Network_eventTrimMessage_Parms), Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::Function_MetaDataParams)) };
@@ -450,13 +448,13 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_ChatClient,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UGI_Network_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UGI_Network_CheckMessage, "CheckMessage" }, // 2138937838
+		{ &Z_Construct_UFunction_UGI_Network_CheckMessage, "CheckMessage" }, // 2304153383
 		{ &Z_Construct_UFunction_UGI_Network_ConnectToServer, "ConnectToServer" }, // 3721457483
 		{ &Z_Construct_UFunction_UGI_Network_LoginToServer, "LoginToServer" }, // 4128830343
 		{ &Z_Construct_UFunction_UGI_Network_Recv, "Recv" }, // 2730677776
 		{ &Z_Construct_UFunction_UGI_Network_RecvData, "RecvData" }, // 606035206
 		{ &Z_Construct_UFunction_UGI_Network_Send, "Send" }, // 1992597702
-		{ &Z_Construct_UFunction_UGI_Network_TrimMessage, "TrimMessage" }, // 2361784591
+		{ &Z_Construct_UFunction_UGI_Network_TrimMessage, "TrimMessage" }, // 2442498341
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGI_Network_Statics::Class_MetaDataParams[] = {
@@ -491,7 +489,7 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGI_Network, 2053903990);
+	IMPLEMENT_CLASS(UGI_Network, 1450948283);
 	template<> CHATCLIENT_API UClass* StaticClass<UGI_Network>()
 	{
 		return UGI_Network::StaticClass();

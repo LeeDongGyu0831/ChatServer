@@ -9,7 +9,7 @@
 
 #include "ConnectLevel.generated.h"
 /**
- * 
+ * 서버와의 접속을 시도하는 레벨
  */
 UCLASS()
 class CHATCLIENT_API AConnectLevel : public ALevelScriptActor
@@ -17,6 +17,7 @@ class CHATCLIENT_API AConnectLevel : public ALevelScriptActor
 	GENERATED_BODY()
 
 private:
+	// 접속창 UI
 	UUI_Connect* connectWidget;
 
 public:

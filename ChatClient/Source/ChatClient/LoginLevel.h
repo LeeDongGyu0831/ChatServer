@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -10,7 +10,7 @@
 #include "LoginLevel.generated.h"
 
 /**
- * 
+ * 로그인창을 보여주려는 레벨
  */
 UCLASS()
 class CHATCLIENT_API ALoginLevel : public ALevelScriptActor
@@ -18,6 +18,7 @@ class CHATCLIENT_API ALoginLevel : public ALevelScriptActor
 	GENERATED_BODY()
 	
 private:
+	// 아이디 로그인창 UI
 	UUI_Login* loginWidget;
 
 public:

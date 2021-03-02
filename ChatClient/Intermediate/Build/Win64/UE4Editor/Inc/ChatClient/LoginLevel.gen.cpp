@@ -47,10 +47,11 @@ void EmptyLinkFunctionForGeneratedCodeLoginLevel() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ALoginLevel_Statics::Class_MetaDataParams[] = {
-		{ "Comment", "/**\n * \n */" },
+		{ "Comment", "/**\n * \xeb\xa1\x9c\xea\xb7\xb8\xec\x9d\xb8\xec\xb0\xbd\xec\x9d\x84 \xeb\xb3\xb4\xec\x97\xac\xec\xa3\xbc\xeb\xa0\xa4\xeb\x8a\x94 \xeb\xa0\x88\xeb\xb2\xa8\n */" },
 		{ "HideCategories", "Collision Rendering Utilities|Transformation" },
 		{ "IncludePath", "LoginLevel.h" },
 		{ "ModuleRelativePath", "LoginLevel.h" },
+		{ "ToolTip", "\xeb\xa1\x9c\xea\xb7\xb8\xec\x9d\xb8\xec\xb0\xbd\xec\x9d\x84 \xeb\xb3\xb4\xec\x97\xac\xec\xa3\xbc\xeb\xa0\xa4\xeb\x8a\x94 \xeb\xa0\x88\xeb\xb2\xa8" },
 	};
 #endif
 #if WITH_METADATA
@@ -90,7 +91,7 @@ void EmptyLinkFunctionForGeneratedCodeLoginLevel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(ALoginLevel, 1893870794);
+	IMPLEMENT_CLASS(ALoginLevel, 44193044);
 	template<> CHATCLIENT_API UClass* StaticClass<ALoginLevel>()
 	{
 		return ALoginLevel::StaticClass();

@@ -47,10 +47,11 @@ void EmptyLinkFunctionForGeneratedCodeConnectLevel() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AConnectLevel_Statics::Class_MetaDataParams[] = {
-		{ "Comment", "/**\n * \n */" },
+		{ "Comment", "/**\n * ???????? ?????? ?\xc3\xb5??\xcf\xb4? ????\n */" },
 		{ "HideCategories", "Collision Rendering Utilities|Transformation" },
 		{ "IncludePath", "ConnectLevel.h" },
 		{ "ModuleRelativePath", "ConnectLevel.h" },
+		{ "ToolTip", "???????? ?????? ?\xc3\xb5??\xcf\xb4? ????" },
 	};
 #endif
 #if WITH_METADATA
@@ -90,7 +91,7 @@ void EmptyLinkFunctionForGeneratedCodeConnectLevel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AConnectLevel, 4151803241);
+	IMPLEMENT_CLASS(AConnectLevel, 3140397268);
 	template<> CHATCLIENT_API UClass* StaticClass<AConnectLevel>()
 	{
 		return AConnectLevel::StaticClass();

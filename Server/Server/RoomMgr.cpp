@@ -113,7 +113,7 @@ bool CRoomMgr::DestroyRoom(const uint& number)
 	CRoom* pRoom = GetRoom(number);
 	{
 		string msg;
-		msg += "\r      [";
+		msg += "\r/      [";
 		msg += pRoom->GetRoomName();
 		msg += "] 대화방이 파괴되었습니다.\n\r";
 		CNetwork::GetInst()->BroadCastMessage(NONE, msg.c_str(), msg.size(), number);

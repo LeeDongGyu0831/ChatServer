@@ -213,10 +213,17 @@ void UGI_Network::PrintLog(const FString& message1, const FString& message2)
 {
 	char logMsg1[BUF_SIZE];
 	char logMsg2[BUF_SIZE];
+	wchar_t finallogMsg1[BUF_SIZE];
+	wchar_t finallogMsg2[BUF_SIZE];
 	size_t convertedNum = 0;
+
 	wcstombs_s<BUF_SIZE>(&convertedNum, logMsg1, *message1, BUF_SIZE);
 	wcstombs_s<BUF_SIZE>(&convertedNum, logMsg2, *message2, BUF_SIZE);
-	UE_LOG(LogTemp, Warning, TEXT("%s, : %s"), logMsg1, logMsg2);
+
+	mbstowcs(finallogMsg1, logMsg1, message1.Len());
+	mbstowcs(finallogMsg2, logMsg2, message2.Len());
+
+	UE_LOG(LogTemp, Warning, TEXT("%s, : %s"), finallogMsg1, finallogMsg2);
 }
 
 FString UGI_Network::BytesToStringFixed(const uint8* In, int32 Count)

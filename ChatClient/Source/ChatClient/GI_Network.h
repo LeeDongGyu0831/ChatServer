@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -12,9 +12,11 @@
 #include "GI_Network.generated.h"
 
 /**
- * 
+ * ì‚¬ìš©ì ì •ì˜ ê²Œì„ ì¸ìŠ¤í„´ìŠ¤
+ * ì´ê³³ì—ì„œ ë„¤íŠ¸ì›Œí¬ ì—°ê²°ì„ ê´€ë¦¬í•©ë‹ˆë‹¤.
  */
 
+// ë©”ì‹œì§€ë¥¼ ë¶„ì„í•˜ê³ ë‚œ í›„ í•´ë‹¹ ë©”ì‹œì§€ê°€ ì„œë²„ ëª…ë ¹ì¸ì§€ ì±„íŒ…ì¸ì§€ êµ¬ë¶„í•˜ê¸° ìœ„í•¨
 UENUM(BlueprintType)
 enum class MSG_TYPE : uint8
 {
@@ -64,18 +66,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Socket)
 	bool Send(const FString& data);
 
-	// ¾Õ µÚ °ø¹é + ÁÙ¹Ù²Ş ¹®ÀÚ + >> ¹®ÀÚ Á¦°Å¿ë
+	// ì• ë’¤ ê³µë°± + ì¤„ë°”ê¿ˆ ë¬¸ì + >> ë¬¸ì ì œê±°ìš©
 	UFUNCTION(BlueprintCallable, Category = Socket)
 	FString TrimMessage(const FString& originString, const FString& subString);
 
-	// °¡Àå ¾Õ¿¡ /°¡ ºÙ¾îÀÖ´Â ¸Ş½ÃÁöÀÎÁö /°¡ ºÙ¾îÀÖ´Â ¸Ş½ÃÁö¶ó¸é ÀÏ¹İ Ã¤ÆÃ ¸Ş½ÃÁö°¡ ¾Æ´Ô
+	// ê°€ì¥ ì•ì— /ê°€ ë¶™ì–´ìˆëŠ” ë©”ì‹œì§€ì¸ì§€ /ê°€ ë¶™ì–´ìˆëŠ” ë©”ì‹œì§€ë¼ë©´ ì¼ë°˜ ì±„íŒ… ë©”ì‹œì§€ê°€ ì•„ë‹˜
 	UFUNCTION(BlueprintCallable, Category = Socket)
 	MSG_TYPE CheckMessage(FString originString);
 
-	// ¸í·É¾î ¸Ş½ÃÁö¸¦ ÀÎ½ÄÇß´Ù¸é ÇØ´ç ¸í·É¾î¿¡¼­ Æ¯Á¤ ±¸°£À» Àß¶ó³»¾î ¾ÆÀÌµğ°°Àº ´Ü¾î¸¦ »Ì¾Æ³¿ 
+	// ëª…ë ¹ì–´ ë©”ì‹œì§€ë¥¼ ì¸ì‹í–ˆë‹¤ë©´ í•´ë‹¹ ëª…ë ¹ì–´ì—ì„œ íŠ¹ì • êµ¬ê°„ì„ ì˜ë¼ë‚´ì–´ ì•„ì´ë””ê°™ì€ ë‹¨ì–´ë¥¼ ë½‘ì•„ëƒ„ 
 	FString GetKeyworkByChar(FString originString, TCHAR startChar, TCHAR endChar);
 
-	// UE_LOG Ãâ·Â¿ë
+	// UE_LOG ì¶œë ¥ìš©
 	void PrintLog(const FString& message1, const FString& message2);
 
 	FString BytesToStringFixed(const uint8* In, int32 Count);

@@ -14,8 +14,8 @@ enum class MSG_TYPE : uint8;
 #endif
 #define CHATCLIENT_GI_Network_generated_h
 
-#define ChatClient_Source_ChatClient_GI_Network_h_29_SPARSE_DATA
-#define ChatClient_Source_ChatClient_GI_Network_h_29_RPC_WRAPPERS \
+#define ChatClient_Source_ChatClient_GI_Network_h_31_SPARSE_DATA
+#define ChatClient_Source_ChatClient_GI_Network_h_31_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execCheckMessage); \
 	DECLARE_FUNCTION(execTrimMessage); \
@@ -26,7 +26,7 @@ enum class MSG_TYPE : uint8;
 	DECLARE_FUNCTION(execRecvData);
 
 
-#define ChatClient_Source_ChatClient_GI_Network_h_29_RPC_WRAPPERS_NO_PURE_DECLS \
+#define ChatClient_Source_ChatClient_GI_Network_h_31_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execCheckMessage); \
 	DECLARE_FUNCTION(execTrimMessage); \
@@ -37,7 +37,7 @@ enum class MSG_TYPE : uint8;
 	DECLARE_FUNCTION(execRecvData);
 
 
-#define ChatClient_Source_ChatClient_GI_Network_h_29_INCLASS_NO_PURE_DECLS \
+#define ChatClient_Source_ChatClient_GI_Network_h_31_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUGI_Network(); \
 	friend struct Z_Construct_UClass_UGI_Network_Statics; \
@@ -46,7 +46,7 @@ public: \
 	DECLARE_SERIALIZER(UGI_Network)
 
 
-#define ChatClient_Source_ChatClient_GI_Network_h_29_INCLASS \
+#define ChatClient_Source_ChatClient_GI_Network_h_31_INCLASS \
 private: \
 	static void StaticRegisterNativesUGI_Network(); \
 	friend struct Z_Construct_UClass_UGI_Network_Statics; \
@@ -55,7 +55,7 @@ public: \
 	DECLARE_SERIALIZER(UGI_Network)
 
 
-#define ChatClient_Source_ChatClient_GI_Network_h_29_STANDARD_CONSTRUCTORS \
+#define ChatClient_Source_ChatClient_GI_Network_h_31_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UGI_Network(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UGI_Network) \
@@ -68,7 +68,7 @@ private: \
 public:
 
 
-#define ChatClient_Source_ChatClient_GI_Network_h_29_ENHANCED_CONSTRUCTORS \
+#define ChatClient_Source_ChatClient_GI_Network_h_31_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API UGI_Network(UGI_Network&&); \
@@ -79,28 +79,28 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UGI_Network); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(UGI_Network)
 
 
-#define ChatClient_Source_ChatClient_GI_Network_h_29_PRIVATE_PROPERTY_OFFSET
-#define ChatClient_Source_ChatClient_GI_Network_h_26_PROLOG
-#define ChatClient_Source_ChatClient_GI_Network_h_29_GENERATED_BODY_LEGACY \
+#define ChatClient_Source_ChatClient_GI_Network_h_31_PRIVATE_PROPERTY_OFFSET
+#define ChatClient_Source_ChatClient_GI_Network_h_28_PROLOG
+#define ChatClient_Source_ChatClient_GI_Network_h_31_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	ChatClient_Source_ChatClient_GI_Network_h_29_PRIVATE_PROPERTY_OFFSET \
-	ChatClient_Source_ChatClient_GI_Network_h_29_SPARSE_DATA \
-	ChatClient_Source_ChatClient_GI_Network_h_29_RPC_WRAPPERS \
-	ChatClient_Source_ChatClient_GI_Network_h_29_INCLASS \
-	ChatClient_Source_ChatClient_GI_Network_h_29_STANDARD_CONSTRUCTORS \
+	ChatClient_Source_ChatClient_GI_Network_h_31_PRIVATE_PROPERTY_OFFSET \
+	ChatClient_Source_ChatClient_GI_Network_h_31_SPARSE_DATA \
+	ChatClient_Source_ChatClient_GI_Network_h_31_RPC_WRAPPERS \
+	ChatClient_Source_ChatClient_GI_Network_h_31_INCLASS \
+	ChatClient_Source_ChatClient_GI_Network_h_31_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define ChatClient_Source_ChatClient_GI_Network_h_29_GENERATED_BODY \
+#define ChatClient_Source_ChatClient_GI_Network_h_31_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	ChatClient_Source_ChatClient_GI_Network_h_29_PRIVATE_PROPERTY_OFFSET \
-	ChatClient_Source_ChatClient_GI_Network_h_29_SPARSE_DATA \
-	ChatClient_Source_ChatClient_GI_Network_h_29_RPC_WRAPPERS_NO_PURE_DECLS \
-	ChatClient_Source_ChatClient_GI_Network_h_29_INCLASS_NO_PURE_DECLS \
-	ChatClient_Source_ChatClient_GI_Network_h_29_ENHANCED_CONSTRUCTORS \
+	ChatClient_Source_ChatClient_GI_Network_h_31_PRIVATE_PROPERTY_OFFSET \
+	ChatClient_Source_ChatClient_GI_Network_h_31_SPARSE_DATA \
+	ChatClient_Source_ChatClient_GI_Network_h_31_RPC_WRAPPERS_NO_PURE_DECLS \
+	ChatClient_Source_ChatClient_GI_Network_h_31_INCLASS_NO_PURE_DECLS \
+	ChatClient_Source_ChatClient_GI_Network_h_31_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
