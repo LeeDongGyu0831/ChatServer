@@ -461,37 +461,37 @@ void CNetwork::CheckErrorMsgType(const SOCKET & sock, MSG_TYPE eType, const uint
 	switch (eType)
 	{
 	case MSG_TYPE::ERROR_MSG:
-		msg = "      잘못된 명령어 입니다. 다시 확인해주세요.\n\r";
+		msg = "/      잘못된 명령어 입니다. 다시 확인해주세요.\n\r";
 		break;
 	case MSG_TYPE::DO_NOT_LOGIN_MSG:
-		msg = "      이미 로그인 했습니다. 다시 확인해주세요.\n\r";
+		msg = "/      이미 로그인 했습니다. 다시 확인해주세요.\n\r";
 		break;
 	case MSG_TYPE::MUST_LOGIN_MSG:
-		msg = "      로그인을 먼저 해야합니다. 다시 확인해주세요.\n\r";
+		msg = "/      로그인을 먼저 해야합니다. 다시 확인해주세요.\n\r";
 		break;
 	case MSG_TYPE::CANT_LOGIN_MSG:
-		msg = "      로그인할 수 없습니다. 다시 확인해주세요.\n\r";
+		msg = "/      로그인할 수 없습니다. 다시 확인해주세요.\n\r";
 		break;
 	case MSG_TYPE::CANT_USE_ID_MSG:
-		msg = "      사용중인 아이디입니다. 다시 확인해주세요.\n\r";
+		msg = "/      사용중인 아이디입니다. 다시 확인해주세요.\n\r";
 		break;
 	case MSG_TYPE::CANT_SEARCH_USER_MSG:
-		msg = "      해당 유저를 찾을 수 없습니다. 다시 확인해주세요.\n\r";
+		msg = "/      해당 유저를 찾을 수 없습니다. 다시 확인해주세요.\n\r";
 		break;
 	case MSG_TYPE::CANT_SEARCH_ROOM_MSG:
-		msg = "      해당 대화방이 존재하지 않습니다. 다시 확인해주세요.\n\r";
+		msg = "/      해당 대화방이 존재하지 않습니다. 다시 확인해주세요.\n\r";
 		break;
 	case MSG_TYPE::CANT_CREATE_ROOM_MSG:
-		msg = "      해당 대화방을 개설할 수 없습니다. 다시 확인해주세요.\n\r";
+		msg = "/      해당 대화방을 개설할 수 없습니다. 다시 확인해주세요.\n\r";
 		break;
 	case MSG_TYPE::CANT_JOIN_ROOM_MSG:
-		msg = "      해당 대화방에 참가할 수 없습니다. 다시 확인해주세요.\n\r";
+		msg = "/      해당 대화방에 참가할 수 없습니다. 다시 확인해주세요.\n\r";
 		break;
 	case MSG_TYPE::NO_MSG:
-		msg = "      전송할 수 없습니다 메시지를 확인해주세요.\n\r";
+		msg = "/      전송할 수 없습니다 메시지를 확인해주세요.\n\r";
 		break;
 	default:
-		msg = "      정의되지 않은 에러 명령입니다. 다시 확인해주세요.\n\r";
+		msg = " /     정의되지 않은 에러 명령입니다. 다시 확인해주세요.\n\r";
 		cout << int(eType) << " 타입의 에러 발생!\n";
 		break;
 	}
@@ -525,7 +525,7 @@ MSG_TYPE CNetwork::Login(const SOCKET & sock, const vector<string>& vecMsg, cons
 	client->SetName(vecMsg[KEYWORD].c_str());
 
 	string logMsg;
-	logMsg += "\r      [";
+	logMsg += "\r/      [";
 	logMsg += vecMsg[KEYWORD].c_str();
 	logMsg += "] 으로 로그인 하였습니다..\n\r";
 	Send(sock, logMsg.c_str(), logMsg.size(), roomNumber);
@@ -610,7 +610,7 @@ MSG_TYPE CNetwork::ShowRoomAll(const SOCKET & sock)
 			exit(1);
 		}
 
-		msg += "\r      [";
+		msg += "\r/      [";
 		msg += to_string(room->GetNumber());
 		msg += "] ";
 		msg += room->GetRoomName();
@@ -648,7 +648,7 @@ MSG_TYPE CNetwork::ShowRoom(const SOCKET & sock, const vector<string>& vecMsg)
 	string msg;
 	msg.reserve(50);
 
-	msg += "\r      [";
+	msg += "\r/      [";
 	msg += to_string(room->GetNumber());
 	msg += "] ";
 	msg += room->GetRoomName();
@@ -711,7 +711,7 @@ MSG_TYPE CNetwork::CreateRoom(const SOCKET & sock, const vector<string>& vecMsg,
 		//Send(sock, msg.c_str(), msg.size(), roomNumber);
 		return MSG_TYPE::CANT_CREATE_ROOM_MSG;
 	}
-	string msg = "\r      ";
+	string msg = "\r/      ";
 	msg += strRoomName;
 	msg += " [";
 	msg += to_string(maxUser);
@@ -795,7 +795,7 @@ MSG_TYPE CNetwork::ShowUserAll(const SOCKET & sock)
 		for (auto& client : mapClient)
 		{
 			string msg;
-			msg += "\r      아이디 : [";
+			msg += "\r/      아이디 : [";
 			msg += client.second->GetName();
 			msg += "] \t\t대화방 번호 : [";
 			msg += to_string(num);
@@ -835,7 +835,7 @@ MSG_TYPE CNetwork::ShowUser(const SOCKET & sock, const vector<string>& vecMsg)
 		exit(1);
 	}
 	string msg;
-	msg += "\r      아이디 : [";
+	msg += "\r/      아이디 : [";
 	msg += client->GetName();
 	msg += "] \t\t대화방 번호 : [";
 	msg += to_string(num);

@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\ChatClient.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{FAAF2187-F529-4319-A5C1-B36CC793C824}</UniqueIdentifier>
+      <UniqueIdentifier>{AD651144-613C-4057-AAA4-F264243FD413}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\ChatClient.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{38F9A36D-1887-427C-B772-60F41F198BB7}</UniqueIdentifier>
+      <UniqueIdentifier>{F280FA55-A072-46D3-82C0-FC1ECD502629}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -24,7 +24,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\ChatClient">
-      <UniqueIdentifier>{8C528C22-A0BF-42AE-A0B2-22720A82C13A}</UniqueIdentifier>
+      <UniqueIdentifier>{AD2F3FA1-A44B-460C-812C-CF9AC2A038CC}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\ChatClient\ChatClient.Build.cs">
       <Filter>Source\ChatClient</Filter>
@@ -35,41 +35,104 @@
     <ClInclude Include="..\..\Source\ChatClient\ChatClient.h">
       <Filter>Source\ChatClient</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\Source\ChatClient\ChatClientGameModeBase.cpp">
-      <Filter>Source\ChatClient</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source\ChatClient\06. Level">
+      <UniqueIdentifier>{094ba660-b683-4be5-8ce3-54c4b34e96d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ChatClient\00. GameMode">
+      <UniqueIdentifier>{51706126-5e51-4b16-8939-105d9278adfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ChatClient\07. UI">
+      <UniqueIdentifier>{7de8fb5c-7d17-4ff5-8eb1-711e9b00df92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ChatClient\01. PlayerController">
+      <UniqueIdentifier>{65eae90b-370a-4178-b999-6ff5513599f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ChatClient\02. PlayerState">
+      <UniqueIdentifier>{113e5b31-d89f-4902-b358-593bb327f175}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ChatClient\04. GaneInstance">
+      <UniqueIdentifier>{59860d3e-eeb7-4006-bd96-769386ba45db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ChatClient\99. Etc">
+      <UniqueIdentifier>{543056b1-b331-4a43-9b1f-784e321c53fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ChatClient\05. Pawn">
+      <UniqueIdentifier>{da9b8a1d-7e7b-4699-bcf1-d3ad7435b6d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ChatClient\03. HUD">
+      <UniqueIdentifier>{70864e73-060c-4f8a-ab38-cd994c1abc6b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\ChatClient\UI_Login.h">
+      <Filter>Source\ChatClient\07. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChatClient\UI_Connect.h">
+      <Filter>Source\ChatClient\07. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChatClient\ConnectLevel.h">
+      <Filter>Source\ChatClient\06. Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChatClient\LoginLevel.h">
+      <Filter>Source\ChatClient\06. Level</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ChatClient\ChatClientGameModeBase.h">
-      <Filter>Source\ChatClient</Filter>
+      <Filter>Source\ChatClient\99. Etc</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\Source\ChatClient\ChatPawn.cpp">
-      <Filter>Source\ChatClient</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\ChatClient\ChatPawn.h">
-      <Filter>Source\ChatClient</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\Source\ChatClient\GI_Network.cpp">
-      <Filter>Source\ChatClient</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\ChatClient\GI_Network.h">
-      <Filter>Source\ChatClient</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\Source\ChatClient\GM_ChatGameMode.cpp">
-      <Filter>Source\ChatClient</Filter>
-    </ClCompile>
     <ClInclude Include="..\..\Source\ChatClient\GM_ChatGameMode.h">
-      <Filter>Source\ChatClient</Filter>
+      <Filter>Source\ChatClient\00. GameMode</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\Source\ChatClient\PC_ChatPlayerController.cpp">
-      <Filter>Source\ChatClient</Filter>
-    </ClCompile>
     <ClInclude Include="..\..\Source\ChatClient\PC_ChatPlayerController.h">
-      <Filter>Source\ChatClient</Filter>
+      <Filter>Source\ChatClient\01. PlayerController</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\Source\ChatClient\PS_ChatState.cpp">
-      <Filter>Source\ChatClient</Filter>
-    </ClCompile>
     <ClInclude Include="..\..\Source\ChatClient\PS_ChatState.h">
-      <Filter>Source\ChatClient</Filter>
+      <Filter>Source\ChatClient\02. PlayerState</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChatClient\ChatHUD.h">
+      <Filter>Source\ChatClient\03. HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChatClient\ChatPawn.h">
+      <Filter>Source\ChatClient\05. Pawn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChatClient\GI_Network.h">
+      <Filter>Source\ChatClient\04. GaneInstance</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\ChatClient\UI_Login.cpp">
+      <Filter>Source\ChatClient\07. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChatClient\UI_Connect.cpp">
+      <Filter>Source\ChatClient\07. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChatClient\ConnectLevel.cpp">
+      <Filter>Source\ChatClient\06. Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChatClient\LoginLevel.cpp">
+      <Filter>Source\ChatClient\06. Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChatClient\ChatClientGameModeBase.cpp">
+      <Filter>Source\ChatClient\99. Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChatClient\GM_ChatGameMode.cpp">
+      <Filter>Source\ChatClient\00. GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChatClient\PC_ChatPlayerController.cpp">
+      <Filter>Source\ChatClient\01. PlayerController</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChatClient\PS_ChatState.cpp">
+      <Filter>Source\ChatClient\02. PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChatClient\ChatHUD.cpp">
+      <Filter>Source\ChatClient\03. HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChatClient\ChatPawn.cpp">
+      <Filter>Source\ChatClient\05. Pawn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChatClient\GI_Network.cpp">
+      <Filter>Source\ChatClient\04. GaneInstance</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

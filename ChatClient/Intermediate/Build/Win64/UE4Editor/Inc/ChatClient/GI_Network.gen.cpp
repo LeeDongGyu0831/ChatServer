@@ -81,6 +81,23 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 		}
 		return ReturnEnum;
 	}
+	DEFINE_FUNCTION(UGI_Network::execCheckMessage)
+	{
+		P_GET_PROPERTY(FStrProperty,Z_Param_originString);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		*(MSG_TYPE*)Z_Param__Result=P_THIS->CheckMessage(Z_Param_originString);
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UGI_Network::execTrimMessage)
+	{
+		P_GET_PROPERTY(FStrProperty,Z_Param_originString);
+		P_GET_PROPERTY(FStrProperty,Z_Param_subString);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		*(FString*)Z_Param__Result=P_THIS->TrimMessage(Z_Param_originString,Z_Param_subString);
+		P_NATIVE_END;
+	}
 	DEFINE_FUNCTION(UGI_Network::execSend)
 	{
 		P_GET_PROPERTY(FStrProperty,Z_Param_data);
@@ -121,13 +138,57 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 	{
 		UClass* Class = UGI_Network::StaticClass();
 		static const FNameNativePtrPair Funcs[] = {
+			{ "CheckMessage", &UGI_Network::execCheckMessage },
 			{ "ConnectToServer", &UGI_Network::execConnectToServer },
 			{ "LoginToServer", &UGI_Network::execLoginToServer },
 			{ "Recv", &UGI_Network::execRecv },
 			{ "RecvData", &UGI_Network::execRecvData },
 			{ "Send", &UGI_Network::execSend },
+			{ "TrimMessage", &UGI_Network::execTrimMessage },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
+	}
+	struct Z_Construct_UFunction_UGI_Network_CheckMessage_Statics
+	{
+		struct GI_Network_eventCheckMessage_Parms
+		{
+			FString originString;
+			MSG_TYPE ReturnValue;
+		};
+		static const UE4CodeGen_Private::FEnumPropertyParams NewProp_ReturnValue;
+		static const UE4CodeGen_Private::FBytePropertyParams NewProp_ReturnValue_Underlying;
+		static const UE4CodeGen_Private::FStrPropertyParams NewProp_originString;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UE4CodeGen_Private::FEnumPropertyParams Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(GI_Network_eventCheckMessage_Parms, ReturnValue), Z_Construct_UEnum_ChatClient_MSG_TYPE, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FBytePropertyParams Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::NewProp_ReturnValue_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, nullptr, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::NewProp_originString = { "originString", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(GI_Network_eventCheckMessage_Parms, originString), METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::NewProp_ReturnValue,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::NewProp_ReturnValue_Underlying,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::NewProp_originString,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Socket" },
+		{ "Comment", "// ???? ?\xd5\xbf? /?? ?\xd9\xbe??\xd6\xb4? ?\xde\xbd??????? /?? ?\xd9\xbe??\xd6\xb4? ?\xde\xbd??????? ?\xcf\xb9? \xc3\xa4?? ?\xde\xbd????? ?\xc6\xb4?\n" },
+		{ "ModuleRelativePath", "GI_Network.h" },
+		{ "ToolTip", "???? ?\xd5\xbf? /?? ?\xd9\xbe??\xd6\xb4? ?\xde\xbd??????? /?? ?\xd9\xbe??\xd6\xb4? ?\xde\xbd??????? ?\xcf\xb9? \xc3\xa4?? ?\xde\xbd????? ?\xc6\xb4?" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UGI_Network, nullptr, "CheckMessage", nullptr, nullptr, sizeof(GI_Network_eventCheckMessage_Parms), Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UGI_Network_CheckMessage()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UGI_Network_CheckMessage_Statics::FuncParams);
+		}
+		return ReturnFunction;
 	}
 	struct Z_Construct_UFunction_UGI_Network_ConnectToServer_Statics
 	{
@@ -311,6 +372,65 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 		}
 		return ReturnFunction;
 	}
+	struct Z_Construct_UFunction_UGI_Network_TrimMessage_Statics
+	{
+		struct GI_Network_eventTrimMessage_Parms
+		{
+			FString originString;
+			FString subString;
+			FString ReturnValue;
+		};
+		static const UE4CodeGen_Private::FStrPropertyParams NewProp_ReturnValue;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_subString_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStrPropertyParams NewProp_subString;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_originString_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStrPropertyParams NewProp_originString;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UE4CodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(GI_Network_eventTrimMessage_Parms, ReturnValue), METADATA_PARAMS(nullptr, 0) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_subString_MetaData[] = {
+		{ "NativeConst", "" },
+	};
+#endif
+	const UE4CodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_subString = { "subString", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(GI_Network_eventTrimMessage_Parms, subString), METADATA_PARAMS(Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_subString_MetaData, UE_ARRAY_COUNT(Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_subString_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_originString_MetaData[] = {
+		{ "NativeConst", "" },
+	};
+#endif
+	const UE4CodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_originString = { "originString", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(GI_Network_eventTrimMessage_Parms, originString), METADATA_PARAMS(Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_originString_MetaData, UE_ARRAY_COUNT(Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_originString_MetaData)) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_ReturnValue,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_subString,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::NewProp_originString,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Socket" },
+		{ "Comment", "// ?? ?? ???? + ?\xd9\xb9\xd9\xb2? ???? + >> ???? ???\xc5\xbf?\n" },
+		{ "ModuleRelativePath", "GI_Network.h" },
+		{ "ToolTip", "?? ?? ???? + ?\xd9\xb9\xd9\xb2? ???? + >> ???? ???\xc5\xbf?" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UGI_Network, nullptr, "TrimMessage", nullptr, nullptr, sizeof(GI_Network_eventTrimMessage_Parms), Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UGI_Network_TrimMessage()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UGI_Network_TrimMessage_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
 	UClass* Z_Construct_UClass_UGI_Network_NoRegister()
 	{
 		return UGI_Network::StaticClass();
@@ -322,29 +442,6 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
 #endif
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bLogin_MetaData[];
-#endif
-		static void NewProp_bLogin_SetBit(void* Obj);
-		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bLogin;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bConnect_MetaData[];
-#endif
-		static void NewProp_bConnect_SetBit(void* Obj);
-		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bConnect;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_strPort_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FStrPropertyParams NewProp_strPort;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_strIP_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FStrPropertyParams NewProp_strIP;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_strID_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FStrPropertyParams NewProp_strID;
-		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
 		static const UE4CodeGen_Private::FClassParams ClassParams;
 	};
@@ -353,11 +450,13 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_ChatClient,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UGI_Network_Statics::FuncInfo[] = {
+		{ &Z_Construct_UFunction_UGI_Network_CheckMessage, "CheckMessage" }, // 2138937838
 		{ &Z_Construct_UFunction_UGI_Network_ConnectToServer, "ConnectToServer" }, // 3721457483
 		{ &Z_Construct_UFunction_UGI_Network_LoginToServer, "LoginToServer" }, // 4128830343
 		{ &Z_Construct_UFunction_UGI_Network_Recv, "Recv" }, // 2730677776
 		{ &Z_Construct_UFunction_UGI_Network_RecvData, "RecvData" }, // 606035206
 		{ &Z_Construct_UFunction_UGI_Network_Send, "Send" }, // 1992597702
+		{ &Z_Construct_UFunction_UGI_Network_TrimMessage, "TrimMessage" }, // 2361784591
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGI_Network_Statics::Class_MetaDataParams[] = {
@@ -365,56 +464,6 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 		{ "ModuleRelativePath", "GI_Network.h" },
 	};
 #endif
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGI_Network_Statics::NewProp_bLogin_MetaData[] = {
-		{ "Category", "Socket" },
-		{ "ModuleRelativePath", "GI_Network.h" },
-	};
-#endif
-	void Z_Construct_UClass_UGI_Network_Statics::NewProp_bLogin_SetBit(void* Obj)
-	{
-		((UGI_Network*)Obj)->bLogin = 1;
-	}
-	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UGI_Network_Statics::NewProp_bLogin = { "bLogin", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(UGI_Network), &Z_Construct_UClass_UGI_Network_Statics::NewProp_bLogin_SetBit, METADATA_PARAMS(Z_Construct_UClass_UGI_Network_Statics::NewProp_bLogin_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGI_Network_Statics::NewProp_bLogin_MetaData)) };
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGI_Network_Statics::NewProp_bConnect_MetaData[] = {
-		{ "Category", "Socket" },
-		{ "ModuleRelativePath", "GI_Network.h" },
-	};
-#endif
-	void Z_Construct_UClass_UGI_Network_Statics::NewProp_bConnect_SetBit(void* Obj)
-	{
-		((UGI_Network*)Obj)->bConnect = 1;
-	}
-	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UGI_Network_Statics::NewProp_bConnect = { "bConnect", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(UGI_Network), &Z_Construct_UClass_UGI_Network_Statics::NewProp_bConnect_SetBit, METADATA_PARAMS(Z_Construct_UClass_UGI_Network_Statics::NewProp_bConnect_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGI_Network_Statics::NewProp_bConnect_MetaData)) };
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGI_Network_Statics::NewProp_strPort_MetaData[] = {
-		{ "Category", "Socket" },
-		{ "ModuleRelativePath", "GI_Network.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FStrPropertyParams Z_Construct_UClass_UGI_Network_Statics::NewProp_strPort = { "strPort", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGI_Network, strPort), METADATA_PARAMS(Z_Construct_UClass_UGI_Network_Statics::NewProp_strPort_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGI_Network_Statics::NewProp_strPort_MetaData)) };
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGI_Network_Statics::NewProp_strIP_MetaData[] = {
-		{ "Category", "Socket" },
-		{ "ModuleRelativePath", "GI_Network.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FStrPropertyParams Z_Construct_UClass_UGI_Network_Statics::NewProp_strIP = { "strIP", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGI_Network, strIP), METADATA_PARAMS(Z_Construct_UClass_UGI_Network_Statics::NewProp_strIP_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGI_Network_Statics::NewProp_strIP_MetaData)) };
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UGI_Network_Statics::NewProp_strID_MetaData[] = {
-		{ "Category", "Socket" },
-		{ "ModuleRelativePath", "GI_Network.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FStrPropertyParams Z_Construct_UClass_UGI_Network_Statics::NewProp_strID = { "strID", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UGI_Network, strID), METADATA_PARAMS(Z_Construct_UClass_UGI_Network_Statics::NewProp_strID_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UGI_Network_Statics::NewProp_strID_MetaData)) };
-	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UGI_Network_Statics::PropPointers[] = {
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGI_Network_Statics::NewProp_bLogin,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGI_Network_Statics::NewProp_bConnect,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGI_Network_Statics::NewProp_strPort,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGI_Network_Statics::NewProp_strIP,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGI_Network_Statics::NewProp_strID,
-	};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UGI_Network_Statics::StaticCppClassTypeInfo = {
 		TCppClassTypeTraits<UGI_Network>::IsAbstract,
 	};
@@ -424,11 +473,11 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 		&StaticCppClassTypeInfo,
 		DependentSingletons,
 		FuncInfo,
-		Z_Construct_UClass_UGI_Network_Statics::PropPointers,
+		nullptr,
 		nullptr,
 		UE_ARRAY_COUNT(DependentSingletons),
 		UE_ARRAY_COUNT(FuncInfo),
-		UE_ARRAY_COUNT(Z_Construct_UClass_UGI_Network_Statics::PropPointers),
+		0,
 		0,
 		0x001000A8u,
 		METADATA_PARAMS(Z_Construct_UClass_UGI_Network_Statics::Class_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UClass_UGI_Network_Statics::Class_MetaDataParams))
@@ -442,7 +491,7 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UGI_Network, 2495572901);
+	IMPLEMENT_CLASS(UGI_Network, 2053903990);
 	template<> CHATCLIENT_API UClass* StaticClass<UGI_Network>()
 	{
 		return UGI_Network::StaticClass();

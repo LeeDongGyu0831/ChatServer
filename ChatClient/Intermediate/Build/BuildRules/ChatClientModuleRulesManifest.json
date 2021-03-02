@@ -1,8 +1,8 @@
 {
 	"SourceFiles": [
-		"D:\\Users\\crow4\\Desktop\\ChatServer\\ChatClient\\Source\\ChatClient\\ChatClient.Build.cs",
-		"D:\\Users\\crow4\\Desktop\\ChatServer\\ChatClient\\Source\\ChatClient.Target.cs",
-		"D:\\Users\\crow4\\Desktop\\ChatServer\\ChatClient\\Source\\ChatClientEditor.Target.cs"
+		"C:\\Users\\donggyu\\Desktop\\GitHub\\ChatServer\\ChatClient\\Source\\ChatClient\\ChatClient.Build.cs",
+		"C:\\Users\\donggyu\\Desktop\\GitHub\\ChatServer\\ChatClient\\Source\\ChatClient.Target.cs",
+		"C:\\Users\\donggyu\\Desktop\\GitHub\\ChatServer\\ChatClient\\Source\\ChatClientEditor.Target.cs"
 	],
 	"EngineVersion": "4.25.4"
 }

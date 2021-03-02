@@ -230,8 +230,8 @@
 /I Runtime\Experimental\GeometryCollectionSimulationCore\Public
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\ClothingSystemRuntimeInterface
 /I Runtime\ClothingSystemRuntimeInterface\Public
-/I D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient
-/I D:\Users\crow4\Desktop\ChatServer\ChatClient\Source
+/I C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient
+/I C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Source
 /I Runtime\Networking\Public
 /I ThirdParty\PhysX3\PxShared\include
 /I ThirdParty\PhysX3\PxShared\include\cudamanager
@@ -256,18 +256,18 @@
 /I ThirdParty\PhysX3\APEX_1.4\shared\general\RenderDebug\public
 /I ThirdParty\PhysX3\APEX_1.4\shared\general\PairFilter\include
 /I ThirdParty\PhysX3\APEX_1.4\shared\internal\include
-/I "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\INCLUDE"
+/I "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\INCLUDE"
 /I "C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt"
-/FI"D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\ChatClientEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
-/Yu"D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\ChatClientEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
-/Fp"D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\ChatClientEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.pch"
-"D:\Users\crow4\Desktop\ChatServer\ChatClient\Source\ChatClient\PC_ChatPlayerController.cpp"
-/FI"D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\Definitions.ChatClient.h"
-/Fo"D:\Users\crow4\Desktop\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\PC_ChatPlayerController.cpp.obj"
+/FI"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\ChatClientEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
+/Yu"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\ChatClientEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
+/Fp"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\ChatClientEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.pch"
+"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Source\ChatClient\PC_ChatPlayerController.cpp"
+/FI"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\Definitions.ChatClient.h"
+/Fo"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\PC_ChatPlayerController.cpp.obj"
 /TP
 /GR-
 /W4

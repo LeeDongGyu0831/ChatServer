@@ -2,12 +2,12 @@
 	"Targets": [
 		{
 			"Name": "ChatClient",
-			"Path": "D:\\Users\\crow4\\Desktop\\ChatServer\\ChatClient\\Source\\ChatClient.Target.cs",
+			"Path": "C:\\Users\\donggyu\\Desktop\\GitHub\\ChatServer\\ChatClient\\Source\\ChatClient.Target.cs",
 			"Type": "Game"
 		},
 		{
 			"Name": "ChatClientEditor",
-			"Path": "D:\\Users\\crow4\\Desktop\\ChatServer\\ChatClient\\Source\\ChatClientEditor.Target.cs",
+			"Path": "C:\\Users\\donggyu\\Desktop\\GitHub\\ChatServer\\ChatClient\\Source\\ChatClientEditor.Target.cs",
 			"Type": "Editor"
 		}
 	]

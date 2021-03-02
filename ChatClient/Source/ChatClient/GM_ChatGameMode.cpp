@@ -7,12 +7,14 @@
 
 #include "GI_Network.h"
 #include "PS_ChatState.h"
+#include "ChatHUD.h"
 
 AGM_ChatGameMode::AGM_ChatGameMode()
 {
 	DefaultPawnClass = AChatPawn::StaticClass();
 	PlayerControllerClass = APC_ChatPlayerController::StaticClass();
 	PlayerStateClass = APS_ChatState::StaticClass();
+	HUDClass = AChatHUD::StaticClass();
 }
 
 void AGM_ChatGameMode::PostLogin(APlayerController* NewPlayer)

@@ -30,6 +30,20 @@ void UGI_Network::Shutdown()
 	if(true == bConnect)
 		Socket->Close();
 }
+void UGI_Network::SetID(FString id)
+{
+	strID = id;
+}
+
+void UGI_Network::SetIP(FString ip)
+{
+	strIP = ip;
+}
+void UGI_Network::SetPort(FString port)
+{
+	strPort = port;
+}
+
 bool UGI_Network::ConnectToServer()
 {
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream, TEXT("default"), false);
@@ -75,8 +89,6 @@ bool UGI_Network::LoginToServer()
 {
 	FString data = L"/l ";
 	data += strID;
-	data.AppendChar('\r');
-	data.AppendChar('\n');
 
 	// 로그인 명령어 전송
 	Send(data);
@@ -92,6 +104,7 @@ bool UGI_Network::LoginToServer()
 
 	//bLogin = true;
 	//Socket->SetNonBlocking(true);
+
 	return true;
 }
 
@@ -104,7 +117,7 @@ FString UGI_Network::Recv()
 
 	mbstowcs(finalMessage, recvMessage, recvBytes + 1);
 	
-	UE_LOG(LogTemp, Warning, TEXT("Recv : %s"), finalMessage);
+	//UE_LOG(LogTemp, Warning, TEXT("Recv : %s"), finalMessage);
 
 	FString result = finalMessage;
 	//if (false == recvSuccess)
@@ -114,11 +127,14 @@ FString UGI_Network::Recv()
 
 bool UGI_Network::Send(const FString& data)
 {
+	FString sendData = data;
+	sendData += "\r\n";
+
 	char message[BUF_SIZE];
 	wchar_t finalMessage[BUF_SIZE];
 	size_t convertedNum = 0;
 
-	wcstombs_s<BUF_SIZE>(&convertedNum, message, *data, BUF_SIZE);
+	wcstombs_s<BUF_SIZE>(&convertedNum, message, *sendData, BUF_SIZE);
 
 	mbstowcs(finalMessage, message, convertedNum + 1);
 
@@ -126,6 +142,81 @@ bool UGI_Network::Send(const FString& data)
 	bool result = Socket->Send(reinterpret_cast<const uint8*>(message), strlen(message), (int32&)sent);
 	UE_LOG(LogTemp, Warning, TEXT("Send : %s"), finalMessage);
 	return result;
+}
+
+FString UGI_Network::TrimMessage(const FString& originString, const FString& subString)
+{
+	FString data, leftString, rightString;
+	data = originString.TrimStart();
+
+	bool result = data.Split(subString, &leftString, &rightString);
+	if (true == result)
+	{
+		data = leftString.TrimEnd();
+	}
+	else
+	{
+		data = data.TrimEnd();
+	}
+	data.TrimQuotesInline();
+	return data;
+}
+
+MSG_TYPE UGI_Network::CheckMessage(FString originString)
+{
+	FString FuncName = "CheckMessage";
+
+	if (originString[0] == '/')
+		return MSG_TYPE::CHAT;
+
+	if (originString.Contains("님이 참가"))
+	{
+		return MSG_TYPE::EXIT;
+	}
+
+	if (originString.Contains("님이 퇴장"))
+	{
+		return MSG_TYPE::JOIN;
+	}
+
+	int startIndex = 0;
+	int endIndex = 0;
+	originString.FindLastChar(']', endIndex);
+	originString.FindLastChar('[', startIndex);
+
+	return MSG_TYPE::CHAT;
+}
+
+FString UGI_Network::GetKeyworkByChar(FString originString, TCHAR startChar, TCHAR endChar)
+{
+	FString FuncName = "GetKeyworkByChar";
+	FString data = originString;
+	int startIndex = 0;
+	int endIndex = 0;
+	if (false == data.FindLastChar(startChar, startIndex))
+		return "";
+	if (false == data.FindLastChar(endChar, endIndex))
+		return "";
+
+	FString subString = "";
+	for (int i = startIndex; i < endIndex; ++i)
+	{
+		subString.AppendChar(data[i]);
+	}
+
+	PrintLog(FuncName, subString);
+
+	return subString;
+}
+
+void UGI_Network::PrintLog(const FString& message1, const FString& message2)
+{
+	char logMsg1[BUF_SIZE];
+	char logMsg2[BUF_SIZE];
+	size_t convertedNum = 0;
+	wcstombs_s<BUF_SIZE>(&convertedNum, logMsg1, *message1, BUF_SIZE);
+	wcstombs_s<BUF_SIZE>(&convertedNum, logMsg2, *message2, BUF_SIZE);
+	UE_LOG(LogTemp, Warning, TEXT("%s, : %s"), logMsg1, logMsg2);
 }
 
 FString UGI_Network::BytesToStringFixed(const uint8* In, int32 Count)
