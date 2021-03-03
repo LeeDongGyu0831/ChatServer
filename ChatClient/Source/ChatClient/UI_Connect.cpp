@@ -34,7 +34,6 @@ void UUI_Connect::NativeConstruct()
 	if (NULL == inputIP || NULL == inputPort || NULL == connectButton)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Do Not Construct UI_Connect"));
-		exit(1);
 	}
 
 	connectButton->OnClicked.AddDynamic(this, &UUI_Connect::ButtonClick);

@@ -40,5 +40,4 @@ public:
 
 	UFUNCTION()
 	void ButtonClick();
-
 };

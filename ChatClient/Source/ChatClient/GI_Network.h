@@ -23,6 +23,7 @@ enum class MSG_TYPE : uint8
 	JOIN UMETA(DisplayName = "JOIN"),
 	CHAT UMETA(DisplayName = "CHAT"),
 	EXIT UMETA(DisplayName = "EXIT"),
+	PLAYERLIST UMETA(DisplayName = "PLAYERLIST"),
 };
 
 UCLASS()
@@ -50,6 +51,7 @@ public:
 	void SetID(FString id);
 	void SetIP(FString ip);
 	void SetPort(FString port);
+	FString GetID();
 
 	UFUNCTION(BlueprintCallable, Category = Socket)
 	void RecvData();
@@ -65,6 +67,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Socket)
 	bool Send(const FString& data);
+
+	void RequestPlayerList(const int32& roomNumber);
+
 
 	// 앞 뒤 공백 + 줄바꿈 문자 + >> 문자 제거용
 	UFUNCTION(BlueprintCallable, Category = Socket)

@@ -19,7 +19,6 @@ void UUI_Login::NativeConstruct()
 	if (NULL == inputID || NULL == connectButton)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Do Not Construct UI_Login"));
-		exit(1);
 	}
 
 	connectButton->OnClicked.AddDynamic(this, &UUI_Login::ConnectButtonClick);

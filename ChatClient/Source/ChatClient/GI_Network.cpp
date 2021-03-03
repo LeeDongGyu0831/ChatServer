@@ -44,6 +44,11 @@ void UGI_Network::SetPort(FString port)
 	strPort = port;
 }
 
+FString UGI_Network::GetID()
+{
+	return strID;
+}
+
 bool UGI_Network::ConnectToServer()
 {
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream, TEXT("default"), false);
@@ -144,6 +149,14 @@ bool UGI_Network::Send(const FString& data)
 	return result;
 }
 
+void UGI_Network::RequestPlayerList(const int32& roomNumber)
+{
+	FString requestString = "/s ";
+	requestString += FString::FromInt(roomNumber);
+	Send(requestString);
+
+}
+
 FString UGI_Network::TrimMessage(const FString& originString, const FString& subString)
 {
 	FString data, leftString, rightString;
@@ -166,23 +179,25 @@ MSG_TYPE UGI_Network::CheckMessage(FString originString)
 {
 	FString FuncName = "CheckMessage";
 
-	if (originString[0] == '/')
+	if (originString[0] != L'/')
 		return MSG_TYPE::CHAT;
 
-	if (originString.Contains("님이 참가"))
-	{
-		return MSG_TYPE::EXIT;
-	}
-
-	if (originString.Contains("님이 퇴장"))
+	if (originString.Contains(L"님이 참가"))
 	{
 		return MSG_TYPE::JOIN;
 	}
 
-	int startIndex = 0;
-	int endIndex = 0;
-	originString.FindLastChar(']', endIndex);
-	originString.FindLastChar('[', startIndex);
+	if (originString.Contains(L"님이 퇴장"))
+	{
+		return MSG_TYPE::EXIT;
+	}
+
+	if (originString.Contains(L"대화방 이용자"))
+	{
+		return MSG_TYPE::PLAYERLIST;
+	}
+
+	PrintLog(FuncName, originString);
 
 	return MSG_TYPE::CHAT;
 }

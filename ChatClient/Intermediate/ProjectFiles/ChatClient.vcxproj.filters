@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\ChatClient.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{0BA54999-6D39-4482-B7C8-24138C153783}</UniqueIdentifier>
+      <UniqueIdentifier>{4B8F57FD-C236-4CC8-AFB1-31854A547CDC}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\ChatClient.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{27A3F1CA-9CC9-4BD8-8F87-9EB276173B3A}</UniqueIdentifier>
+      <UniqueIdentifier>{10BC66EC-2361-4B46-85AC-8BB10F5CCC78}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -24,7 +24,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\ChatClient">
-      <UniqueIdentifier>{AE7BEBBE-A2A8-4D88-86C6-5D95C7CF83AE}</UniqueIdentifier>
+      <UniqueIdentifier>{149A0B1E-87E6-4664-A49F-78447AD75027}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\ChatClient\ChatClient.Build.cs">
       <Filter>Source\ChatClient</Filter>
@@ -95,6 +95,12 @@
     <ClInclude Include="..\..\Source\ChatClient\PS_ChatState.h">
       <Filter>Source\ChatClient</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\ChatClient\UI_ChatText.cpp">
+      <Filter>Source\ChatClient</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\ChatClient\UI_ChatText.h">
+      <Filter>Source\ChatClient</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\ChatClient\UI_Connect.cpp">
       <Filter>Source\ChatClient</Filter>
     </ClCompile>
@@ -110,6 +116,8 @@
     <ClCompile Include="..\..\Source\ChatClient\UI_MainRoom.cpp">
       <Filter>Source\ChatClient</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="..\..\Source\ChatClient\UI_MainRoom.h">
       <Filter>Source\ChatClient</Filter>
     </ClInclude>

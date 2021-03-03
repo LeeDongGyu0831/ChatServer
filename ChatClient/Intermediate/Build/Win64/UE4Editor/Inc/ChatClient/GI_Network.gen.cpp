@@ -33,7 +33,7 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 		return MSG_TYPE_StaticEnum();
 	}
 	static FCompiledInDeferEnum Z_CompiledInDeferEnum_UEnum_MSG_TYPE(MSG_TYPE_StaticEnum, TEXT("/Script/ChatClient"), TEXT("MSG_TYPE"), false, nullptr, nullptr);
-	uint32 Get_Z_Construct_UEnum_ChatClient_MSG_TYPE_Hash() { return 298377558U; }
+	uint32 Get_Z_Construct_UEnum_ChatClient_MSG_TYPE_Hash() { return 946019561U; }
 	UEnum* Z_Construct_UEnum_ChatClient_MSG_TYPE()
 	{
 #if WITH_HOT_RELOAD
@@ -48,6 +48,7 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 				{ "MSG_TYPE::JOIN", (int64)MSG_TYPE::JOIN },
 				{ "MSG_TYPE::CHAT", (int64)MSG_TYPE::CHAT },
 				{ "MSG_TYPE::EXIT", (int64)MSG_TYPE::EXIT },
+				{ "MSG_TYPE::PLAYERLIST", (int64)MSG_TYPE::PLAYERLIST },
 			};
 #if WITH_METADATA
 			const UE4CodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
@@ -60,6 +61,8 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 				{ "JOIN.DisplayName", "JOIN" },
 				{ "JOIN.Name", "MSG_TYPE::JOIN" },
 				{ "ModuleRelativePath", "GI_Network.h" },
+				{ "PLAYERLIST.DisplayName", "PLAYERLIST" },
+				{ "PLAYERLIST.Name", "MSG_TYPE::PLAYERLIST" },
 				{ "ToolTip", "\xec\x82\xac\xec\x9a\xa9\xec\x9e\x90 \xec\xa0\x95\xec\x9d\x98 \xea\xb2\x8c\xec\x9e\x84 \xec\x9d\xb8\xec\x8a\xa4\xed\x84\xb4\xec\x8a\xa4\n\xec\x9d\xb4\xea\xb3\xb3\xec\x97\x90\xec\x84\x9c \xeb\x84\xa4\xed\x8a\xb8\xec\x9b\x8c\xed\x81\xac \xec\x97\xb0\xea\xb2\xb0\xec\x9d\x84 \xea\xb4\x80\xeb\xa6\xac\xed\x95\xa9\xeb\x8b\x88\xeb\x8b\xa4.\n // \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xeb\xa5\xbc \xeb\xb6\x84\xec\x84\x9d\xed\x95\x98\xea\xb3\xa0\xeb\x82\x9c \xed\x9b\x84 \xed\x95\xb4\xeb\x8b\xb9 \xeb\xa9\x94\xec\x8b\x9c\xec\xa7\x80\xea\xb0\x80 \xec\x84\x9c\xeb\xb2\x84 \xeb\xaa\x85\xeb\xa0\xb9\xec\x9d\xb8\xec\xa7\x80 \xec\xb1\x84\xed\x8c\x85\xec\x9d\xb8\xec\xa7\x80 \xea\xb5\xac\xeb\xb6\x84\xed\x95\x98\xea\xb8\xb0 \xec\x9c\x84\xed\x95\xa8" },
 			};
 #endif
