@@ -20,10 +20,11 @@
 UENUM(BlueprintType)
 enum class MSG_TYPE : uint8
 {
-	JOIN UMETA(DisplayName = "JOIN"),
-	CHAT UMETA(DisplayName = "CHAT"),
-	EXIT UMETA(DisplayName = "EXIT"),
-	PLAYERLIST UMETA(DisplayName = "PLAYERLIST"),
+	JOIN		UMETA(DisplayName = "JOIN"),
+	CHAT		UMETA(DisplayName = "CHAT"),
+	EXIT		UMETA(DisplayName = "EXIT"),
+	PLAYERLIST	UMETA(DisplayName = "PLAYERLIST"),
+	ROOMLIST	UMETA(DisplayName = "ROOMLIST"),
 };
 
 UCLASS()
@@ -69,6 +70,7 @@ public:
 	bool Send(const FString& data);
 
 	void RequestPlayerList(const int32& roomNumber);
+	void RequestRoomList();
 
 
 	// 앞 뒤 공백 + 줄바꿈 문자 + >> 문자 제거용

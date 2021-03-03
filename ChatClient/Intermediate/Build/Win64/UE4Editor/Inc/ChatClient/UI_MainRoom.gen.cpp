@@ -20,6 +20,20 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 	COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
 	UMG_API UClass* Z_Construct_UClass_UUserWidget_NoRegister();
 // End Cross Module References
+	DEFINE_FUNCTION(UUI_MainRoom::execCreateRoomButtonClickEvent)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->CreateRoomButtonClickEvent();
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UUI_MainRoom::execCloseButtonClickEvent)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->CloseButtonClickEvent();
+		P_NATIVE_END;
+	}
 	DEFINE_FUNCTION(UUI_MainRoom::execRefreshButtonClickEvent)
 	{
 		P_FINISH;
@@ -38,10 +52,56 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 	{
 		UClass* Class = UUI_MainRoom::StaticClass();
 		static const FNameNativePtrPair Funcs[] = {
+			{ "CloseButtonClickEvent", &UUI_MainRoom::execCloseButtonClickEvent },
+			{ "CreateRoomButtonClickEvent", &UUI_MainRoom::execCreateRoomButtonClickEvent },
 			{ "RecvButtonClickEvent", &UUI_MainRoom::execRecvButtonClickEvent },
 			{ "RefreshButtonClickEvent", &UUI_MainRoom::execRefreshButtonClickEvent },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
+	}
+	struct Z_Construct_UFunction_UUI_MainRoom_CloseButtonClickEvent_Statics
+	{
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UUI_MainRoom_CloseButtonClickEvent_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "UI_MainRoom.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UUI_MainRoom_CloseButtonClickEvent_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UUI_MainRoom, nullptr, "CloseButtonClickEvent", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UUI_MainRoom_CloseButtonClickEvent_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UUI_MainRoom_CloseButtonClickEvent_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UUI_MainRoom_CloseButtonClickEvent()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UUI_MainRoom_CloseButtonClickEvent_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_UUI_MainRoom_CreateRoomButtonClickEvent_Statics
+	{
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UUI_MainRoom_CreateRoomButtonClickEvent_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "UI_MainRoom.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UUI_MainRoom_CreateRoomButtonClickEvent_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UUI_MainRoom, nullptr, "CreateRoomButtonClickEvent", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UUI_MainRoom_CreateRoomButtonClickEvent_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UUI_MainRoom_CreateRoomButtonClickEvent_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UUI_MainRoom_CreateRoomButtonClickEvent()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UUI_MainRoom_CreateRoomButtonClickEvent_Statics::FuncParams);
+		}
+		return ReturnFunction;
 	}
 	struct Z_Construct_UFunction_UUI_MainRoom_RecvButtonClickEvent_Statics
 	{
@@ -99,6 +159,18 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 		static const UE4CodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
 #endif
 #if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_createRoomWidgetClass_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FClassPropertyParams NewProp_createRoomWidgetClass;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_roomNameLabelClass_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FClassPropertyParams NewProp_roomNameLabelClass;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_playerNameLabelClass_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FClassPropertyParams NewProp_playerNameLabelClass;
+#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_chatTextClass_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FClassPropertyParams NewProp_chatTextClass;
@@ -111,17 +183,39 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_ChatClient,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UUI_MainRoom_Statics::FuncInfo[] = {
+		{ &Z_Construct_UFunction_UUI_MainRoom_CloseButtonClickEvent, "CloseButtonClickEvent" }, // 3133730557
+		{ &Z_Construct_UFunction_UUI_MainRoom_CreateRoomButtonClickEvent, "CreateRoomButtonClickEvent" }, // 2058525764
 		{ &Z_Construct_UFunction_UUI_MainRoom_RecvButtonClickEvent, "RecvButtonClickEvent" }, // 402214869
 		{ &Z_Construct_UFunction_UUI_MainRoom_RefreshButtonClickEvent, "RefreshButtonClickEvent" }, // 4027795369
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UUI_MainRoom_Statics::Class_MetaDataParams[] = {
-		{ "Comment", "/**\n * \n */" },
 		{ "IncludePath", "UI_MainRoom.h" },
 		{ "ModuleRelativePath", "UI_MainRoom.h" },
 		{ "ObjectInitializerConstructorDeclared", "" },
 	};
 #endif
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_createRoomWidgetClass_MetaData[] = {
+		{ "Category", "Widgets" },
+		{ "ModuleRelativePath", "UI_MainRoom.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_createRoomWidgetClass = { "createRoomWidgetClass", nullptr, (EPropertyFlags)0x0044000000010001, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UUI_MainRoom, createRoomWidgetClass), Z_Construct_UClass_UUserWidget_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_createRoomWidgetClass_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_createRoomWidgetClass_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_roomNameLabelClass_MetaData[] = {
+		{ "Category", "Widgets" },
+		{ "ModuleRelativePath", "UI_MainRoom.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_roomNameLabelClass = { "roomNameLabelClass", nullptr, (EPropertyFlags)0x0044000000010001, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UUI_MainRoom, roomNameLabelClass), Z_Construct_UClass_UUserWidget_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_roomNameLabelClass_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_roomNameLabelClass_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_playerNameLabelClass_MetaData[] = {
+		{ "Category", "Widgets" },
+		{ "ModuleRelativePath", "UI_MainRoom.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_playerNameLabelClass = { "playerNameLabelClass", nullptr, (EPropertyFlags)0x0044000000010001, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UUI_MainRoom, playerNameLabelClass), Z_Construct_UClass_UUserWidget_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_playerNameLabelClass_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_playerNameLabelClass_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_chatTextClass_MetaData[] = {
 		{ "Category", "Widgets" },
@@ -130,6 +224,9 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 #endif
 	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_chatTextClass = { "chatTextClass", nullptr, (EPropertyFlags)0x0044000000010001, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UUI_MainRoom, chatTextClass), Z_Construct_UClass_UUserWidget_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_chatTextClass_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_chatTextClass_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UUI_MainRoom_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_createRoomWidgetClass,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_roomNameLabelClass,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_playerNameLabelClass,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UUI_MainRoom_Statics::NewProp_chatTextClass,
 	};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UUI_MainRoom_Statics::StaticCppClassTypeInfo = {
@@ -159,7 +256,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UUI_MainRoom, 1320356716);
+	IMPLEMENT_CLASS(UUI_MainRoom, 3366175869);
 	template<> CHATCLIENT_API UClass* StaticClass<UUI_MainRoom>()
 	{
 		return UUI_MainRoom::StaticClass();

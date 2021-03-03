@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\ChatClient.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{4B8F57FD-C236-4CC8-AFB1-31854A547CDC}</UniqueIdentifier>
+      <UniqueIdentifier>{62E1F832-8972-4D03-84A5-E2B3FE6725B5}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\ChatClient.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{10BC66EC-2361-4B46-85AC-8BB10F5CCC78}</UniqueIdentifier>
+      <UniqueIdentifier>{F6329047-9216-4538-A61B-ECE086575C0F}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -23,8 +23,11 @@
     <None Include="..\..\Config\DefaultGame.ini">
       <Filter>Config</Filter>
     </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
     <Filter Include="Source\ChatClient">
-      <UniqueIdentifier>{149A0B1E-87E6-4664-A49F-78447AD75027}</UniqueIdentifier>
+      <UniqueIdentifier>{CF8AFD85-2C17-4C35-89E8-86DC52FE0163}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\ChatClient\ChatClient.Build.cs">
       <Filter>Source\ChatClient</Filter>
@@ -95,6 +98,12 @@
     <ClInclude Include="..\..\Source\ChatClient\PS_ChatState.h">
       <Filter>Source\ChatClient</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\ChatClient\UI_ChatRoom.cpp">
+      <Filter>Source\ChatClient</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\ChatClient\UI_ChatRoom.h">
+      <Filter>Source\ChatClient</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\ChatClient\UI_ChatText.cpp">
       <Filter>Source\ChatClient</Filter>
     </ClCompile>
@@ -116,9 +125,19 @@
     <ClCompile Include="..\..\Source\ChatClient\UI_MainRoom.cpp">
       <Filter>Source\ChatClient</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\Source\ChatClient\UI_MainRoom.h">
+      <Filter>Source\ChatClient</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\ChatClient\UI_ShowPlayerLabel.cpp">
+      <Filter>Source\ChatClient</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\ChatClient\UI_ShowPlayerLabel.h">
+      <Filter>Source\ChatClient</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\ChatClient\UI_ShowRoomLabel.cpp">
+      <Filter>Source\ChatClient</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\ChatClient\UI_ShowRoomLabel.h">
       <Filter>Source\ChatClient</Filter>
     </ClInclude>
   </ItemGroup>

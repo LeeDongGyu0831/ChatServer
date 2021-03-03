@@ -21,11 +21,11 @@ private:
 	class UTextBlock* chatText;
 
 public:
-	UUI_ChatText() = default;
-
 	UUI_ChatText(const FObjectInitializer& ObjectInitializer);
 
 	virtual void NativeConstruct() override;
+
+	void Init();
 
 	void SetChatMessage(const FString& chatMessage);
 };

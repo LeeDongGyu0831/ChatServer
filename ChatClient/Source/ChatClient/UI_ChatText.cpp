@@ -12,7 +12,10 @@ UUI_ChatText::UUI_ChatText(const FObjectInitializer& ObjectInitializer) : Super(
 void UUI_ChatText::NativeConstruct()
 {
 	Super::NativeConstruct();
+}
 
+void UUI_ChatText::Init()
+{
 	chatText = Cast<UTextBlock>(WidgetTree->FindWidget("Chat"));
 	if (NULL == chatText)
 	{
@@ -22,15 +25,6 @@ void UUI_ChatText::NativeConstruct()
 
 void UUI_ChatText::SetChatMessage(const FString& chatMessage)
 {
-	if (!chatText)
-	{
-		chatText = Cast<UTextBlock>(WidgetTree->FindWidget("Chat"));
-		if (NULL == chatText)
-		{
-			UE_LOG(LogTemp, Error, TEXT("Do Not Construct ChatText"));
-		}
-	}
-
 	if(chatText)
 		chatText->SetText(FText::FromString(chatMessage));
 }

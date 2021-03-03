@@ -36,7 +36,7 @@ public: \
 
 #define ChatClient_Source_ChatClient_UI_ChatText_h_18_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
-	NO_API UUI_ChatText(const FObjectInitializer& ObjectInitializer); \
+	NO_API UUI_ChatText(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UUI_ChatText) \
 	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, UUI_ChatText); \
 DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UUI_ChatText); \

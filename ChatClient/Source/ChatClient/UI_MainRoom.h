@@ -6,13 +6,15 @@
 #include "Blueprint/UserWidget.h"
 
 #include "Runtime/UMG/Public/UMG.h"
-#include "UI_ChatText.h"
 
 #include "UI_MainRoom.generated.h"
 
 /**
  * 
  */
+
+class UUI_ShowPlayerLabel;
+class UUI_ShowRoomLabel;
 
 UCLASS()
 class CHATCLIENT_API UUI_MainRoom : public UUserWidget
@@ -26,16 +28,28 @@ private:
 
 	class UScrollBox* chatListScrollBox;
 	class UScrollBox* playerListScrollBox;
+	class UScrollBox* roomListScrollBox;
 	class UEditableText* inputMessageText;
 	class UButton* recvButton;
 	class UButton* refreshButton;
+	class UButton* createRoomButton;
+	class UButton* closeButton;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> chatTextClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UUserWidget> playerNameLabelClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UUserWidget> roomNameLabelClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UUserWidget> createRoomWidgetClass;
+
 	// 이름이 Key, 인덱스가 UserWidget 자식 클래스
-	//std::unordered_map<FString, UUI_ChatText*> playerNameToWidgetMap;
-	TMap<FString, TWeakObjectPtr<UUI_ChatText>> TestWidgetMap;
+	TMap<FString, TWeakObjectPtr<UUI_ShowPlayerLabel>> playerNameToWidgetMap;
+	TMap<FString, TWeakObjectPtr<UUI_ShowRoomLabel>> roomNameToWidgetMap;
 
 public:
 	UUI_MainRoom(const FObjectInitializer& ObjectInitializer);
@@ -46,10 +60,18 @@ public:
 	void RecvButtonClickEvent();
 	UFUNCTION()
 	void RefreshButtonClickEvent();
+	UFUNCTION()
+	void CloseButtonClickEvent();
+	UFUNCTION()
+	void CreateRoomButtonClickEvent();
 
 	void AddChatting(const FString& chatMessage);
 	void AddPlayer(const FString& playerName);
 	void ExitPlayer(const FString& playerName);
 
+	void AddRoom(const FString& roomName);
+	void ExitRoom(const FString& roomName);
+
 	void FindPlayerListFromMessage(const FString& recvString);
+	void FindRoomListFromMessage(const FString& recvString);
 };

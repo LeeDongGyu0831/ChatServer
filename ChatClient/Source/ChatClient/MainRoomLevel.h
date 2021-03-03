@@ -18,8 +18,12 @@ class CHATCLIENT_API AMainRoomLevel : public ALevelScriptActor
 	GENERATED_BODY()
 	
 private:
+	constexpr static float REFRESH_TIME = 1.f;
+
 	// 메인 대화방 UI
 	UUI_MainRoom* mainRoomWidget;
+
+	float refreshTime;
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")

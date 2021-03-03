@@ -953,8 +953,6 @@ C:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\UMG\Public\Animation/M
 C:\Program Files\Epic Games\UE_4.25\Engine\Intermediate\Build\Win64\UE4Editor\Inc\UMG\MovieSceneMarginTrack.generated.h
 C:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\UMG\Public\Animation/UMGSequencePlayer.h
 C:\Program Files\Epic Games\UE_4.25\Engine\Intermediate\Build\Win64\UE4Editor\Inc\UMG\UMGSequencePlayer.generated.h
-C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Source\ChatClient\UI_ChatText.h
-C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\UI_ChatText.generated.h
 C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\UI_MainRoom.generated.h
 C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Source\ChatClient\GI_Network.h
 C:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking/Public/Networking.h
@@ -974,3 +972,9 @@ C:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking\Public\Comm
 C:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking\Public\Common/UdpSocketSender.h
 C:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\Networking\Public\Common/UdpSocketBuilder.h
 C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\GI_Network.generated.h
+C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Source\ChatClient\UI_ChatText.h
+C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\UI_ChatText.generated.h
+C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Source\ChatClient\UI_ShowPlayerLabel.h
+C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\UI_ShowPlayerLabel.generated.h
+C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Source\ChatClient\UI_ShowRoomLabel.h
+C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\UI_ShowRoomLabel.generated.h

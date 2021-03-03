@@ -157,6 +157,12 @@ void UGI_Network::RequestPlayerList(const int32& roomNumber)
 
 }
 
+void UGI_Network::RequestRoomList()
+{
+	FString requestString = "/o ";
+	Send(requestString);
+}
+
 FString UGI_Network::TrimMessage(const FString& originString, const FString& subString)
 {
 	FString data, leftString, rightString;
@@ -195,6 +201,11 @@ MSG_TYPE UGI_Network::CheckMessage(FString originString)
 	if (originString.Contains(L"대화방 이용자"))
 	{
 		return MSG_TYPE::PLAYERLIST;
+	}
+
+	if (originString.Contains(L"[0] Login Room"))
+	{
+		return MSG_TYPE::ROOMLIST;
 	}
 
 	PrintLog(FuncName, originString);
