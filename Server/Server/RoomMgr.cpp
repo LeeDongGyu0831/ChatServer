@@ -117,6 +117,7 @@ bool CRoomMgr::DestroyRoom(const uint& number)
 		msg += pRoom->GetRoomName();
 		msg += "] 대화방이 파괴되었습니다.\n\r";
 		CNetwork::GetInst()->BroadCastMessage(NONE, msg.c_str(), msg.size(), number);
+		CNetwork::GetInst()->BroadCastMessage(NONE, msg.c_str(), msg.size(), uint(ROOM_TYPE::MAIN_ROOM));
 	}
 
 	unordered_map<uint, CClient*> mapClient = pRoom->GetClients();

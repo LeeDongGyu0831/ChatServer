@@ -15,6 +15,13 @@ void UUI_ShowPlayerLabel::NativeConstruct()
 	Super::NativeConstruct();
 }
 
+void UUI_ShowPlayerLabel::BeginDestroy()
+{
+	Super::BeginDestroy();
+	//if (Fuc_DeleSingle_OneParam.IsBound() == true)
+	Fuc_DeleSingle_OneParam.Unbind();
+}
+
 void UUI_ShowPlayerLabel::Init()
 {
 	playerNameTextBlock = Cast<UTextBlock>(WidgetTree->FindWidget("PlayerName"));
@@ -35,5 +42,6 @@ void UUI_ShowPlayerLabel::SetPlayerName(const FString& playerName)
 
 void UUI_ShowPlayerLabel::SendMessageButton()
 {
-	UE_LOG(LogTemp, Error, TEXT("SendMessageButton"));
+	if (Fuc_DeleSingle_OneParam.IsBound() == true)
+		Fuc_DeleSingle_OneParam.Execute(_playerName);
 }

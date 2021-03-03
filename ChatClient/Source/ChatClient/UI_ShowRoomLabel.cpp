@@ -16,10 +16,15 @@ void UUI_ShowRoomLabel::NativeConstruct()
 
 void UUI_ShowRoomLabel::Init()
 {
-	RoomInfoTextBlock = Cast<UTextBlock>(WidgetTree->FindWidget("RoomName"));
+	roomNameTextBlock = Cast<UTextBlock>(WidgetTree->FindWidget("RoomName"));
+	roomNumberTextBlock = Cast<UTextBlock>(WidgetTree->FindWidget("RoomNumber"));
+	roomPlayerCountTextBlock = Cast<UTextBlock>(WidgetTree->FindWidget("RoomPlayerCount"));
+
 	destroyButton = Cast<UButton>(WidgetTree->FindWidget("DestroyButton"));
 	joinButton = Cast<UButton>(WidgetTree->FindWidget("ConnectButton"));
-	if (NULL == RoomInfoTextBlock)
+	if (nullptr == roomNameTextBlock ||
+		nullptr == roomNumberTextBlock ||
+		nullptr == roomPlayerCountTextBlock )
 	{
 		UE_LOG(LogTemp, Error, TEXT("Do Not Construct ShowPlayerLabel"));
 	}
@@ -28,11 +33,14 @@ void UUI_ShowRoomLabel::Init()
 	joinButton->OnClicked.AddDynamic(this, &UUI_ShowRoomLabel::JoinButtonClickEvent);
 }
 
-void UUI_ShowRoomLabel::SetRoomInfo(const FString& roomName)
+void UUI_ShowRoomLabel::SetRoomInfo(const FString& roomNunmber, const FString& roomName, const FString& roomPlayerCount)
 {
-
-	if (RoomInfoTextBlock)
-		RoomInfoTextBlock->SetText(FText::FromString(roomName));
+	if (roomNameTextBlock)
+		roomNameTextBlock->SetText(FText::FromString(roomName));
+	if (roomNumberTextBlock)
+		roomNumberTextBlock->SetText(FText::FromString(roomNunmber));
+	if (roomPlayerCountTextBlock)
+		roomPlayerCountTextBlock->SetText(FText::FromString(roomPlayerCount));
 }
 
 void UUI_ShowRoomLabel::DestroyButtonClickEvent()

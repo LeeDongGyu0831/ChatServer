@@ -22,14 +22,16 @@ void UUI_MainRoom::NativeConstruct()
 	roomListScrollBox = Cast<UScrollBox>(WidgetTree->FindWidget("RoomList"));
 	inputMessageText = Cast<UEditableText>(WidgetTree->FindWidget("Input"));
 	recvButton = Cast<UButton>(WidgetTree->FindWidget("SendButton"));
-	refreshButton = Cast<UButton>(WidgetTree->FindWidget("Refresh"));
+	refreshPlayerButton = Cast<UButton>(WidgetTree->FindWidget("Refresh"));
+	refreshRoomButton = Cast<UButton>(WidgetTree->FindWidget("RefreshRoom"));
 	createRoomButton = Cast<UButton>(WidgetTree->FindWidget("CreateRoomButton"));
 	closeButton = Cast<UButton>(WidgetTree->FindWidget("CloseButton"));
 
 	if (nullptr == chatListScrollBox ||
 		nullptr == playerListScrollBox ||
 		nullptr == recvButton ||
-		nullptr == refreshButton ||
+		nullptr == refreshPlayerButton ||
+		nullptr == refreshRoomButton ||
 		nullptr == createRoomButton ||
 		nullptr == closeButton || 
 		nullptr == inputMessageText
@@ -39,7 +41,8 @@ void UUI_MainRoom::NativeConstruct()
 	}
 
 	recvButton->OnClicked.AddDynamic(this, &UUI_MainRoom::RecvButtonClickEvent);
-	refreshButton->OnClicked.AddDynamic(this, &UUI_MainRoom::RefreshButtonClickEvent);
+	refreshPlayerButton->OnClicked.AddDynamic(this, &UUI_MainRoom::RefreshPlayerButtonClickEvent);
+	refreshRoomButton->OnClicked.AddDynamic(this, &UUI_MainRoom::RefreshRoomButtonClickEvent);
 	createRoomButton->OnClicked.AddDynamic(this, &UUI_MainRoom::CreateRoomButtonClickEvent);
 	closeButton->OnClicked.AddDynamic(this, &UUI_MainRoom::CloseButtonClickEvent);
 
@@ -75,7 +78,7 @@ void UUI_MainRoom::RecvButtonClickEvent()
 	inputMessageText->SetText(FText::FromString(""));
 }
 
-void UUI_MainRoom::RefreshButtonClickEvent()
+void UUI_MainRoom::RefreshPlayerButtonClickEvent()
 {
 	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (NULL == GINetwork)
@@ -139,18 +142,23 @@ void UUI_MainRoom::AddPlayer(const FString& playerName)
 		UE_LOG(LogTemp, Error, TEXT("Do Not CreateWidget playerTextWidget"));
 		return;
 	}
+
+	if (!playerListScrollBox)
+	{
+		UE_LOG(LogTemp, Error, TEXT("playerListScrollBox is not Exist"));
+		return;
+	}
 	playerNameLabelWidget->Init();
 
 	playerNameLabelWidget->SetPlayerName(playerName);
 
-	if (playerListScrollBox)
-	{
-		playerListScrollBox->AddChild(playerNameLabelWidget);
-		playerListScrollBox->ScrollToEnd();
+	playerNameLabelWidget->Fuc_DeleSingle_OneParam.BindUFunction(this, FName("ReadySendMessage"));
 
-		// 맵에 저장
-		playerNameToWidgetMap.Emplace(playerName, TWeakObjectPtr<UUI_ShowPlayerLabel>(playerNameLabelWidget));
-	}
+	playerListScrollBox->AddChild(playerNameLabelWidget);
+	playerListScrollBox->ScrollToEnd();
+
+	// 맵에 저장
+	playerNameToWidgetMap.Emplace(playerName, TWeakObjectPtr<UUI_ShowPlayerLabel>(playerNameLabelWidget));
 }
 
 void UUI_MainRoom::ExitPlayer(const FString& playerName)
@@ -168,20 +176,23 @@ void UUI_MainRoom::ExitPlayer(const FString& playerName)
 		return;
 	}
 
-	if (playerListScrollBox)
+	if (!playerListScrollBox)
 	{
-		UUI_ShowPlayerLabel* playerNameLabelWidget = playerNameToWidgetMap.Find(playerName)->Get();
-
-		playerListScrollBox->RemoveChild(playerNameLabelWidget);
-		playerListScrollBox->ScrollToEnd();
-
-		// 맵에서 삭제
-		playerNameToWidgetMap.Remove(playerName);
+		UE_LOG(LogTemp, Error, TEXT("PlayerListScrollBox is not Exist"));
+		return;
 	}
+
+	UUI_ShowPlayerLabel* playerNameLabelWidget = playerNameToWidgetMap.Find(playerName)->Get();
+
+	playerListScrollBox->RemoveChild(playerNameLabelWidget);
+	playerListScrollBox->ScrollToEnd();
+
+	// 맵에서 삭제
+	playerNameToWidgetMap.Remove(playerName);
 }
 
 
-void UUI_MainRoom::AddRoom(const FString& roomName)
+void UUI_MainRoom::AddRoom(const FString& roomNunmber, const FString& roomName, const FString& roomPlayerCount)
 {
 	if (!roomNameLabelClass)
 	{
@@ -203,22 +214,31 @@ void UUI_MainRoom::AddRoom(const FString& roomName)
 		UE_LOG(LogTemp, Error, TEXT("Do Not CreateWidget playerTextWidget"));
 		return;
 	}
+
+	if (!roomListScrollBox)
+	{
+		UE_LOG(LogTemp, Error, TEXT("RoomListScrollBox is not Exist"));
+		return;
+	}
+
 	roomNameLabelWidget->Init();
 
-	roomNameLabelWidget->SetRoomInfo(roomName);
+	roomNameLabelWidget->SetRoomInfo(roomNunmber, roomName, roomPlayerCount);
 
-	if (roomListScrollBox)
-	{
-		roomListScrollBox->AddChild(roomNameLabelWidget);
-		roomListScrollBox->ScrollToEnd();
 
-		// 맵에 저장
-		roomNameToWidgetMap.Emplace(roomName, TWeakObjectPtr<UUI_ShowRoomLabel>(roomNameLabelWidget));
-	}
+	roomListScrollBox->AddChild(roomNameLabelWidget);
+	roomListScrollBox->ScrollToEnd();
+
+	// 맵에 저장
+	roomNameToWidgetMap.Emplace(roomName, TWeakObjectPtr<UUI_ShowRoomLabel>(roomNameLabelWidget));
 }
 
-void UUI_MainRoom::ExitRoom(const FString& roomName)
+void UUI_MainRoom::DestroyRoom(const FString& recvString)
 {
+	FString roomName = GetRoomNameFromRecvString(recvString);
+
+	// 여기까지 방 이름은 검색했다!
+
 	if (!roomNameLabelClass)
 	{
 		return;
@@ -228,20 +248,23 @@ void UUI_MainRoom::ExitRoom(const FString& roomName)
 	// 없던 플레이어가 퇴장하는 경우
 	if (false == find)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Non Room Destoryed"));
+		UE_LOG(LogTemp, Error, TEXT("[Bug] Non Player Name Exit"));
 		return;
 	}
 
-	if (roomListScrollBox)
+	if (!roomListScrollBox)
 	{
-		UUI_ShowRoomLabel* roomNameLabelWidget = roomNameToWidgetMap.Find(roomName)->Get();
-
-		roomListScrollBox->RemoveChild(roomNameLabelWidget);
-		roomListScrollBox->ScrollToEnd();
-
-		// 맵에서 삭제
-		roomNameToWidgetMap.Remove(roomName);
+		UE_LOG(LogTemp, Error, TEXT("RoomListScrollBox is not Exist"));
+		return;
 	}
+
+	UUI_ShowRoomLabel* playerNameLabelWidget = roomNameToWidgetMap.Find(roomName)->Get();
+
+	roomListScrollBox->RemoveChild(playerNameLabelWidget);
+	roomListScrollBox->ScrollToEnd();
+
+	// 맵에서 삭제
+	roomNameToWidgetMap.Remove(roomName);
 }
 
 void UUI_MainRoom::FindPlayerListFromMessage(const FString& recvString)
@@ -291,7 +314,6 @@ void UUI_MainRoom::FindRoomListFromMessage(const FString& recvString)
 {
 	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
 	FString strMessage = recvString;
-	GINetwork->PrintLog("RecvString", recvString);
 	/*  도착하는 명령어 형태
 		/      [0] Login Room [0/1000]
 		/      [1] Main Room [3/1000]
@@ -301,6 +323,7 @@ void UUI_MainRoom::FindRoomListFromMessage(const FString& recvString)
 	int index = -1;
 	int32 endIndex = index;
 	int32 startIndex = index;
+	int32 roomCount = 0;
 	while (1)
 	{
 		startIndex = strMessage.Find("/", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart, startIndex + 1);
@@ -310,21 +333,94 @@ void UUI_MainRoom::FindRoomListFromMessage(const FString& recvString)
 		if (endIndex == -1)
 			endIndex = strMessage.Len();
 
-		FString roomName = "";
-		for (int i = startIndex + 1; i < endIndex; ++i)
+		if (roomCount > 1)
 		{
-			roomName.AppendChar(strMessage[i]);
+			FString lineString = "";
+			for (int i = startIndex + 1; i < endIndex; ++i)
+			{
+				lineString.AppendChar(strMessage[i]);
+			}
+			lineString.TrimStartAndEndInline(); // 공백 제거
+			lineString.TrimQuotesInline(); // 줄바꿈 제거
+
+			FString roomName = GetRoomNameFromString(lineString);
+			FString roomNumber = GetRoomNumberFromString(lineString);
+			FString roomPlayerCount = GetRoomPlayerCountFromString(lineString);
+
+			AddRoom(roomNumber, roomName, roomPlayerCount);
 		}
-		roomName.TrimStartAndEndInline(); // 공백 제거
-		roomName.TrimQuotesInline(); // 줄바꿈 제거
-
-		GINetwork->PrintLog("RoomName", roomName);
-
-		AddRoom(roomName);
 		startIndex = endIndex;
+		roomCount++;
 	}
 
 	return;
+}
+
+FString UUI_MainRoom::GetRoomNameFromRecvString(const FString& recvString)
+{
+	FString roomName = "";
+
+	int32 startIndex, endIndex;
+	startIndex = recvString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
+	endIndex = recvString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
+
+	for (int i = startIndex + 1; i < endIndex; ++i)
+	{
+		roomName.AppendChar(recvString[i]);
+	}
+	roomName.TrimStartAndEndInline(); // 공백 제거
+	return roomName;
+}
+
+FString UUI_MainRoom::GetRoomNameFromString(const FString& recvString)
+{
+	FString roomName = "";
+
+	int startIndex, endIndex;
+	startIndex = recvString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
+	endIndex = recvString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
+
+	for (int i = startIndex + 1; i < endIndex; ++i)
+	{
+		roomName.AppendChar(recvString[i]);
+	}
+	roomName.TrimStartAndEndInline(); // 공백 제거
+
+	return roomName;
+}
+
+FString UUI_MainRoom::GetRoomNumberFromString(const FString& recvString)
+{
+	FString roomNumber = "";
+
+	int startIndex, endIndex;
+	startIndex = recvString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
+	endIndex = recvString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
+
+	for (int i = startIndex; i <= endIndex; ++i)
+	{
+		roomNumber.AppendChar(recvString[i]);
+	}
+	roomNumber.TrimStartAndEndInline(); // 공백 제거
+
+	return roomNumber;
+}
+
+FString UUI_MainRoom::GetRoomPlayerCountFromString(const FString& recvString)
+{
+	FString roomPlayerCount;
+
+	int startIndex, endIndex;
+	startIndex = recvString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
+	endIndex = recvString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
+
+	for (int i = startIndex; i <= endIndex; ++i)
+	{
+		roomPlayerCount.AppendChar(recvString[i]);
+	}
+	roomPlayerCount.TrimStartAndEndInline(); // 공백 제거
+
+	return roomPlayerCount;
 }
 
 void UUI_MainRoom::CreateRoomButtonClickEvent()
@@ -336,7 +432,20 @@ void UUI_MainRoom::CreateRoomButtonClickEvent()
 void UUI_MainRoom::CloseButtonClickEvent()
 {
 	UE_LOG(LogTemp, Warning, TEXT("CloseButtonClick"));
+	return;
+}
 
+void UUI_MainRoom::ReadySendMessage(const FString& playerName)
+{
+	inputMessageText->SetText(FText::FromString(""));
+	FString sendMessageString = "/t ";
+	sendMessageString += playerName;
+	sendMessageString += " ";
+	inputMessageText->SetText(FText::FromString(sendMessageString));
+}
+
+void UUI_MainRoom::RefreshRoomButtonClickEvent()
+{
 	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (NULL == GINetwork)
 	{
@@ -344,10 +453,4 @@ void UUI_MainRoom::CloseButtonClickEvent()
 		return;
 	}
 	GINetwork->RequestRoomList();
-	return;
-}
-
-void UUI_MainRoom::ReadySendMessage(const FString& playerName)
-{
-
 }

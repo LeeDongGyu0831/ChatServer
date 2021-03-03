@@ -214,6 +214,17 @@ MSG_TYPE UGI_Network::CheckMessage(FString originString)
 		return MSG_TYPE::ROOMLIST;
 	}
 
+	if (originString.Contains(L"대화방이 파괴"))
+	{
+		return MSG_TYPE::DESTROYROOM;
+	}
+
+	if (originString.Contains(L"대화방이 생성"))
+	{
+		return MSG_TYPE::DESTROYROOM;
+	}
+
+
 	PrintLog(FuncName, originString);
 
 	return MSG_TYPE::CHAT;

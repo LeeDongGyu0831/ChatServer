@@ -31,7 +31,8 @@ private:
 	class UScrollBox* roomListScrollBox;
 	class UEditableText* inputMessageText;
 	class UButton* recvButton;
-	class UButton* refreshButton;
+	class UButton* refreshPlayerButton;
+	class UButton* refreshRoomButton;
 	class UButton* createRoomButton;
 	class UButton* closeButton;
 
@@ -61,7 +62,9 @@ public:
 	UFUNCTION()
 	void RecvButtonClickEvent();
 	UFUNCTION()
-	void RefreshButtonClickEvent();
+	void RefreshPlayerButtonClickEvent();
+	UFUNCTION()
+	void RefreshRoomButtonClickEvent();
 	UFUNCTION()
 	void CloseButtonClickEvent();
 	UFUNCTION()
@@ -71,11 +74,17 @@ public:
 	void AddPlayer(const FString& playerName);
 	void ExitPlayer(const FString& playerName);
 
-	void AddRoom(const FString& roomName);
-	void ExitRoom(const FString& roomName);
+	void AddRoom(const FString& roomNunmber, const FString& roomName, const FString& roomPlayerCount);
+	void DestroyRoom(const FString& recvString);
+	//void CheckCreateRoom(const FString& recvString);
 
 	void FindPlayerListFromMessage(const FString& recvString);
 	void FindRoomListFromMessage(const FString& recvString);
+	FString GetRoomNameFromRecvString(const FString& recvString);
+
+	FString GetRoomNameFromString(const FString& recvString);
+	FString GetRoomNumberFromString(const FString& recvString);
+	FString GetRoomPlayerCountFromString(const FString& recvString);
 
 	// Delegate
 	UFUNCTION()

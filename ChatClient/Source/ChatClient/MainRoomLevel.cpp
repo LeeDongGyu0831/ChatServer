@@ -39,6 +39,13 @@ void AMainRoomLevel::Tick(float DeltaTime)
 		UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
 		return;
 	}
+	refreshTime -= DeltaTime;
+	// 대화방 리스트 갱신
+	if (refreshTime < 0.f)
+	{
+		refreshTime = REFRESH_TIME;
+		GINetwork->RequestRoomList();
+	}
 
 	FString recvString = GINetwork->Recv();
 
@@ -83,15 +90,18 @@ void AMainRoomLevel::Tick(float DeltaTime)
 		mainRoomWidget->FindRoomListFromMessage(recvString);
 	}
 	break;
+	case MSG_TYPE::DESTROYROOM:
+	{
+		mainRoomWidget->DestroyRoom(recvString);
+	}
+	break;
+	case MSG_TYPE::CREATEROOM:
+	{
+		// mainRoomWidget->CheckCreateRoom(recvString);
+	}
+	break;
 	default:
 		break;
-	}
-
-	refreshTime -= DeltaTime;
-	// 대화방 리스트 갱신
-	if (refreshTime < 0.f)
-	{
-		refreshTime = REFRESH_TIME;
 	}
 }
 

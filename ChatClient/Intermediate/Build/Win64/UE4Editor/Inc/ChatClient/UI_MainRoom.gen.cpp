@@ -42,11 +42,18 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 		P_THIS->CloseButtonClickEvent();
 		P_NATIVE_END;
 	}
-	DEFINE_FUNCTION(UUI_MainRoom::execRefreshButtonClickEvent)
+	DEFINE_FUNCTION(UUI_MainRoom::execRefreshRoomButtonClickEvent)
 	{
 		P_FINISH;
 		P_NATIVE_BEGIN;
-		P_THIS->RefreshButtonClickEvent();
+		P_THIS->RefreshRoomButtonClickEvent();
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UUI_MainRoom::execRefreshPlayerButtonClickEvent)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->RefreshPlayerButtonClickEvent();
 		P_NATIVE_END;
 	}
 	DEFINE_FUNCTION(UUI_MainRoom::execRecvButtonClickEvent)
@@ -64,7 +71,8 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 			{ "CreateRoomButtonClickEvent", &UUI_MainRoom::execCreateRoomButtonClickEvent },
 			{ "ReadySendMessage", &UUI_MainRoom::execReadySendMessage },
 			{ "RecvButtonClickEvent", &UUI_MainRoom::execRecvButtonClickEvent },
-			{ "RefreshButtonClickEvent", &UUI_MainRoom::execRefreshButtonClickEvent },
+			{ "RefreshPlayerButtonClickEvent", &UUI_MainRoom::execRefreshPlayerButtonClickEvent },
+			{ "RefreshRoomButtonClickEvent", &UUI_MainRoom::execRefreshRoomButtonClickEvent },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 	}
@@ -176,7 +184,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 		}
 		return ReturnFunction;
 	}
-	struct Z_Construct_UFunction_UUI_MainRoom_RefreshButtonClickEvent_Statics
+	struct Z_Construct_UFunction_UUI_MainRoom_RefreshPlayerButtonClickEvent_Statics
 	{
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -184,17 +192,39 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UUI_MainRoom_RefreshButtonClickEvent_Statics::Function_MetaDataParams[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UUI_MainRoom_RefreshPlayerButtonClickEvent_Statics::Function_MetaDataParams[] = {
 		{ "ModuleRelativePath", "UI_MainRoom.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UUI_MainRoom_RefreshButtonClickEvent_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UUI_MainRoom, nullptr, "RefreshButtonClickEvent", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UUI_MainRoom_RefreshButtonClickEvent_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UUI_MainRoom_RefreshButtonClickEvent_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_UUI_MainRoom_RefreshButtonClickEvent()
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UUI_MainRoom_RefreshPlayerButtonClickEvent_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UUI_MainRoom, nullptr, "RefreshPlayerButtonClickEvent", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UUI_MainRoom_RefreshPlayerButtonClickEvent_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UUI_MainRoom_RefreshPlayerButtonClickEvent_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UUI_MainRoom_RefreshPlayerButtonClickEvent()
 	{
 		static UFunction* ReturnFunction = nullptr;
 		if (!ReturnFunction)
 		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UUI_MainRoom_RefreshButtonClickEvent_Statics::FuncParams);
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UUI_MainRoom_RefreshPlayerButtonClickEvent_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_UUI_MainRoom_RefreshRoomButtonClickEvent_Statics
+	{
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UUI_MainRoom_RefreshRoomButtonClickEvent_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "UI_MainRoom.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UUI_MainRoom_RefreshRoomButtonClickEvent_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UUI_MainRoom, nullptr, "RefreshRoomButtonClickEvent", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UUI_MainRoom_RefreshRoomButtonClickEvent_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UUI_MainRoom_RefreshRoomButtonClickEvent_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UUI_MainRoom_RefreshRoomButtonClickEvent()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UUI_MainRoom_RefreshRoomButtonClickEvent_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -238,7 +268,8 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 		{ &Z_Construct_UFunction_UUI_MainRoom_CreateRoomButtonClickEvent, "CreateRoomButtonClickEvent" }, // 2058525764
 		{ &Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage, "ReadySendMessage" }, // 1793640267
 		{ &Z_Construct_UFunction_UUI_MainRoom_RecvButtonClickEvent, "RecvButtonClickEvent" }, // 402214869
-		{ &Z_Construct_UFunction_UUI_MainRoom_RefreshButtonClickEvent, "RefreshButtonClickEvent" }, // 4027795369
+		{ &Z_Construct_UFunction_UUI_MainRoom_RefreshPlayerButtonClickEvent, "RefreshPlayerButtonClickEvent" }, // 2985270702
+		{ &Z_Construct_UFunction_UUI_MainRoom_RefreshRoomButtonClickEvent, "RefreshRoomButtonClickEvent" }, // 3235544521
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UUI_MainRoom_Statics::Class_MetaDataParams[] = {
@@ -308,7 +339,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UUI_MainRoom, 1536354479);
+	IMPLEMENT_CLASS(UUI_MainRoom, 3988164357);
 	template<> CHATCLIENT_API UClass* StaticClass<UUI_MainRoom>()
 	{
 		return UUI_MainRoom::StaticClass();

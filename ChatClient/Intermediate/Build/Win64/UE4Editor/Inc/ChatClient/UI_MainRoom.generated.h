@@ -19,7 +19,8 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	DECLARE_FUNCTION(execReadySendMessage); \
 	DECLARE_FUNCTION(execCreateRoomButtonClickEvent); \
 	DECLARE_FUNCTION(execCloseButtonClickEvent); \
-	DECLARE_FUNCTION(execRefreshButtonClickEvent); \
+	DECLARE_FUNCTION(execRefreshRoomButtonClickEvent); \
+	DECLARE_FUNCTION(execRefreshPlayerButtonClickEvent); \
 	DECLARE_FUNCTION(execRecvButtonClickEvent);
 
 
@@ -28,7 +29,8 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	DECLARE_FUNCTION(execReadySendMessage); \
 	DECLARE_FUNCTION(execCreateRoomButtonClickEvent); \
 	DECLARE_FUNCTION(execCloseButtonClickEvent); \
-	DECLARE_FUNCTION(execRefreshButtonClickEvent); \
+	DECLARE_FUNCTION(execRefreshRoomButtonClickEvent); \
+	DECLARE_FUNCTION(execRefreshPlayerButtonClickEvent); \
 	DECLARE_FUNCTION(execRecvButtonClickEvent);
 
 

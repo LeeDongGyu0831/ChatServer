@@ -32,6 +32,7 @@ public:
 	UUI_ShowPlayerLabel(const FObjectInitializer & ObjectInitializer);
 
 	virtual void NativeConstruct() override;
+	virtual void BeginDestroy() override;
 
 	void Init();
 

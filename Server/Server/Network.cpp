@@ -336,7 +336,6 @@ IN_ADDR CNetwork::GetDefaultMyIP()
 bool CNetwork::Send(const SOCKET& sock, const char * msg, const uint& size, const uint& roomNumber = NONE)
 {
 	int retVal = send(sock, msg, size, 0);
-	cout << "\nSend : " << msg << endl;
 	if (retVal == SOCKET_ERROR)
 	{
 		printf("send() SOCKET_ERROR\n");

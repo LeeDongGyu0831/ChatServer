@@ -18,7 +18,9 @@ class CHATCLIENT_API UUI_ShowRoomLabel : public UUserWidget
 	GENERATED_BODY()
 
 private:
-	class UTextBlock* RoomInfoTextBlock;
+	class UTextBlock* roomNameTextBlock;
+	class UTextBlock* roomNumberTextBlock;
+	class UTextBlock* roomPlayerCountTextBlock;
 	class UButton* destroyButton;
 	class UButton* joinButton;
 
@@ -29,7 +31,7 @@ public:
 
 	void Init();
 
-	void SetRoomInfo(const FString& roomName);
+	void SetRoomInfo(const FString& roomNunmber, const FString& roomName, const FString& roomPlayerCount);
 
 	UFUNCTION()
 	void DestroyButtonClickEvent();

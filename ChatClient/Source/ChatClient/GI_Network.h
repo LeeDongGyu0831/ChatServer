@@ -25,6 +25,8 @@ enum class MSG_TYPE : uint8
 	EXIT		UMETA(DisplayName = "EXIT"),
 	PLAYERLIST	UMETA(DisplayName = "PLAYERLIST"),
 	ROOMLIST	UMETA(DisplayName = "ROOMLIST"),
+	DESTROYROOM	UMETA(DisplayName = "DESTROYROOM"),
+	CREATEROOM	UMETA(DisplayName = "CREATEROOM"),
 };
 
 UCLASS()
