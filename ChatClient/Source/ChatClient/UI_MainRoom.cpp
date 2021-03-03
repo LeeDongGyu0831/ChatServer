@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "UI_MainRoom.h"
@@ -18,12 +18,14 @@ void UUI_MainRoom::NativeConstruct()
 	playerListScrollBox = Cast<UScrollBox>(WidgetTree->FindWidget("PlayerList"));
 	inputMessageText = Cast<UEditableText>(WidgetTree->FindWidget("Input"));
 	recvButton = Cast<UButton>(WidgetTree->FindWidget("SendButton"));
+	refreshButton = Cast<UButton>(WidgetTree->FindWidget("Refresh"));
 	if (NULL == chatListScrollBox || NULL == playerListScrollBox || NULL == recvButton)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Do Not Construct UI_MainRoom"));
 	}
 
 	recvButton->OnClicked.AddDynamic(this, &UUI_MainRoom::RecvButtonClickEvent);
+	refreshButton->OnClicked.AddDynamic(this, &UUI_MainRoom::RefreshButtonClickEvent);
 
 	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (NULL == GINetwork)
@@ -32,6 +34,8 @@ void UUI_MainRoom::NativeConstruct()
 		return;
 	}
 	AddPlayer(GINetwork->GetID());
+
+	GINetwork->RequestPlayerList(1);
 }
 
 void UUI_MainRoom::RecvButtonClickEvent()
@@ -42,11 +46,23 @@ void UUI_MainRoom::RecvButtonClickEvent()
 		UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
 		return;
 	}
+
 	FText inputText = inputMessageText->GetText();
 	FString message = inputText.ToString();
 	GINetwork->Send(message);
 	AddChatting(message);
 	inputMessageText->SetText(FText::FromString(""));
+}
+
+void UUI_MainRoom::RefreshButtonClickEvent()
+{
+	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (NULL == GINetwork)
+	{
+		UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
+		return;
+	}
+	GINetwork->RequestPlayerList(1);
 }
 
 void UUI_MainRoom::AddChatting(const FString& chatMessage)
@@ -58,7 +74,7 @@ void UUI_MainRoom::AddChatting(const FString& chatMessage)
 	if (chatMessage.Len() == 0)
 		return;
 
-	// ¸â¹öº¯¼ö·Î STL ÄÁÅ×ÀÌ³Ê¸¦ »ç¿ëÇØ¾ßÇÏ³ª?
+	// ë©¤ë²„ë³€ìˆ˜ë¡œ STL ì»¨í…Œì´ë„ˆë¥¼ ì‚¬ìš©í•´ì•¼í•˜ë‚˜?
 	UUI_ChatText* chatTextWidget = CreateWidget<UUI_ChatText>(GetWorld(), chatTextClass);
 	if (!chatTextWidget)
 	{
@@ -68,7 +84,7 @@ void UUI_MainRoom::AddChatting(const FString& chatMessage)
 	if(chatTextWidget)
 		chatTextWidget->SetChatMessage(chatMessage);
 
-	// ½ºÅ©·Ñ ¹Ú½º¿¡ ¿¬°á
+	// ìŠ¤í¬ë¡¤ ë°•ìŠ¤ì— ì—°ê²°
 	if (chatListScrollBox)
 	{
 		chatListScrollBox->AddChild(chatTextWidget);
@@ -89,14 +105,13 @@ void UUI_MainRoom::AddPlayer(const FString& playerName)
 	bool find = TestWidgetMap.Contains(playerName);
 	//UUI_ChatText* playerTextWidget = TestWidgetMap.Find(playerName)->Get();
 
-	// ÇÃ·¹ÀÌ¾î°¡ ¸®½ºÆ®¿¡ ÀÖ´Âµ¥ ¶Ç´Ù½Ã Âü°¡¸¦ ÇÑ °æ¿ì?
+	// í”Œë ˆì´ì–´ê°€ ë¦¬ìŠ¤íŠ¸ì— ìˆëŠ”ë° ë˜ë‹¤ì‹œ ì°¸ê°€ë¥¼ í•œ ê²½ìš°?
 	if(true == find)
 	{
-		UE_LOG(LogTemp, Error, TEXT("[Bug] Same Player Name Join"));
 		return;
 	}
 
-	// ±âÁ¸ ¸®½ºÆ®¿¡ ÇØ´ç ÇÃ·¹ÀÌ¾î ÀÌ¸§ÀÌ ¾øÀ» °æ¿ì
+	// ê¸°ì¡´ ë¦¬ìŠ¤íŠ¸ì— í•´ë‹¹ í”Œë ˆì´ì–´ ì´ë¦„ì´ ì—†ì„ ê²½ìš°
 	UUI_ChatText* playerTextWidget = CreateWidget<UUI_ChatText>(GetWorld(), chatTextClass);
 
 	if (!playerTextWidget)
@@ -112,7 +127,7 @@ void UUI_MainRoom::AddPlayer(const FString& playerName)
 		playerListScrollBox->AddChild(playerTextWidget);
 		playerListScrollBox->ScrollToEnd();
 
-		// ¸Ê¿¡ ÀúÀå
+		// ë§µì— ì €ì¥
 		TestWidgetMap.Emplace(playerName, TWeakObjectPtr<UUI_ChatText>(playerTextWidget));
 		//TestWidgetMap.Emplace(playerName, false);
 	}
@@ -126,10 +141,10 @@ void UUI_MainRoom::ExitPlayer(const FString& playerName)
 	}
 	bool find = TestWidgetMap.Contains(playerName);
 
-	// ¾ø´ø ÇÃ·¹ÀÌ¾î°¡ ÅğÀåÇÏ´Â °æ¿ì
+	// ì—†ë˜ í”Œë ˆì´ì–´ê°€ í‡´ì¥í•˜ëŠ” ê²½ìš°
 	if (false == find)
 	{
-		UE_LOG(LogTemp, Error, TEXT("[Bug] Same Player Name Join"));
+		UE_LOG(LogTemp, Error, TEXT("[Bug] Non Player Name Exit"));
 		return;
 	}
 
@@ -140,20 +155,49 @@ void UUI_MainRoom::ExitPlayer(const FString& playerName)
 		playerListScrollBox->RemoveChild(playerTextWidget);
 		playerListScrollBox->ScrollToEnd();
 
-		// ¸Ê¿¡¼­ »èÁ¦
+		// ë§µì—ì„œ ì‚­ì œ
 		TestWidgetMap.Remove(playerName);
 	}
 }
 
 void UUI_MainRoom::FindPlayerListFromMessage(const FString& recvString)
 {
+	FString keyword = L"ëŒ€í™”ë°© ì´ìš©ì";
 	FString strMessage = recvString;
+	
+	/*  ë„ì°©í•˜ëŠ” ëª…ë ¹ì–´ í˜•íƒœ
+		[1] Main Room[4 / 1000]
+		====ëŒ€í™”ë°© ì´ìš©ì====
+		[0] Player_1
+		[1] Player_2
+		[2] Player_3
+		[3] Test		
+	*/
+	// ëŒ€ëµì ìœ¼ë¡œ ì•ì—ì„œë¶€í„° ì‹œì‘
+	int index = FIND_PLAYERLIST_STARTINDEX;
+	int32 endIndex = index;
+	int32 startIndex = index;
+	while (1)
+	{
+		startIndex = strMessage.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart, startIndex + 1);
+		endIndex = strMessage.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart, startIndex + 1);
+		if (startIndex == -1)
+			break;
+		if (endIndex == -1)
+			endIndex = strMessage.Len();
 
-	TArray<FString> strArray;
-	int32 result = strMessage.CullArray(&strArray);
-	UE_LOG(LogTemp, Error, TEXT("Result : %d"), result);
-	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
-	for (auto& str : strArray)
-		GINetwork->PrintLog("CullArray", str);
+		//[ìˆ«ì] ë§Œí¼ ë²Œë¦°ë‹¤
+		startIndex += REMOVE_PLAYERNUM;
+
+		FString playerName = "";
+		for (int i = startIndex; i < endIndex; ++i)
+		{
+			playerName.AppendChar(strMessage[i]);
+		}
+		playerName.TrimStartAndEndInline(); // ê³µë°± ì œê±°
+		playerName.TrimQuotesInline(); // ì¤„ë°”ê¿ˆ ì œê±°
+		AddPlayer(playerName);
+	}
+
 	return;
 }

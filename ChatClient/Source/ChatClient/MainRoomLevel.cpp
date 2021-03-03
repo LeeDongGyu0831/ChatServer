@@ -25,7 +25,6 @@ void AMainRoomLevel::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
 		return;
 	}
-	GINetwork->RequestPlayerList(MAINROOM_NUMBER);
 }
 
 void AMainRoomLevel::Tick(float DeltaTime)

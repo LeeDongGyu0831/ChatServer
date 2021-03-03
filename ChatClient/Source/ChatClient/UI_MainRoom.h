@@ -21,11 +21,14 @@ class CHATCLIENT_API UUI_MainRoom : public UUserWidget
 
 private:
 	constexpr static uint32 MAX_SHOW_CHAT = 100;
+	constexpr static uint32 FIND_PLAYERLIST_STARTINDEX = 25;
+	constexpr static uint32 REMOVE_PLAYERNUM = 4;
 
 	class UScrollBox* chatListScrollBox;
 	class UScrollBox* playerListScrollBox;
 	class UEditableText* inputMessageText;
 	class UButton* recvButton;
+	class UButton* refreshButton;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> chatTextClass;
@@ -41,6 +44,8 @@ public:
 
 	UFUNCTION()
 	void RecvButtonClickEvent();
+	UFUNCTION()
+	void RefreshButtonClickEvent();
 
 	void AddChatting(const FString& chatMessage);
 	void AddPlayer(const FString& playerName);

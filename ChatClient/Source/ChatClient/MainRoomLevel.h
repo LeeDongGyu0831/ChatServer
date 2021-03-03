@@ -18,8 +18,6 @@ class CHATCLIENT_API AMainRoomLevel : public ALevelScriptActor
 	GENERATED_BODY()
 	
 private:
-	constexpr static int MAINROOM_NUMBER = 1;
-
 	// 메인 대화방 UI
 	UUI_MainRoom* mainRoomWidget;
 

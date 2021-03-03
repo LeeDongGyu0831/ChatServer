@@ -16,11 +16,13 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #define ChatClient_Source_ChatClient_UI_MainRoom_h_20_SPARSE_DATA
 #define ChatClient_Source_ChatClient_UI_MainRoom_h_20_RPC_WRAPPERS \
  \
+	DECLARE_FUNCTION(execRefreshButtonClickEvent); \
 	DECLARE_FUNCTION(execRecvButtonClickEvent);
 
 
 #define ChatClient_Source_ChatClient_UI_MainRoom_h_20_RPC_WRAPPERS_NO_PURE_DECLS \
  \
+	DECLARE_FUNCTION(execRefreshButtonClickEvent); \
 	DECLARE_FUNCTION(execRecvButtonClickEvent);
 
 
