@@ -31,7 +31,8 @@ void UUI_MainRoom::NativeConstruct()
 		nullptr == recvButton ||
 		nullptr == refreshButton ||
 		nullptr == createRoomButton ||
-		nullptr == closeButton
+		nullptr == closeButton || 
+		nullptr == inputMessageText
 		)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Do Not Construct UI_MainRoom"));
@@ -51,6 +52,11 @@ void UUI_MainRoom::NativeConstruct()
 	AddPlayer(GINetwork->GetID());
 
 	GINetwork->RequestPlayerList(1);
+}
+
+void UUI_MainRoom::BeginDestroy()
+{
+	Super::BeginDestroy();
 }
 
 void UUI_MainRoom::RecvButtonClickEvent()
@@ -339,4 +345,9 @@ void UUI_MainRoom::CloseButtonClickEvent()
 	}
 	GINetwork->RequestRoomList();
 	return;
+}
+
+void UUI_MainRoom::ReadySendMessage(const FString& playerName)
+{
+
 }

@@ -78,7 +78,6 @@ void EmptyLinkFunctionForGeneratedCodeUI_ShowPlayerLabel() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UUI_ShowPlayerLabel_Statics::Class_MetaDataParams[] = {
-		{ "Comment", "/**\n * \n */" },
 		{ "IncludePath", "UI_ShowPlayerLabel.h" },
 		{ "ModuleRelativePath", "UI_ShowPlayerLabel.h" },
 		{ "ObjectInitializerConstructorDeclared", "" },
@@ -111,7 +110,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_ShowPlayerLabel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UUI_ShowPlayerLabel, 3788650632);
+	IMPLEMENT_CLASS(UUI_ShowPlayerLabel, 2768195133);
 	template<> CHATCLIENT_API UClass* StaticClass<UUI_ShowPlayerLabel>()
 	{
 		return UUI_ShowPlayerLabel::StaticClass();

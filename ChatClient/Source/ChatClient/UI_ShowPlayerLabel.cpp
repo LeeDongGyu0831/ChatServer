@@ -3,6 +3,8 @@
 
 #include "UI_ShowPlayerLabel.h"
 
+#include "UI_MainRoom.h"
+
 UUI_ShowPlayerLabel::UUI_ShowPlayerLabel(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 
@@ -26,8 +28,9 @@ void UUI_ShowPlayerLabel::Init()
 
 void UUI_ShowPlayerLabel::SetPlayerName(const FString& playerName)
 {
-	if (playerNameTextBlock)
+	if (playerNameTextBlock) 
 		playerNameTextBlock->SetText(FText::FromString(playerName));
+	_playerName = playerName;
 }
 
 void UUI_ShowPlayerLabel::SendMessageButton()

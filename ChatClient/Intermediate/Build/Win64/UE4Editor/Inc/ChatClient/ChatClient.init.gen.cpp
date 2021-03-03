@@ -21,7 +21,7 @@ void EmptyLinkFunctionForGeneratedCodeChatClient_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0xB96FF4C3,
+				0xB6B00F3D,
 				0xD3E76F5D,
 				METADATA_PARAMS(nullptr, 0)
 			};

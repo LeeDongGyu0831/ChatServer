@@ -30,6 +30,7 @@ void UGI_Network::Shutdown()
 	if(true == bConnect)
 		Socket->Close();
 }
+
 void UGI_Network::SetID(FString id)
 {
 	strID = id;
@@ -52,6 +53,11 @@ FString UGI_Network::GetID()
 bool UGI_Network::ConnectToServer()
 {
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream, TEXT("default"), false);
+	if (nullptr == Socket)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Not Create Socket"));
+		return false;
+	}
 
 	FString address = strIP;
 	int32 port = FCString::Atoi(*strPort);

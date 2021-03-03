@@ -12,6 +12,9 @@
 /**
  * 
  */
+
+DECLARE_DELEGATE_OneParam(FDele_Single_OneParam, FString);
+
 UCLASS()
 class CHATCLIENT_API UUI_ShowPlayerLabel : public UUserWidget
 {
@@ -20,6 +23,10 @@ class CHATCLIENT_API UUI_ShowPlayerLabel : public UUserWidget
 private:
 	class UTextBlock* playerNameTextBlock;
 	class UButton* sendMessageButton;
+
+	FString _playerName;
+public:
+	FDele_Single_OneParam Fuc_DeleSingle_OneParam;
 
 public:
 	UUI_ShowPlayerLabel(const FObjectInitializer & ObjectInitializer);

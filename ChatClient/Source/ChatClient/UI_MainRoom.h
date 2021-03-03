@@ -56,6 +56,8 @@ public:
 
 	virtual void NativeConstruct() override;
 
+	virtual void BeginDestroy() override;
+
 	UFUNCTION()
 	void RecvButtonClickEvent();
 	UFUNCTION()
@@ -74,4 +76,8 @@ public:
 
 	void FindPlayerListFromMessage(const FString& recvString);
 	void FindRoomListFromMessage(const FString& recvString);
+
+	// Delegate
+	UFUNCTION()
+	void ReadySendMessage(const FString& playerName);
 };

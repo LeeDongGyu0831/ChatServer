@@ -20,6 +20,14 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 	COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
 	UMG_API UClass* Z_Construct_UClass_UUserWidget_NoRegister();
 // End Cross Module References
+	DEFINE_FUNCTION(UUI_MainRoom::execReadySendMessage)
+	{
+		P_GET_PROPERTY(FStrProperty,Z_Param_playerName);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->ReadySendMessage(Z_Param_playerName);
+		P_NATIVE_END;
+	}
 	DEFINE_FUNCTION(UUI_MainRoom::execCreateRoomButtonClickEvent)
 	{
 		P_FINISH;
@@ -54,6 +62,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 		static const FNameNativePtrPair Funcs[] = {
 			{ "CloseButtonClickEvent", &UUI_MainRoom::execCloseButtonClickEvent },
 			{ "CreateRoomButtonClickEvent", &UUI_MainRoom::execCreateRoomButtonClickEvent },
+			{ "ReadySendMessage", &UUI_MainRoom::execReadySendMessage },
 			{ "RecvButtonClickEvent", &UUI_MainRoom::execRecvButtonClickEvent },
 			{ "RefreshButtonClickEvent", &UUI_MainRoom::execRefreshButtonClickEvent },
 		};
@@ -100,6 +109,48 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 		if (!ReturnFunction)
 		{
 			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UUI_MainRoom_CreateRoomButtonClickEvent_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics
+	{
+		struct UI_MainRoom_eventReadySendMessage_Parms
+		{
+			FString playerName;
+		};
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_playerName_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStrPropertyParams NewProp_playerName;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::NewProp_playerName_MetaData[] = {
+		{ "NativeConst", "" },
+	};
+#endif
+	const UE4CodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::NewProp_playerName = { "playerName", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UI_MainRoom_eventReadySendMessage_Parms, playerName), METADATA_PARAMS(Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::NewProp_playerName_MetaData, UE_ARRAY_COUNT(Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::NewProp_playerName_MetaData)) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::NewProp_playerName,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::Function_MetaDataParams[] = {
+		{ "Comment", "// Delegate\n" },
+		{ "ModuleRelativePath", "UI_MainRoom.h" },
+		{ "ToolTip", "Delegate" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UUI_MainRoom, nullptr, "ReadySendMessage", nullptr, nullptr, sizeof(UI_MainRoom_eventReadySendMessage_Parms), Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -185,6 +236,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 	const FClassFunctionLinkInfo Z_Construct_UClass_UUI_MainRoom_Statics::FuncInfo[] = {
 		{ &Z_Construct_UFunction_UUI_MainRoom_CloseButtonClickEvent, "CloseButtonClickEvent" }, // 3133730557
 		{ &Z_Construct_UFunction_UUI_MainRoom_CreateRoomButtonClickEvent, "CreateRoomButtonClickEvent" }, // 2058525764
+		{ &Z_Construct_UFunction_UUI_MainRoom_ReadySendMessage, "ReadySendMessage" }, // 1793640267
 		{ &Z_Construct_UFunction_UUI_MainRoom_RecvButtonClickEvent, "RecvButtonClickEvent" }, // 402214869
 		{ &Z_Construct_UFunction_UUI_MainRoom_RefreshButtonClickEvent, "RefreshButtonClickEvent" }, // 4027795369
 	};
@@ -256,7 +308,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_MainRoom() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UUI_MainRoom, 3366175869);
+	IMPLEMENT_CLASS(UUI_MainRoom, 1536354479);
 	template<> CHATCLIENT_API UClass* StaticClass<UUI_MainRoom>()
 	{
 		return UUI_MainRoom::StaticClass();
