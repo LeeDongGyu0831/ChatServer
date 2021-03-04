@@ -102,8 +102,8 @@
 "C:\Program Files\Epic Games\UE_4.25\Engine\Intermediate\Build\Win64\UE4Editor\Development\InputCore\UE4Editor-InputCore.lib"
 "C:\Program Files\Epic Games\UE_4.25\Engine\Intermediate\Build\Win64\UE4Editor\Development\Networking\UE4Editor-Networking.lib"
 "C:\Program Files\Epic Games\UE_4.25\Engine\Intermediate\Build\Win64\UE4Editor\Development\Sockets\UE4Editor-Sockets.lib"
-/OUT:"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Binaries\Win64\UE4Editor-ChatClient-0003.dll"
-/IMPLIB:"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\UE4Editor-ChatClient-0003.suppressed.lib"
-/PDB:"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Binaries\Win64\UE4Editor-ChatClient-0003.pdb"
+/OUT:"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Binaries\Win64\UE4Editor-ChatClient-1384.dll"
+/IMPLIB:"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Development\ChatClient\UE4Editor-ChatClient-1384.suppressed.lib"
+/PDB:"C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Binaries\Win64\UE4Editor-ChatClient-1384.pdb"
 /ignore:4078
 /INCLUDE:IMPLEMENT_MODULE_ChatClient

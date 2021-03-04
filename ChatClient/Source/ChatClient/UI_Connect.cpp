@@ -43,11 +43,11 @@ void UUI_Connect::NativeConstruct()
 
 void UUI_Connect::BeginDestroy()
 {
-	Super::BeginDestroy();
+	//connectButton->OnClicked.RemoveDynamic(this, &UUI_Connect::ButtonClick);
+	//inputIP->OnTextChanged.RemoveDynamic(this, &UUI_Connect::InputIPEvent);
+	//inputPort->OnTextChanged.RemoveDynamic(this, &UUI_Connect::InputPortEvent);
 
-	connectButton->OnClicked.RemoveDynamic(this, &UUI_Connect::ButtonClick);
-	inputIP->OnTextChanged.RemoveDynamic(this, &UUI_Connect::InputIPEvent);
-	inputPort->OnTextChanged.RemoveDynamic(this, &UUI_Connect::InputPortEvent);
+	Super::BeginDestroy();
 }
 
 void UUI_Connect::InputIPEvent(const FText& InText)

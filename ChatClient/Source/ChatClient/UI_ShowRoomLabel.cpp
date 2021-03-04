@@ -16,13 +16,13 @@ void UUI_ShowRoomLabel::NativeConstruct()
 
 void UUI_ShowRoomLabel::BeginDestroy()
 {
-	Super::BeginDestroy();
-
 	Fuc_DeleSingle_OneParam_JoinRoom.Unbind();
 	Fuc_DeleSingle_OneParam_DestroyRoom.Unbind();
 
-	destroyButton->OnClicked.RemoveDynamic(this, &UUI_ShowRoomLabel::DestroyButtonClickEvent);
-	joinButton->OnClicked.RemoveDynamic(this, &UUI_ShowRoomLabel::JoinButtonClickEvent);
+	//destroyButton->OnClicked.RemoveDynamic(this, &UUI_ShowRoomLabel::DestroyButtonClickEvent);
+	//joinButton->OnClicked.RemoveDynamic(this, &UUI_ShowRoomLabel::JoinButtonClickEvent);
+
+	Super::BeginDestroy();
 }
 
 void UUI_ShowRoomLabel::Init()

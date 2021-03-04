@@ -63,13 +63,13 @@ void UUI_MainRoom::NativeConstruct()
 
 void UUI_MainRoom::BeginDestroy()
 {
-	Super::BeginDestroy();
+	//recvButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::RecvButtonClickEvent);
+	//refreshPlayerButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::RefreshPlayerButtonClickEvent);
+	//refreshRoomButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::RefreshRoomButtonClickEvent);
+	//createRoomButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::CreateRoomButtonClickEvent);
+	//closeButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::CloseButtonClickEvent);
 
-	recvButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::RecvButtonClickEvent);
-	refreshPlayerButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::RefreshPlayerButtonClickEvent);
-	refreshRoomButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::RefreshRoomButtonClickEvent);
-	createRoomButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::CreateRoomButtonClickEvent);
-	closeButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::CloseButtonClickEvent);
+	Super::BeginDestroy();
 }
 
 void UUI_MainRoom::RecvButtonClickEvent()

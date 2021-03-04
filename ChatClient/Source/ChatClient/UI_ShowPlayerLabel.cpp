@@ -17,10 +17,11 @@ void UUI_ShowPlayerLabel::NativeConstruct()
 
 void UUI_ShowPlayerLabel::BeginDestroy()
 {
-	Super::BeginDestroy();
 	//if (Fuc_DeleSingle_OneParam.IsBound() == true)
 	Fuc_DeleSingle_OneParam.Unbind();
-	sendMessageButton->OnClicked.RemoveDynamic(this, &UUI_ShowPlayerLabel::SendMessageButton);
+	//sendMessageButton->OnClicked.RemoveDynamic(this, &UUI_ShowPlayerLabel::SendMessageButton);
+
+	Super::BeginDestroy();
 }
 
 void UUI_ShowPlayerLabel::Init()

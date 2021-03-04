@@ -32,3 +32,10 @@ void AConnectLevel::Tick(float DeltaTime)
 	}
 	GINetwork->RecvData();
 }
+
+void AConnectLevel::Destroyed()
+{
+	Super::Destroyed();
+
+	UE_LOG(LogTemp, Error, TEXT("ConnectLevel Destoryed"));
+}

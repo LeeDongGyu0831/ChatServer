@@ -27,10 +27,10 @@ void UUI_Login::NativeConstruct()
 
 void UUI_Login::BeginDestroy()
 {
-	Super::BeginDestroy();
+	//connectButton->OnClicked.RemoveDynamic(this, &UUI_Login::ConnectButtonClick);
+	//inputID->OnTextChanged.RemoveDynamic(this, &UUI_Login::InputIDEvent);
 
-	connectButton->OnClicked.RemoveDynamic(this, &UUI_Login::ConnectButtonClick);
-	inputID->OnTextChanged.RemoveDynamic(this, &UUI_Login::InputIDEvent);
+	Super::BeginDestroy();
 }
 
 void UUI_Login::InputIDEvent(const FText& InText)
