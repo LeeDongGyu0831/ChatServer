@@ -22,6 +22,7 @@ void AGM_ChatGameMode::PostLogin(APlayerController* NewPlayer)
 	UE_LOG(LogTemp, Warning, TEXT("PostLogin Begin"));
 	Super::PostLogin(NewPlayer);
 	UE_LOG(LogTemp, Warning, TEXT("PostLogin End"));
+	setlocale(LC_ALL, "Korean");
 
 	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (NULL == GINetwork)

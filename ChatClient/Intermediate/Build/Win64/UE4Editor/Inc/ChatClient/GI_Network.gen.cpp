@@ -33,7 +33,7 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 		return MSG_TYPE_StaticEnum();
 	}
 	static FCompiledInDeferEnum Z_CompiledInDeferEnum_UEnum_MSG_TYPE(MSG_TYPE_StaticEnum, TEXT("/Script/ChatClient"), TEXT("MSG_TYPE"), false, nullptr, nullptr);
-	uint32 Get_Z_Construct_UEnum_ChatClient_MSG_TYPE_Hash() { return 3500766136U; }
+	uint32 Get_Z_Construct_UEnum_ChatClient_MSG_TYPE_Hash() { return 2513154326U; }
 	UEnum* Z_Construct_UEnum_ChatClient_MSG_TYPE()
 	{
 #if WITH_HOT_RELOAD
@@ -52,6 +52,7 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 				{ "MSG_TYPE::ROOMLIST", (int64)MSG_TYPE::ROOMLIST },
 				{ "MSG_TYPE::DESTROYROOM", (int64)MSG_TYPE::DESTROYROOM },
 				{ "MSG_TYPE::CREATEROOM", (int64)MSG_TYPE::CREATEROOM },
+				{ "MSG_TYPE::JOINROOM", (int64)MSG_TYPE::JOINROOM },
 			};
 #if WITH_METADATA
 			const UE4CodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
@@ -67,6 +68,8 @@ void EmptyLinkFunctionForGeneratedCodeGI_Network() {}
 				{ "EXIT.Name", "MSG_TYPE::EXIT" },
 				{ "JOIN.DisplayName", "JOIN" },
 				{ "JOIN.Name", "MSG_TYPE::JOIN" },
+				{ "JOINROOM.DisplayName", "JOINROOM" },
+				{ "JOINROOM.Name", "MSG_TYPE::JOINROOM" },
 				{ "ModuleRelativePath", "GI_Network.h" },
 				{ "PLAYERLIST.DisplayName", "PLAYERLIST" },
 				{ "PLAYERLIST.Name", "MSG_TYPE::PLAYERLIST" },

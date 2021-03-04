@@ -11,7 +11,8 @@ APC_ChatPlayerController::APC_ChatPlayerController()
 void APC_ChatPlayerController::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	UE_LOG(LogTemp, Warning, TEXT("PostInitilizeComponents"))
+	UE_LOG(LogTemp, Warning, TEXT("PostInitilizeComponents"));
+	bShowMouseCursor = true;
 }
 
 void APC_ChatPlayerController::OnPossess(APawn* aPawn)

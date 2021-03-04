@@ -105,6 +105,8 @@ void CRoom::AddClient(const uint& id, CClient * client)
 	{
 		string msg;
 		msg += "\r/      [";
+		msg += GetNumber() + 48;
+		msg += "] [";
 		msg += GetRoomName();
 		msg += "] 에 참가하였습니다.\n\r";
 		CNetwork::GetInst()->Send(id, msg.c_str(), msg.size(), m_nNumber);

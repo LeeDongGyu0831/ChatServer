@@ -7,6 +7,7 @@
 #include "UI_ChatText.h"
 #include "UI_ShowPlayerLabel.h"
 #include "UI_ShowRoomLabel.h"
+#include "UI_CreateRoomWidget.h"
 
 UUI_MainRoom::UUI_MainRoom(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -49,6 +50,18 @@ void UUI_MainRoom::NativeConstruct()
 	refreshRoomButton->OnClicked.AddDynamic(this, &UUI_MainRoom::RefreshRoomButtonClickEvent);
 	createRoomButton->OnClicked.AddDynamic(this, &UUI_MainRoom::CreateRoomButtonClickEvent);
 	closeButton->OnClicked.AddDynamic(this, &UUI_MainRoom::CloseButtonClickEvent);
+
+	if (createRoomWidgetClass)
+	{
+		createRoomWidget = CreateWidget<UUI_CreateRoomWidget>(GetWorld(), createRoomWidgetClass);
+		if (!createRoomWidget)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Can't Create ChatTextWidget"));
+			return;
+		}
+		createRoomWidget->AddToViewport(1);
+		createRoomWidget->Init();
+	}
 
 	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (NULL == GINetwork)
@@ -111,7 +124,7 @@ void UUI_MainRoom::AddChatting(const FString& chatMessage)
 	UUI_ChatText* chatTextWidget = CreateWidget<UUI_ChatText>(GetWorld(), chatTextClass);
 	if (!chatTextWidget)
 	{
-		UE_LOG(LogTemp, Error, TEXT("!!!!!!!!!!!!!!!!")); 
+		UE_LOG(LogTemp, Error, TEXT("Can't Create ChatTextWidget")); 
 		return;
 	}
 	chatTextWidget->Init();
@@ -202,17 +215,20 @@ void UUI_MainRoom::ExitPlayer(const FString& playerName)
 }
 
 
-void UUI_MainRoom::AddRoom(const FString& roomNunmber, const FString& roomName, const FString& roomPlayerCount)
+void UUI_MainRoom::AddRoom(const FString& roomNumberStr, const FString& roomName, const FString& roomPlayerCountStr, const FString& roomCurrentPlayerCountStr)
 {
+	int32 roomNumber = FCString::Atoi(*roomNumberStr);
 	if (!roomNameLabelClass)
 	{
 		return;
 	}
-	bool find = roomNameToWidgetMap.Contains(roomName);
+	bool find = roomNameToWidgetMap.Contains(roomNumber);
 
 	// 플레이어가 리스트에 있는데 또다시 참가를 한 경우?
 	if (true == find)
 	{
+		UUI_ShowRoomLabel* roomNameLabelWidget = roomNameToWidgetMap[roomNumber].Get();
+		roomNameLabelWidget->SetRoomInfo(roomNumberStr, roomName, roomPlayerCountStr, roomCurrentPlayerCountStr);
 		return;
 	}
 
@@ -233,7 +249,7 @@ void UUI_MainRoom::AddRoom(const FString& roomNunmber, const FString& roomName, 
 
 	roomNameLabelWidget->Init();
 
-	roomNameLabelWidget->SetRoomInfo(roomNunmber, roomName, roomPlayerCount);
+	roomNameLabelWidget->SetRoomInfo(roomNumberStr, roomName, roomPlayerCountStr, roomCurrentPlayerCountStr);
 
 	roomNameLabelWidget->Fuc_DeleSingle_OneParam_DestroyRoom.BindUFunction(this, FName("RequestDestroyRoom"));
 	roomNameLabelWidget->Fuc_DeleSingle_OneParam_JoinRoom.BindUFunction(this, FName("RequestJoinRoom"));
@@ -242,12 +258,14 @@ void UUI_MainRoom::AddRoom(const FString& roomNunmber, const FString& roomName, 
 	roomListScrollBox->ScrollToEnd();
 
 	// 맵에 저장
-	roomNameToWidgetMap.Emplace(roomName, TWeakObjectPtr<UUI_ShowRoomLabel>(roomNameLabelWidget));
+	roomNameToWidgetMap.Emplace(roomNumber, TWeakObjectPtr<UUI_ShowRoomLabel>(roomNameLabelWidget));
 }
 
 void UUI_MainRoom::DestroyRoom(const FString& recvString)
 {
-	FString roomName = GetRoomNameFromRecvString(recvString);
+	int32 roomNumber = FCString::Atoi(*GetRoomNumberFromRecvString(recvString));
+
+	UE_LOG(LogTemp, Error, TEXT("%d"), roomNumber);
 
 	// 여기까지 방 이름은 검색했다!
 
@@ -255,12 +273,12 @@ void UUI_MainRoom::DestroyRoom(const FString& recvString)
 	{
 		return;
 	}
-	bool find = roomNameToWidgetMap.Contains(roomName);
+	bool find = roomNameToWidgetMap.Contains(roomNumber);
 
-	// 없던 플레이어가 퇴장하는 경우
+	// 없던 맵이 삭제되는 경우
 	if (false == find)
 	{
-		UE_LOG(LogTemp, Error, TEXT("[Bug] Non Player Name Exit"));
+		UE_LOG(LogTemp, Error, TEXT("[Bug] Non Room Name Exit"));
 		return;
 	}
 
@@ -270,13 +288,13 @@ void UUI_MainRoom::DestroyRoom(const FString& recvString)
 		return;
 	}
 
-	UUI_ShowRoomLabel* playerNameLabelWidget = roomNameToWidgetMap.Find(roomName)->Get();
+	UUI_ShowRoomLabel* playerNameLabelWidget = roomNameToWidgetMap.Find(roomNumber)->Get();
 
 	roomListScrollBox->RemoveChild(playerNameLabelWidget);
 	roomListScrollBox->ScrollToEnd();
 
 	// 맵에서 삭제
-	roomNameToWidgetMap.Remove(roomName);
+	roomNameToWidgetMap.Remove(roomNumber);
 }
 
 void UUI_MainRoom::FindPlayerListFromMessage(const FString& recvString)
@@ -285,12 +303,15 @@ void UUI_MainRoom::FindPlayerListFromMessage(const FString& recvString)
 	FString strMessage = recvString;
 	
 	/*  도착하는 명령어 형태
-		[1] Main Room[4 / 1000]
-		====대화방 이용자====
-		[0] Player_1
-		[1] Player_2
-		[2] Player_3
-		[3] Test		
+	* 
+		[1] Main Room[4 / 1000]	\n
+		====대화방 이용자====	\n
+		[0] Player_1			\n
+		[1] Player_2			\n
+		[2] Player_3			\n
+		[3] Test				\n
+	>>
+
 	*/
 	// 대략적으로 앞에서부터 시작
 	int index = FIND_PLAYERLIST_STARTINDEX;
@@ -335,7 +356,6 @@ void UUI_MainRoom::FindRoomListFromMessage(const FString& recvString)
 	int index = -1;
 	int32 endIndex = index;
 	int32 startIndex = index;
-	int32 roomCount = 0;
 	while (1)
 	{
 		startIndex = strMessage.Find("/", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart, startIndex + 1);
@@ -345,24 +365,24 @@ void UUI_MainRoom::FindRoomListFromMessage(const FString& recvString)
 		if (endIndex == -1)
 			endIndex = strMessage.Len();
 
-		if (roomCount > 1)
+		FString lineString = "";
+		for (int i = startIndex + 1; i < endIndex; ++i)
 		{
-			FString lineString = "";
-			for (int i = startIndex + 1; i < endIndex; ++i)
-			{
-				lineString.AppendChar(strMessage[i]);
-			}
-			lineString.TrimStartAndEndInline(); // 공백 제거
-			lineString.TrimQuotesInline(); // 줄바꿈 제거
-
-			FString roomName = GetRoomNameFromString(lineString);
-			FString roomNumber = GetRoomNumberFromString(lineString);
-			FString roomPlayerCount = GetRoomPlayerCountFromString(lineString);
-
-			AddRoom(roomNumber, roomName, roomPlayerCount);
+			lineString.AppendChar(strMessage[i]);
 		}
+		lineString.TrimStartAndEndInline(); // 공백 제거
+		lineString.TrimQuotesInline(); // 줄바꿈 제거
+
+		FString roomName = GetRoomNameFromString(lineString);
+		FString roomNumber = GetRoomNumberFromString(lineString);
+		FString roomPlayerCount = GetRoomPlayerCountFromString(lineString);
+		FString roomCurrentPlayerCount = GetRoomCurrentPlayerCountFromString(lineString);
+
+		int32 number = FCString::Atoi(*roomNumber);
+		if(number != 0 && number != 1)
+			AddRoom(roomNumber, roomName, roomPlayerCount, roomCurrentPlayerCount);
+
 		startIndex = endIndex;
-		roomCount++;
 	}
 
 	return;
@@ -373,8 +393,8 @@ FString UUI_MainRoom::GetRoomNameFromRecvString(const FString& recvString)
 	FString roomName = "";
 
 	int32 startIndex, endIndex;
-	startIndex = recvString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
-	endIndex = recvString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
+	startIndex = recvString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
+	endIndex = recvString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
 
 	for (int i = startIndex + 1; i < endIndex; ++i)
 	{
@@ -384,10 +404,26 @@ FString UUI_MainRoom::GetRoomNameFromRecvString(const FString& recvString)
 	return roomName;
 }
 
+FString UUI_MainRoom::GetRoomNumberFromRecvString(const FString& recvString)
+{
+	FString roomNumber = "";
+
+	int32 startIndex, endIndex;
+	startIndex = recvString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
+	endIndex = recvString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
+
+	for (int i = startIndex + 1; i < endIndex; ++i)
+	{
+		roomNumber.AppendChar(recvString[i]);
+	}
+	roomNumber.TrimStartAndEndInline(); // 공백 제거
+	return roomNumber;
+}
+
 FString UUI_MainRoom::GetRoomNameFromString(const FString& recvString)
 {
 	FString roomName = "";
-
+	
 	int startIndex, endIndex;
 	startIndex = recvString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
 	endIndex = recvString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
@@ -409,7 +445,7 @@ FString UUI_MainRoom::GetRoomNumberFromString(const FString& recvString)
 	startIndex = recvString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
 	endIndex = recvString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
 
-	for (int i = startIndex; i <= endIndex; ++i)
+	for (int i = startIndex + 1; i < endIndex; ++i)
 	{
 		roomNumber.AppendChar(recvString[i]);
 	}
@@ -423,10 +459,27 @@ FString UUI_MainRoom::GetRoomPlayerCountFromString(const FString& recvString)
 	FString roomPlayerCount;
 
 	int startIndex, endIndex;
-	startIndex = recvString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
+	startIndex = recvString.Find("/", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
 	endIndex = recvString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
 
-	for (int i = startIndex; i <= endIndex; ++i)
+	for (int i = startIndex + 1; i < endIndex; ++i)
+	{
+		roomPlayerCount.AppendChar(recvString[i]);
+	}
+	roomPlayerCount.TrimStartAndEndInline(); // 공백 제거
+
+	return roomPlayerCount;
+}
+
+FString UUI_MainRoom::GetRoomCurrentPlayerCountFromString(const FString& recvString)
+{
+	FString roomPlayerCount;
+
+	int startIndex, endIndex;
+	startIndex = recvString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
+	endIndex = recvString.Find("/", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
+
+	for (int i = startIndex + 1; i < endIndex; ++i)
 	{
 		roomPlayerCount.AppendChar(recvString[i]);
 	}
@@ -437,14 +490,14 @@ FString UUI_MainRoom::GetRoomPlayerCountFromString(const FString& recvString)
 
 void UUI_MainRoom::CreateRoomButtonClickEvent()
 {
-	UE_LOG(LogTemp, Warning, TEXT("CreateRoomButtonClick"));
+	createRoomWidget->SetVisibility(ESlateVisibility::Visible);
 	return;
 }
 
 void UUI_MainRoom::CloseButtonClickEvent()
 {
 	UE_LOG(LogTemp, Warning, TEXT("CloseButtonClick"));
-	return;
+	exit(1);
 }
 
 void UUI_MainRoom::ReadySendMessage(const FString& playerName)

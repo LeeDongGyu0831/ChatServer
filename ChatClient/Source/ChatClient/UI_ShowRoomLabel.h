@@ -30,6 +30,7 @@ private:
 	int32 _roomNumber;
 	FString _roomName;
 	int32 _roomPlayerCount;
+	int32 _roomCurrentPlayerCount;
 
 public:
 	// 대화방 파괴 및 참가를 요청하는 델리게이트
@@ -46,7 +47,7 @@ public:
 	// Add To Viewport 함수를 사용하면 NativeConstruct가 호출되지 않아 임의로 제작한 초기화 함수입니다.
 	void Init();
 
-	void SetRoomInfo(const FString& roomNumber, const FString& roomName, const FString& roomPlayerCount);
+	void SetRoomInfo(const FString& roomNumber, const FString& roomName, const FString& roomPlayerCount, const FString& roomCurrentPlayerCount);
 
 	UFUNCTION()
 	void DestroyButtonClickEvent();

@@ -44,18 +44,32 @@ void UUI_ShowRoomLabel::Init()
 	joinButton->OnClicked.AddDynamic(this, &UUI_ShowRoomLabel::JoinButtonClickEvent);
 }
 
-void UUI_ShowRoomLabel::SetRoomInfo(const FString& roomNumber, const FString& roomName, const FString& roomPlayerCount)
+void UUI_ShowRoomLabel::SetRoomInfo(const FString& roomNumber, const FString& roomName, const FString& roomPlayerCount, const FString& roomCurrentPlayerCount)
 {
 	if (roomNameTextBlock)
 		roomNameTextBlock->SetText(FText::FromString(roomName));
+
+	FString roomInfo = "[";
+	roomInfo += roomNumber;
+	roomInfo += "]";
+
 	if (roomNumberTextBlock)
-		roomNumberTextBlock->SetText(FText::FromString(roomNumber));
+		roomNumberTextBlock->SetText(FText::FromString(roomInfo));
+
+	roomInfo = "[";
+	roomInfo += roomCurrentPlayerCount;
+	roomInfo += "/";
+	roomInfo += roomPlayerCount;
+	roomInfo += "]";
+
 	if (roomPlayerCountTextBlock)
-		roomPlayerCountTextBlock->SetText(FText::FromString(roomPlayerCount));
+		roomPlayerCountTextBlock->SetText(FText::FromString(roomInfo));
+
 
 	_roomNumber = FCString::Atoi(*roomNumber);
 	_roomName = roomName;
 	_roomPlayerCount = FCString::Atoi(*roomPlayerCount);
+	_roomCurrentPlayerCount = FCString::Atoi(*roomCurrentPlayerCount);
 }
 
 void UUI_ShowRoomLabel::DestroyButtonClickEvent()

@@ -15,12 +15,13 @@ UGI_Network::UGI_Network()
 void UGI_Network::Init()
 {
 	Super::Init();
-	setlocale(LC_ALL, "Korean");
 
 	UE_LOG(LogTemp, Warning, TEXT("Network GameInstance Init"));
 
 	bLogin = false;
 	bConnect = false;
+
+	currentRoomNumber = 0;
 }
 
 void UGI_Network::Shutdown()
@@ -31,23 +32,44 @@ void UGI_Network::Shutdown()
 		Socket->Close();
 }
 
-void UGI_Network::SetID(FString id)
+void UGI_Network::SetID(const FString& id)
 {
 	strID = id;
 }
 
-void UGI_Network::SetIP(FString ip)
+void UGI_Network::SetIP(const FString& ip)
 {
 	strIP = ip;
 }
-void UGI_Network::SetPort(FString port)
+void UGI_Network::SetPort(const FString& port)
 {
 	strPort = port;
+}
+
+void UGI_Network::SetCurrentRoomNumber(const int32& roomNumber)
+{
+	currentRoomNumber = roomNumber;
+	UE_LOG(LogTemp, Warning, TEXT("Current RoomNumber : %d"), roomNumber);
+}
+
+int32 UGI_Network::GetCurrentRoomNumber()
+{
+	return currentRoomNumber;
 }
 
 FString UGI_Network::GetID()
 {
 	return strID;
+}
+
+void UGI_Network::SetCurrentRoomName(const FString& roomName)
+{
+	currentRoomName = roomName;
+}
+
+FString UGI_Network::GetCurrentRoomName()
+{
+	return currentRoomName;
 }
 
 bool UGI_Network::ConnectToServer()
@@ -245,13 +267,53 @@ MSG_TYPE UGI_Network::CheckMessage(FString originString)
 
 	if (originString.Contains(L"대화방이 생성"))
 	{
-		return MSG_TYPE::DESTROYROOM;
+		//return MSG_TYPE::DESTROYROOM;
 	}
 
+	if (originString.Contains(L"에 참가"))
+	{
+		SetCurrentRoomName(GetRoomNameFromString(originString));
+		SetCurrentRoomNumber(GetRoomNumberFromString(originString));
+		return MSG_TYPE::JOINROOM;
+	}
 
 	PrintLog(FuncName, originString);
 
 	return MSG_TYPE::CHAT;
+}
+
+int32 UGI_Network::GetRoomNumberFromString(const FString& originString)
+{
+	FString roomNumberStr = "";
+
+	int startIndex, endIndex;
+	startIndex = originString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
+	endIndex = originString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart);
+
+	for (int i = startIndex + 1; i < endIndex; ++i)
+	{
+		roomNumberStr.AppendChar(originString[i]);
+	}
+	roomNumberStr.TrimStartAndEndInline(); // 공백 제거
+
+	return FCString::Atoi(*roomNumberStr);
+}
+
+FString UGI_Network::GetRoomNameFromString(const FString& originString)
+{
+	FString roomName = "";
+
+	int startIndex, endIndex;
+	startIndex = originString.Find("[", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
+	endIndex = originString.Find("]", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromEnd);
+
+	for (int i = startIndex + 1; i < endIndex; ++i)
+	{
+		roomName.AppendChar(originString[i]);
+	}
+	roomName.TrimStartAndEndInline(); // 공백 제거
+
+	return roomName;
 }
 
 FString UGI_Network::GetKeyworkByChar(FString originString, TCHAR startChar, TCHAR endChar)

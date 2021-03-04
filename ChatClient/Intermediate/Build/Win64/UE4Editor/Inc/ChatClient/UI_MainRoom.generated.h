@@ -13,8 +13,8 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define CHATCLIENT_UI_MainRoom_generated_h
 
-#define ChatClient_Source_ChatClient_UI_MainRoom_h_22_SPARSE_DATA
-#define ChatClient_Source_ChatClient_UI_MainRoom_h_22_RPC_WRAPPERS \
+#define ChatClient_Source_ChatClient_UI_MainRoom_h_23_SPARSE_DATA
+#define ChatClient_Source_ChatClient_UI_MainRoom_h_23_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execRequestDestroyRoom); \
 	DECLARE_FUNCTION(execRequestJoinRoom); \
@@ -26,7 +26,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	DECLARE_FUNCTION(execRecvButtonClickEvent);
 
 
-#define ChatClient_Source_ChatClient_UI_MainRoom_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
+#define ChatClient_Source_ChatClient_UI_MainRoom_h_23_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execRequestDestroyRoom); \
 	DECLARE_FUNCTION(execRequestJoinRoom); \
@@ -38,7 +38,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	DECLARE_FUNCTION(execRecvButtonClickEvent);
 
 
-#define ChatClient_Source_ChatClient_UI_MainRoom_h_22_INCLASS_NO_PURE_DECLS \
+#define ChatClient_Source_ChatClient_UI_MainRoom_h_23_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUUI_MainRoom(); \
 	friend struct Z_Construct_UClass_UUI_MainRoom_Statics; \
@@ -47,7 +47,7 @@ public: \
 	DECLARE_SERIALIZER(UUI_MainRoom)
 
 
-#define ChatClient_Source_ChatClient_UI_MainRoom_h_22_INCLASS \
+#define ChatClient_Source_ChatClient_UI_MainRoom_h_23_INCLASS \
 private: \
 	static void StaticRegisterNativesUUI_MainRoom(); \
 	friend struct Z_Construct_UClass_UUI_MainRoom_Statics; \
@@ -56,7 +56,7 @@ public: \
 	DECLARE_SERIALIZER(UUI_MainRoom)
 
 
-#define ChatClient_Source_ChatClient_UI_MainRoom_h_22_STANDARD_CONSTRUCTORS \
+#define ChatClient_Source_ChatClient_UI_MainRoom_h_23_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UUI_MainRoom(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UUI_MainRoom) \
@@ -69,7 +69,7 @@ private: \
 public:
 
 
-#define ChatClient_Source_ChatClient_UI_MainRoom_h_22_ENHANCED_CONSTRUCTORS \
+#define ChatClient_Source_ChatClient_UI_MainRoom_h_23_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API UUI_MainRoom(UUI_MainRoom&&); \
@@ -80,34 +80,34 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UUI_MainRoom); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UUI_MainRoom)
 
 
-#define ChatClient_Source_ChatClient_UI_MainRoom_h_22_PRIVATE_PROPERTY_OFFSET \
+#define ChatClient_Source_ChatClient_UI_MainRoom_h_23_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO__chatTextClass() { return STRUCT_OFFSET(UUI_MainRoom, chatTextClass); } \
 	FORCEINLINE static uint32 __PPO__playerNameLabelClass() { return STRUCT_OFFSET(UUI_MainRoom, playerNameLabelClass); } \
 	FORCEINLINE static uint32 __PPO__roomNameLabelClass() { return STRUCT_OFFSET(UUI_MainRoom, roomNameLabelClass); } \
 	FORCEINLINE static uint32 __PPO__createRoomWidgetClass() { return STRUCT_OFFSET(UUI_MainRoom, createRoomWidgetClass); }
 
 
-#define ChatClient_Source_ChatClient_UI_MainRoom_h_19_PROLOG
-#define ChatClient_Source_ChatClient_UI_MainRoom_h_22_GENERATED_BODY_LEGACY \
+#define ChatClient_Source_ChatClient_UI_MainRoom_h_20_PROLOG
+#define ChatClient_Source_ChatClient_UI_MainRoom_h_23_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	ChatClient_Source_ChatClient_UI_MainRoom_h_22_PRIVATE_PROPERTY_OFFSET \
-	ChatClient_Source_ChatClient_UI_MainRoom_h_22_SPARSE_DATA \
-	ChatClient_Source_ChatClient_UI_MainRoom_h_22_RPC_WRAPPERS \
-	ChatClient_Source_ChatClient_UI_MainRoom_h_22_INCLASS \
-	ChatClient_Source_ChatClient_UI_MainRoom_h_22_STANDARD_CONSTRUCTORS \
+	ChatClient_Source_ChatClient_UI_MainRoom_h_23_PRIVATE_PROPERTY_OFFSET \
+	ChatClient_Source_ChatClient_UI_MainRoom_h_23_SPARSE_DATA \
+	ChatClient_Source_ChatClient_UI_MainRoom_h_23_RPC_WRAPPERS \
+	ChatClient_Source_ChatClient_UI_MainRoom_h_23_INCLASS \
+	ChatClient_Source_ChatClient_UI_MainRoom_h_23_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define ChatClient_Source_ChatClient_UI_MainRoom_h_22_GENERATED_BODY \
+#define ChatClient_Source_ChatClient_UI_MainRoom_h_23_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	ChatClient_Source_ChatClient_UI_MainRoom_h_22_PRIVATE_PROPERTY_OFFSET \
-	ChatClient_Source_ChatClient_UI_MainRoom_h_22_SPARSE_DATA \
-	ChatClient_Source_ChatClient_UI_MainRoom_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
-	ChatClient_Source_ChatClient_UI_MainRoom_h_22_INCLASS_NO_PURE_DECLS \
-	ChatClient_Source_ChatClient_UI_MainRoom_h_22_ENHANCED_CONSTRUCTORS \
+	ChatClient_Source_ChatClient_UI_MainRoom_h_23_PRIVATE_PROPERTY_OFFSET \
+	ChatClient_Source_ChatClient_UI_MainRoom_h_23_SPARSE_DATA \
+	ChatClient_Source_ChatClient_UI_MainRoom_h_23_RPC_WRAPPERS_NO_PURE_DECLS \
+	ChatClient_Source_ChatClient_UI_MainRoom_h_23_INCLASS_NO_PURE_DECLS \
+	ChatClient_Source_ChatClient_UI_MainRoom_h_23_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

@@ -31,11 +31,5 @@ public:
 	virtual void BeginDestroy() override;
 
 	UFUNCTION()
-	void InputIPEvent(const FText& InText);
-
-	UFUNCTION()
-	void InputPortEvent(const FText& InText);
-
-	UFUNCTION()
 	void ButtonClick();
 };

@@ -4,6 +4,7 @@
 #include "MainRoomLevel.h"
 
 #include "GI_Network.h"
+#include "UI_MainRoom.h"
 
 void AMainRoomLevel::BeginPlay()
 {
@@ -19,12 +20,13 @@ void AMainRoomLevel::BeginPlay()
 		}
 	}
 
-	//auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
-	//if (NULL == GINetwork)
-	//{
-	//	UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
-	//	return;
-	//}
+	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (NULL == GINetwork)
+	{
+		UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
+		return;
+	}
+	GINetwork->SetCurrentRoomNumber(1);
 
 	refreshTime = REFRESH_TIME;
 }
@@ -98,6 +100,11 @@ void AMainRoomLevel::Tick(float DeltaTime)
 	case MSG_TYPE::CREATEROOM:
 	{
 		// mainRoomWidget->CheckCreateRoom(recvString);
+	}
+	break;
+	case MSG_TYPE::JOINROOM:
+	{
+		UGameplayStatics::OpenLevel(this, "ChatRoomLevel");
 	}
 	break;
 	default:

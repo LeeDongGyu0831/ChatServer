@@ -37,8 +37,6 @@ void UUI_Connect::NativeConstruct()
 	}
 
 	connectButton->OnClicked.AddDynamic(this, &UUI_Connect::ButtonClick);
-	inputIP->OnTextChanged.AddDynamic(this, &UUI_Connect::InputIPEvent);
-	inputPort->OnTextChanged.AddDynamic(this, &UUI_Connect::InputPortEvent);
 }
 
 void UUI_Connect::BeginDestroy()
@@ -50,30 +48,6 @@ void UUI_Connect::BeginDestroy()
 	Super::BeginDestroy();
 }
 
-void UUI_Connect::InputIPEvent(const FText& InText)
-{
-	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (NULL == GINetwork)
-	{
-		UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
-		return;
-	}
-	FString ip = InText.ToString();
-	GINetwork->SetIP(ip);
-}
-
-void UUI_Connect::InputPortEvent(const FText& InText)
-{
-	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (NULL == GINetwork)
-	{
-		UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
-		return;
-	}
-	FString port = InText.ToString();
-	GINetwork->SetPort(port);
-}
-
 void UUI_Connect::ButtonClick()
 {
 	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
@@ -82,6 +56,13 @@ void UUI_Connect::ButtonClick()
 		UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
 		return;
 	}
+
+	FString ip = inputIP->GetText().ToString();
+	FString port = inputPort->GetText().ToString();
+
+	GINetwork->SetIP(ip);
+	GINetwork->SetPort(port);
+
 	bool result = GINetwork->ConnectToServer();
 
 	if (true == result)

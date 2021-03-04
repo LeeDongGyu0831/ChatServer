@@ -15,6 +15,7 @@
 
 class UUI_ShowPlayerLabel;
 class UUI_ShowRoomLabel;
+class UUI_CreateRoomWidget;
 
 UCLASS()
 class CHATCLIENT_API UUI_MainRoom : public UUserWidget
@@ -33,12 +34,17 @@ private:
 	class UScrollBox* chatListScrollBox;
 	class UScrollBox* playerListScrollBox;
 	class UScrollBox* roomListScrollBox;
+
+private:
 	class UEditableText* inputMessageText;
+
 	class UButton* recvButton;
 	class UButton* refreshPlayerButton;
 	class UButton* refreshRoomButton;
 	class UButton* createRoomButton;
 	class UButton* closeButton;
+
+	class UUI_CreateRoomWidget* createRoomWidget;
 
 	// 채팅창 한줄 한줄에 대한 UI 템플릿
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
@@ -59,7 +65,7 @@ private:
 	// 이름이 Key, 인덱스가 UserWidget 자식 클래스
 	// 기존 리스트 정보가 갱신될 때 맵을 통해 위젯이 리스트박스에 담겨있는지 아닌지 확인하는 용도
 	TMap<FString, TWeakObjectPtr<UUI_ShowPlayerLabel>> playerNameToWidgetMap;
-	TMap<FString, TWeakObjectPtr<UUI_ShowRoomLabel>> roomNameToWidgetMap;
+	TMap<int32, TWeakObjectPtr<UUI_ShowRoomLabel>> roomNameToWidgetMap;
 
 public:
 	UUI_MainRoom(const FObjectInitializer& ObjectInitializer);
@@ -83,7 +89,7 @@ public:
 	void AddPlayer(const FString& playerName);
 	void ExitPlayer(const FString& playerName);
 
-	void AddRoom(const FString& roomNunmber, const FString& roomName, const FString& roomPlayerCount);
+	void AddRoom(const FString& roomNumberStr, const FString& roomName, const FString& roomPlayerCountStr, const FString& roomCurrentPlayerCountStr);
 	void DestroyRoom(const FString& recvString);
 	//void CheckCreateRoom(const FString& recvString);
 
@@ -93,11 +99,13 @@ public:
 	void FindRoomListFromMessage(const FString& recvString);
 	// 생성, 파괴 정보를 받았을때 한줄의 문자열에서 방 이름을 추출하는 함수
 	FString GetRoomNameFromRecvString(const FString& recvString);
+	FString GetRoomNumberFromRecvString(const FString& recvString);
 
 	// 방 리스트를 받았을때 한줄의 문자열에서 각각 정보들을 추출하는 함수
 	FString GetRoomNameFromString(const FString& recvString);
 	FString GetRoomNumberFromString(const FString& recvString);
 	FString GetRoomPlayerCountFromString(const FString& recvString);
+	FString GetRoomCurrentPlayerCountFromString(const FString& recvString);
 
 	// Delegate
 	// 네트워크에게 메시지 전송 요청

@@ -16,16 +16,12 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #define ChatClient_Source_ChatClient_UI_Connect_h_18_SPARSE_DATA
 #define ChatClient_Source_ChatClient_UI_Connect_h_18_RPC_WRAPPERS \
  \
-	DECLARE_FUNCTION(execButtonClick); \
-	DECLARE_FUNCTION(execInputPortEvent); \
-	DECLARE_FUNCTION(execInputIPEvent);
+	DECLARE_FUNCTION(execButtonClick);
 
 
 #define ChatClient_Source_ChatClient_UI_Connect_h_18_RPC_WRAPPERS_NO_PURE_DECLS \
  \
-	DECLARE_FUNCTION(execButtonClick); \
-	DECLARE_FUNCTION(execInputPortEvent); \
-	DECLARE_FUNCTION(execInputIPEvent);
+	DECLARE_FUNCTION(execButtonClick);
 
 
 #define ChatClient_Source_ChatClient_UI_Connect_h_18_INCLASS_NO_PURE_DECLS \

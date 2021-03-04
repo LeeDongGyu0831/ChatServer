@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\ChatClient.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{62E1F832-8972-4D03-84A5-E2B3FE6725B5}</UniqueIdentifier>
+      <UniqueIdentifier>{46E822BE-77FB-4A9D-A45F-81E1A71059A5}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\ChatClient.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{F6329047-9216-4538-A61B-ECE086575C0F}</UniqueIdentifier>
+      <UniqueIdentifier>{8E6914A8-049B-45BA-8CF7-F00F6EF0D7F2}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -27,7 +27,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\ChatClient">
-      <UniqueIdentifier>{CF8AFD85-2C17-4C35-89E8-86DC52FE0163}</UniqueIdentifier>
+      <UniqueIdentifier>{0BE3E6DF-EA6E-470A-AEC4-76661CE2840A}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\ChatClient\ChatClient.Build.cs">
       <Filter>Source\ChatClient</Filter>
@@ -54,6 +54,12 @@
       <Filter>Source\ChatClient</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\ChatClient\ChatPawn.h">
+      <Filter>Source\ChatClient</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\ChatClient\ChatRoomLevel.cpp">
+      <Filter>Source\ChatClient</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\ChatClient\ChatRoomLevel.h">
       <Filter>Source\ChatClient</Filter>
     </ClInclude>
     <ClCompile Include="..\..\Source\ChatClient\ConnectLevel.cpp">
@@ -114,6 +120,12 @@
       <Filter>Source\ChatClient</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\ChatClient\UI_Connect.h">
+      <Filter>Source\ChatClient</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\ChatClient\UI_CreateRoomWidget.cpp">
+      <Filter>Source\ChatClient</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\ChatClient\UI_CreateRoomWidget.h">
       <Filter>Source\ChatClient</Filter>
     </ClInclude>
     <ClCompile Include="..\..\Source\ChatClient\UI_Login.cpp">

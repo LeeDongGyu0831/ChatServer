@@ -47,7 +47,6 @@ void EmptyLinkFunctionForGeneratedCodeMainRoomLevel() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMainRoomLevel_Statics::Class_MetaDataParams[] = {
-		{ "Comment", "/**\n * \n */" },
 		{ "HideCategories", "Collision Rendering Utilities|Transformation" },
 		{ "IncludePath", "MainRoomLevel.h" },
 		{ "ModuleRelativePath", "MainRoomLevel.h" },
@@ -92,7 +91,7 @@ void EmptyLinkFunctionForGeneratedCodeMainRoomLevel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AMainRoomLevel, 23237702);
+	IMPLEMENT_CLASS(AMainRoomLevel, 363275255);
 	template<> CHATCLIENT_API UClass* StaticClass<AMainRoomLevel>()
 	{
 		return AMainRoomLevel::StaticClass();

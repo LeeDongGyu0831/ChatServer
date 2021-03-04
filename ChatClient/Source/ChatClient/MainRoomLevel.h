@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "Engine/LevelScriptActor.h"
 
-#include "UI_MainRoom.h"
-
 #include "MainRoomLevel.generated.h"
 
 /**
  * 
  */
+
+class UUI_MainRoom;
+
 UCLASS()
 class CHATCLIENT_API AMainRoomLevel : public ALevelScriptActor
 {

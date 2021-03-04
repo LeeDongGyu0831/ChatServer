@@ -27,6 +27,7 @@ enum class MSG_TYPE : uint8
 	ROOMLIST	UMETA(DisplayName = "ROOMLIST"),
 	DESTROYROOM	UMETA(DisplayName = "DESTROYROOM"),
 	CREATEROOM	UMETA(DisplayName = "CREATEROOM"),
+	JOINROOM	UMETA(DisplayName = "JOINROOM"),
 };
 
 UCLASS()
@@ -44,6 +45,9 @@ private:
 	bool bConnect;
 	bool bLogin;
 
+	int32 currentRoomNumber;
+	FString currentRoomName;
+
 public:
 	UGI_Network();
 
@@ -51,9 +55,13 @@ public:
 	virtual void Shutdown() override;
 
 public:
-	void SetID(FString id);
-	void SetIP(FString ip);
-	void SetPort(FString port);
+	void SetID(const FString& id);
+	void SetIP(const FString& ip);
+	void SetPort(const FString& port);
+	void SetCurrentRoomNumber(const int32& currentRoomNumber);
+	int32 GetCurrentRoomNumber();
+	void SetCurrentRoomName(const FString& roomName);
+	FString GetCurrentRoomName();
 	FString GetID();
 
 	UFUNCTION(BlueprintCallable, Category = Socket)
@@ -77,6 +85,9 @@ public:
 	void RequestDestroyRoom(const int32& roomNumber);
 	void RequestJoinRoom(const int32& roomNumber);
 	void RequestCreateRoom(const int32& maxPlayerCount, const FString& roomName);
+
+	int32 GetRoomNumberFromString(const FString& originString);
+	FString GetRoomNameFromString(const FString& originString);
 
 
 	// 앞 뒤 공백 + 줄바꿈 문자 + >> 문자 제거용

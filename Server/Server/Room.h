@@ -29,6 +29,7 @@ public:
 	bool GetState() const;			// 현재 접속 인원이 여유가 있는지
 
 	const char* GetRoomName() const;
+	uint GetRoomNumber() const;
 
 	// 현재 접속중인 클라이언트들 반환
 	unordered_map<uint, CClient*> GetClients();

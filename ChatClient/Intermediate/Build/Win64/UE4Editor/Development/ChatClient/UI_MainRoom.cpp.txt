@@ -978,3 +978,5 @@ C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Source\ChatClient\UI_ShowP
 C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\UI_ShowPlayerLabel.generated.h
 C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Source\ChatClient\UI_ShowRoomLabel.h
 C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\UI_ShowRoomLabel.generated.h
+C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Source\ChatClient\UI_CreateRoomWidget.h
+C:\Users\donggyu\Desktop\GitHub\ChatServer\ChatClient\Intermediate\Build\Win64\UE4Editor\Inc\ChatClient\UI_CreateRoomWidget.generated.h
