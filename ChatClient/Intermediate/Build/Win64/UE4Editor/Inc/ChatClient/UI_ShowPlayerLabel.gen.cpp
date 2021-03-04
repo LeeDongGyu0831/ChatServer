@@ -42,7 +42,9 @@ void EmptyLinkFunctionForGeneratedCodeUI_ShowPlayerLabel() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UUI_ShowPlayerLabel_SendMessageButton_Statics::Function_MetaDataParams[] = {
+		{ "Comment", "// ?\xd8\xb4? ?\xd4\xbc????? ????????\xc6\xae?? ???? ??\xc8\xad???? ??\xc7\xb2 ?\xd8\xbd?\xc6\xae?? ?????? ?\xd6\xb0???\n" },
 		{ "ModuleRelativePath", "UI_ShowPlayerLabel.h" },
+		{ "ToolTip", "?\xd8\xb4? ?\xd4\xbc????? ????????\xc6\xae?? ???? ??\xc8\xad???? ??\xc7\xb2 ?\xd8\xbd?\xc6\xae?? ?????? ?\xd6\xb0???" },
 	};
 #endif
 	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UUI_ShowPlayerLabel_SendMessageButton_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UUI_ShowPlayerLabel, nullptr, "SendMessageButton", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UUI_ShowPlayerLabel_SendMessageButton_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UUI_ShowPlayerLabel_SendMessageButton_Statics::Function_MetaDataParams)) };
@@ -74,7 +76,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_ShowPlayerLabel() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_ChatClient,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UUI_ShowPlayerLabel_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UUI_ShowPlayerLabel_SendMessageButton, "SendMessageButton" }, // 3082420008
+		{ &Z_Construct_UFunction_UUI_ShowPlayerLabel_SendMessageButton, "SendMessageButton" }, // 725671563
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UUI_ShowPlayerLabel_Statics::Class_MetaDataParams[] = {
@@ -110,7 +112,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_ShowPlayerLabel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UUI_ShowPlayerLabel, 2768195133);
+	IMPLEMENT_CLASS(UUI_ShowPlayerLabel, 4282839950);
 	template<> CHATCLIENT_API UClass* StaticClass<UUI_ShowPlayerLabel>()
 	{
 		return UUI_ShowPlayerLabel::StaticClass();

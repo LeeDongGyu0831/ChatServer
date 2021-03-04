@@ -100,9 +100,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_Connect() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UUI_Connect_InputIPEvent_Statics::Function_MetaDataParams[] = {
-		{ "Comment", "// Do it via a C++ delegate\n" },
 		{ "ModuleRelativePath", "UI_Connect.h" },
-		{ "ToolTip", "Do it via a C++ delegate" },
 	};
 #endif
 	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UUI_Connect_InputIPEvent_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UUI_Connect, nullptr, "InputIPEvent", nullptr, nullptr, sizeof(UI_Connect_eventInputIPEvent_Parms), Z_Construct_UFunction_UUI_Connect_InputIPEvent_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UUI_Connect_InputIPEvent_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00420401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UUI_Connect_InputIPEvent_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UUI_Connect_InputIPEvent_Statics::Function_MetaDataParams)) };
@@ -175,7 +173,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_Connect() {}
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UUI_Connect_Statics::FuncInfo[] = {
 		{ &Z_Construct_UFunction_UUI_Connect_ButtonClick, "ButtonClick" }, // 3856487418
-		{ &Z_Construct_UFunction_UUI_Connect_InputIPEvent, "InputIPEvent" }, // 2084400152
+		{ &Z_Construct_UFunction_UUI_Connect_InputIPEvent, "InputIPEvent" }, // 3830440736
 		{ &Z_Construct_UFunction_UUI_Connect_InputPortEvent, "InputPortEvent" }, // 3456011895
 	};
 #if WITH_METADATA
@@ -213,7 +211,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_Connect() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UUI_Connect, 644296046);
+	IMPLEMENT_CLASS(UUI_Connect, 329918474);
 	template<> CHATCLIENT_API UClass* StaticClass<UUI_Connect>()
 	{
 		return UUI_Connect::StaticClass();

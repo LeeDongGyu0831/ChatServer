@@ -26,6 +26,7 @@ public:
 	UUI_Login(const FObjectInitializer& ObjectInitializer);
 
 	virtual void NativeConstruct() override;
+	virtual void BeginDestroy() override;
 
 	UFUNCTION()
 	void InputIDEvent(const FText& InText);

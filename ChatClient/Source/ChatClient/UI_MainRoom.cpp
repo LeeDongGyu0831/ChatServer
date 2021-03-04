@@ -17,18 +17,21 @@ void UUI_MainRoom::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	UE_LOG(LogTemp, Error, TEXT("Constructing UI_MainRoom..."));
+
 	chatListScrollBox = Cast<UScrollBox>(WidgetTree->FindWidget("ChatScroll"));
 	playerListScrollBox = Cast<UScrollBox>(WidgetTree->FindWidget("PlayerList"));
 	roomListScrollBox = Cast<UScrollBox>(WidgetTree->FindWidget("RoomList"));
 	inputMessageText = Cast<UEditableText>(WidgetTree->FindWidget("Input"));
 	recvButton = Cast<UButton>(WidgetTree->FindWidget("SendButton"));
-	refreshPlayerButton = Cast<UButton>(WidgetTree->FindWidget("Refresh"));
-	refreshRoomButton = Cast<UButton>(WidgetTree->FindWidget("RefreshRoom"));
-	createRoomButton = Cast<UButton>(WidgetTree->FindWidget("CreateRoomButton"));
-	closeButton = Cast<UButton>(WidgetTree->FindWidget("CloseButton"));
+	refreshPlayerButton = Cast<UButton>(WidgetTree->FindWidget("RefreshPlayerBt"));
+	refreshRoomButton = Cast<UButton>(WidgetTree->FindWidget("RefreshRoomBt"));
+	createRoomButton = Cast<UButton>(WidgetTree->FindWidget("CreateRoomBt"));
+	closeButton = Cast<UButton>(WidgetTree->FindWidget("CloseBt"));
 
 	if (nullptr == chatListScrollBox ||
 		nullptr == playerListScrollBox ||
+		nullptr == roomListScrollBox ||
 		nullptr == recvButton ||
 		nullptr == refreshPlayerButton ||
 		nullptr == refreshRoomButton ||
@@ -38,6 +41,7 @@ void UUI_MainRoom::NativeConstruct()
 		)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Do Not Construct UI_MainRoom"));
+		return;
 	}
 
 	recvButton->OnClicked.AddDynamic(this, &UUI_MainRoom::RecvButtonClickEvent);
@@ -60,6 +64,12 @@ void UUI_MainRoom::NativeConstruct()
 void UUI_MainRoom::BeginDestroy()
 {
 	Super::BeginDestroy();
+
+	recvButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::RecvButtonClickEvent);
+	refreshPlayerButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::RefreshPlayerButtonClickEvent);
+	refreshRoomButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::RefreshRoomButtonClickEvent);
+	createRoomButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::CreateRoomButtonClickEvent);
+	closeButton->OnClicked.RemoveDynamic(this, &UUI_MainRoom::CloseButtonClickEvent);
 }
 
 void UUI_MainRoom::RecvButtonClickEvent()
@@ -225,6 +235,8 @@ void UUI_MainRoom::AddRoom(const FString& roomNunmber, const FString& roomName, 
 
 	roomNameLabelWidget->SetRoomInfo(roomNunmber, roomName, roomPlayerCount);
 
+	roomNameLabelWidget->Fuc_DeleSingle_OneParam_DestroyRoom.BindUFunction(this, FName("RequestDestroyRoom"));
+	roomNameLabelWidget->Fuc_DeleSingle_OneParam_JoinRoom.BindUFunction(this, FName("RequestJoinRoom"));
 
 	roomListScrollBox->AddChild(roomNameLabelWidget);
 	roomListScrollBox->ScrollToEnd();
@@ -453,4 +465,26 @@ void UUI_MainRoom::RefreshRoomButtonClickEvent()
 		return;
 	}
 	GINetwork->RequestRoomList();
+}
+
+void UUI_MainRoom::RequestJoinRoom(const int32& roomNumber)
+{
+	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (NULL == GINetwork)
+	{
+		UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
+		return;
+	}
+	GINetwork->RequestJoinRoom(roomNumber);
+}
+
+void UUI_MainRoom::RequestDestroyRoom(const int32& roomNumber)
+{
+	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (NULL == GINetwork)
+	{
+		UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
+		return;
+	}
+	GINetwork->RequestDestroyRoom(roomNumber);
 }

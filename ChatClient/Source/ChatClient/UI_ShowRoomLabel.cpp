@@ -14,6 +14,17 @@ void UUI_ShowRoomLabel::NativeConstruct()
 	Super::NativeConstruct();
 }
 
+void UUI_ShowRoomLabel::BeginDestroy()
+{
+	Super::BeginDestroy();
+
+	Fuc_DeleSingle_OneParam_JoinRoom.Unbind();
+	Fuc_DeleSingle_OneParam_DestroyRoom.Unbind();
+
+	destroyButton->OnClicked.RemoveDynamic(this, &UUI_ShowRoomLabel::DestroyButtonClickEvent);
+	joinButton->OnClicked.RemoveDynamic(this, &UUI_ShowRoomLabel::JoinButtonClickEvent);
+}
+
 void UUI_ShowRoomLabel::Init()
 {
 	roomNameTextBlock = Cast<UTextBlock>(WidgetTree->FindWidget("RoomName"));
@@ -33,23 +44,28 @@ void UUI_ShowRoomLabel::Init()
 	joinButton->OnClicked.AddDynamic(this, &UUI_ShowRoomLabel::JoinButtonClickEvent);
 }
 
-void UUI_ShowRoomLabel::SetRoomInfo(const FString& roomNunmber, const FString& roomName, const FString& roomPlayerCount)
+void UUI_ShowRoomLabel::SetRoomInfo(const FString& roomNumber, const FString& roomName, const FString& roomPlayerCount)
 {
 	if (roomNameTextBlock)
 		roomNameTextBlock->SetText(FText::FromString(roomName));
 	if (roomNumberTextBlock)
-		roomNumberTextBlock->SetText(FText::FromString(roomNunmber));
+		roomNumberTextBlock->SetText(FText::FromString(roomNumber));
 	if (roomPlayerCountTextBlock)
 		roomPlayerCountTextBlock->SetText(FText::FromString(roomPlayerCount));
+
+	_roomNumber = FCString::Atoi(*roomNumber);
+	_roomName = roomName;
+	_roomPlayerCount = FCString::Atoi(*roomPlayerCount);
 }
 
 void UUI_ShowRoomLabel::DestroyButtonClickEvent()
 {
-	UE_LOG(LogTemp, Error, TEXT("DestroyButtonClickEvent"));
-
+	if (Fuc_DeleSingle_OneParam_DestroyRoom.IsBound() == true)
+		Fuc_DeleSingle_OneParam_DestroyRoom.Execute(_roomNumber);
 }
 
 void UUI_ShowRoomLabel::JoinButtonClickEvent()
 {
-	UE_LOG(LogTemp, Error, TEXT("JoinButtonClickEvent"));
+	if (Fuc_DeleSingle_OneParam_JoinRoom.IsBound() == true)
+		Fuc_DeleSingle_OneParam_JoinRoom.Execute(_roomNumber);
 }

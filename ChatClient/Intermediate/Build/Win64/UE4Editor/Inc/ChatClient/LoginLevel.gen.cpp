@@ -57,7 +57,9 @@ void EmptyLinkFunctionForGeneratedCodeLoginLevel() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ALoginLevel_Statics::NewProp_connectLoginClass_MetaData[] = {
 		{ "Category", "Widgets" },
+		{ "Comment", "// \xeb\xa1\x9c\xea\xb7\xb8\xec\x9d\xb8 \xeb\xa0\x88\xeb\xb2\xa8\xec\x97\x90\xec\x84\x9c \xed\x91\x9c\xec\x8b\x9c\xed\x95\xa0 \xeb\xa1\x9c\xea\xb7\xb8\xec\x9d\xb8 UI \xec\x9c\x84\xec\xa0\xaf\n" },
 		{ "ModuleRelativePath", "LoginLevel.h" },
+		{ "ToolTip", "\xeb\xa1\x9c\xea\xb7\xb8\xec\x9d\xb8 \xeb\xa0\x88\xeb\xb2\xa8\xec\x97\x90\xec\x84\x9c \xed\x91\x9c\xec\x8b\x9c\xed\x95\xa0 \xeb\xa1\x9c\xea\xb7\xb8\xec\x9d\xb8 UI \xec\x9c\x84\xec\xa0\xaf" },
 	};
 #endif
 	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UClass_ALoginLevel_Statics::NewProp_connectLoginClass = { "connectLoginClass", nullptr, (EPropertyFlags)0x0014000000010001, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ALoginLevel, connectLoginClass), Z_Construct_UClass_UUserWidget_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(Z_Construct_UClass_ALoginLevel_Statics::NewProp_connectLoginClass_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ALoginLevel_Statics::NewProp_connectLoginClass_MetaData)) };
@@ -91,7 +93,7 @@ void EmptyLinkFunctionForGeneratedCodeLoginLevel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(ALoginLevel, 44193044);
+	IMPLEMENT_CLASS(ALoginLevel, 3543623259);
 	template<> CHATCLIENT_API UClass* StaticClass<ALoginLevel>()
 	{
 		return ALoginLevel::StaticClass();

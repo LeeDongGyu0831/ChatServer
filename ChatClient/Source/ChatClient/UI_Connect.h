@@ -28,10 +28,8 @@ public:
 	UUI_Connect(const FObjectInitializer& ObjectInitializer);
 
 	virtual void NativeConstruct() override;
+	virtual void BeginDestroy() override;
 
-	void TestFunc();
-
-	// Do it via a C++ delegate
 	UFUNCTION()
 	void InputIPEvent(const FText& InText);
 

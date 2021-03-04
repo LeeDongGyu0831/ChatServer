@@ -32,11 +32,3 @@ void AConnectLevel::Tick(float DeltaTime)
 	}
 	GINetwork->RecvData();
 }
-
-void AConnectLevel::TestFunc()
-{
-	if (connectWidget)
-	{
-		connectWidget->TestFunc();
-	}
-}

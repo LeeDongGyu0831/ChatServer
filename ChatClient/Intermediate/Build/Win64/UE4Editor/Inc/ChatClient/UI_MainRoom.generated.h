@@ -16,6 +16,8 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #define ChatClient_Source_ChatClient_UI_MainRoom_h_22_SPARSE_DATA
 #define ChatClient_Source_ChatClient_UI_MainRoom_h_22_RPC_WRAPPERS \
  \
+	DECLARE_FUNCTION(execRequestDestroyRoom); \
+	DECLARE_FUNCTION(execRequestJoinRoom); \
 	DECLARE_FUNCTION(execReadySendMessage); \
 	DECLARE_FUNCTION(execCreateRoomButtonClickEvent); \
 	DECLARE_FUNCTION(execCloseButtonClickEvent); \
@@ -26,6 +28,8 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
 #define ChatClient_Source_ChatClient_UI_MainRoom_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
  \
+	DECLARE_FUNCTION(execRequestDestroyRoom); \
+	DECLARE_FUNCTION(execRequestJoinRoom); \
 	DECLARE_FUNCTION(execReadySendMessage); \
 	DECLARE_FUNCTION(execCreateRoomButtonClickEvent); \
 	DECLARE_FUNCTION(execCloseButtonClickEvent); \

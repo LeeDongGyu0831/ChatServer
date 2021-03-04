@@ -27,5 +27,6 @@ public:
 
 	void Init();
 
+	// 한줄의 채팅 라벨에 정보 갱신
 	void SetChatMessage(const FString& chatMessage);
 };

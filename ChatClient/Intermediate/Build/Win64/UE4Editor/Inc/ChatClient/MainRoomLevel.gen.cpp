@@ -56,7 +56,9 @@ void EmptyLinkFunctionForGeneratedCodeMainRoomLevel() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMainRoomLevel_Statics::NewProp_mainRoomClass_MetaData[] = {
 		{ "Category", "Widgets" },
+		{ "Comment", "// ???? ?? ???????? \xc7\xa5???? UI ????\n" },
 		{ "ModuleRelativePath", "MainRoomLevel.h" },
+		{ "ToolTip", "???? ?? ???????? \xc7\xa5???? UI ????" },
 	};
 #endif
 	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UClass_AMainRoomLevel_Statics::NewProp_mainRoomClass = { "mainRoomClass", nullptr, (EPropertyFlags)0x0014000000010001, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMainRoomLevel, mainRoomClass), Z_Construct_UClass_UUserWidget_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(Z_Construct_UClass_AMainRoomLevel_Statics::NewProp_mainRoomClass_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMainRoomLevel_Statics::NewProp_mainRoomClass_MetaData)) };
@@ -90,7 +92,7 @@ void EmptyLinkFunctionForGeneratedCodeMainRoomLevel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AMainRoomLevel, 3383884709);
+	IMPLEMENT_CLASS(AMainRoomLevel, 23237702);
 	template<> CHATCLIENT_API UClass* StaticClass<AMainRoomLevel>()
 	{
 		return AMainRoomLevel::StaticClass();

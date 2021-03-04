@@ -68,7 +68,8 @@ bool UGI_Network::ConnectToServer()
 	addr->SetIp(ip.Value);
 	addr->SetPort(port);
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Trying to connect.")));
+	//인게임에서 로그를 남기는 함수
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Trying to connect.")));
 
 	bConnect = Socket->Connect(*addr);
 	if (false == bConnect)
@@ -166,6 +167,29 @@ void UGI_Network::RequestPlayerList(const int32& roomNumber)
 void UGI_Network::RequestRoomList()
 {
 	FString requestString = "/o ";
+	Send(requestString);
+}
+
+void UGI_Network::RequestDestroyRoom(const int32& roomNumber)
+{
+	FString requestString = "/d ";
+	requestString += FString::FromInt(roomNumber);
+	Send(requestString);
+}
+
+void UGI_Network::RequestJoinRoom(const int32& roomNumber)
+{
+	FString requestString = "/j ";
+	requestString += FString::FromInt(roomNumber);
+	Send(requestString);
+}
+
+void UGI_Network::RequestCreateRoom(const int32& maxPlayerCount, const FString& roomName)
+{
+	FString requestString = "/c ";
+	requestString += FString::FromInt(maxPlayerCount);
+	requestString += " ";
+	requestString += roomName;
 	Send(requestString);
 }
 

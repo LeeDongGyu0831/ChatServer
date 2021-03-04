@@ -25,6 +25,14 @@ void UUI_Login::NativeConstruct()
 	inputID->OnTextChanged.AddDynamic(this, &UUI_Login::InputIDEvent);
 }
 
+void UUI_Login::BeginDestroy()
+{
+	Super::BeginDestroy();
+
+	connectButton->OnClicked.RemoveDynamic(this, &UUI_Login::ConnectButtonClick);
+	inputID->OnTextChanged.RemoveDynamic(this, &UUI_Login::InputIDEvent);
+}
+
 void UUI_Login::InputIDEvent(const FText& InText)
 {
 	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));

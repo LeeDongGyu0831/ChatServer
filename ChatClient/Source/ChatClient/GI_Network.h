@@ -74,6 +74,10 @@ public:
 	void RequestPlayerList(const int32& roomNumber);
 	void RequestRoomList();
 
+	void RequestDestroyRoom(const int32& roomNumber);
+	void RequestJoinRoom(const int32& roomNumber);
+	void RequestCreateRoom(const int32& maxPlayerCount, const FString& roomName);
+
 
 	// 앞 뒤 공백 + 줄바꿈 문자 + >> 문자 제거용
 	UFUNCTION(BlueprintCallable, Category = Socket)

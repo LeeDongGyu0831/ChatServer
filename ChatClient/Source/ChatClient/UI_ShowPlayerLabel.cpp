@@ -20,6 +20,7 @@ void UUI_ShowPlayerLabel::BeginDestroy()
 	Super::BeginDestroy();
 	//if (Fuc_DeleSingle_OneParam.IsBound() == true)
 	Fuc_DeleSingle_OneParam.Unbind();
+	sendMessageButton->OnClicked.RemoveDynamic(this, &UUI_ShowPlayerLabel::SendMessageButton);
 }
 
 void UUI_ShowPlayerLabel::Init()

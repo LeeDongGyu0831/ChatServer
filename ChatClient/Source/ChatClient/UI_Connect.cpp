@@ -41,9 +41,13 @@ void UUI_Connect::NativeConstruct()
 	inputPort->OnTextChanged.AddDynamic(this, &UUI_Connect::InputPortEvent);
 }
 
-void UUI_Connect::TestFunc()
+void UUI_Connect::BeginDestroy()
 {
-	UE_LOG(LogTemp, Error, TEXT("TestFunc"));
+	Super::BeginDestroy();
+
+	connectButton->OnClicked.RemoveDynamic(this, &UUI_Connect::ButtonClick);
+	inputIP->OnTextChanged.RemoveDynamic(this, &UUI_Connect::InputIPEvent);
+	inputPort->OnTextChanged.RemoveDynamic(this, &UUI_Connect::InputPortEvent);
 }
 
 void UUI_Connect::InputIPEvent(const FText& InText)

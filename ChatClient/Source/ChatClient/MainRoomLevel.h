@@ -18,6 +18,8 @@ class CHATCLIENT_API AMainRoomLevel : public ALevelScriptActor
 	GENERATED_BODY()
 	
 private:
+	// 방 목록을 몇 초마다 갱신해서 보여줄 것인지
+	// 기존 서버에서는 방이 파괴되거나 생성될 때 메인 대화방 및 다른 대화방의 유저에게는 정보를 전송하지 않기 때문
 	constexpr static float REFRESH_TIME = 2.5f;
 
 	// 메인 대화방 UI
@@ -26,6 +28,7 @@ private:
 	float refreshTime;
 
 public:
+	// 메인 룸 레벨에서 표시할 UI 위젯
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> mainRoomClass;
 

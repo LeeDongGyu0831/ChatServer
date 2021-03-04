@@ -109,7 +109,6 @@ void EmptyLinkFunctionForGeneratedCodeUI_ShowRoomLabel() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UUI_ShowRoomLabel_Statics::Class_MetaDataParams[] = {
-		{ "Comment", "/**\n * \n */" },
 		{ "IncludePath", "UI_ShowRoomLabel.h" },
 		{ "ModuleRelativePath", "UI_ShowRoomLabel.h" },
 		{ "ObjectInitializerConstructorDeclared", "" },
@@ -142,7 +141,7 @@ void EmptyLinkFunctionForGeneratedCodeUI_ShowRoomLabel() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UUI_ShowRoomLabel, 2362155677);
+	IMPLEMENT_CLASS(UUI_ShowRoomLabel, 1165364755);
 	template<> CHATCLIENT_API UClass* StaticClass<UUI_ShowRoomLabel>()
 	{
 		return UUI_ShowRoomLabel::StaticClass();

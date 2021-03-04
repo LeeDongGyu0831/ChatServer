@@ -19,12 +19,12 @@ void AMainRoomLevel::BeginPlay()
 		}
 	}
 
-	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (NULL == GINetwork)
-	{
-		UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
-		return;
-	}
+	//auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
+	//if (NULL == GINetwork)
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("GameInstance is not GI_Network!!"));
+	//	return;
+	//}
 
 	refreshTime = REFRESH_TIME;
 }

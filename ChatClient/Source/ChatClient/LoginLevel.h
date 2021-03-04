@@ -22,6 +22,7 @@ private:
 	UUI_Login* loginWidget;
 
 public:
+	// 로그인 레벨에서 표시할 로그인 UI 위젯
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> connectLoginClass;
 
