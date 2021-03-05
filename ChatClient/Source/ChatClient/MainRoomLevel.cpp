@@ -29,6 +29,8 @@ void AMainRoomLevel::BeginPlay()
 	GINetwork->SetCurrentRoomNumber(1);
 
 	refreshTime = REFRESH_TIME;
+
+	SetActorTickEnabled(true);
 }
 
 void AMainRoomLevel::Tick(float DeltaTime)
@@ -104,6 +106,8 @@ void AMainRoomLevel::Tick(float DeltaTime)
 	break;
 	case MSG_TYPE::JOINROOM:
 	{
+		SetActorTickEnabled(false);
+		UE_LOG(LogTemp, Error, TEXT("JOIN CHAT ROOM"));
 		UGameplayStatics::OpenLevel(this, "ChatRoomLevel");
 	}
 	break;

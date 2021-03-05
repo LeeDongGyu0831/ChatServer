@@ -58,6 +58,10 @@ void UUI_ChatRoom::NativeConstruct()
 		return;
 	}
 	AddPlayer(GINetwork->GetID());
+
+	int32 index = GetWorld()->GetActiveLevelCollectionIndex();
+	GetWorld()->GetLevel(index)->GetLevelScriptActor()->SetActorTickEnabled(true);
+	UE_LOG(LogTemp, Error, TEXT("Construct UI_ChatRoom..."));
 }
 
 void UUI_ChatRoom::BeginDestroy()
@@ -268,7 +272,9 @@ void UUI_ChatRoom::DestroyRoomButtonClickEvent()
 	GINetwork->SetCurrentRoomName("Main Room");
 	GINetwork->SetCurrentRoomNumber(1);
 	GINetwork->RequestDestroyRoom(_roomNumber);
+
 	UGameplayStatics::OpenLevel(this, "MainLevel");
+
 	UE_LOG(LogTemp, Warning, TEXT("DestroyButtonClick"));
 	return;
 }
@@ -284,7 +290,9 @@ void UUI_ChatRoom::LeaveRoomButtonClickEvent()
 	GINetwork->SetCurrentRoomName("Main Room");
 	GINetwork->SetCurrentRoomNumber(1);
 	GINetwork->RequestJoinRoom(1);
+
 	UGameplayStatics::OpenLevel(this, "MainLevel");
+
 	UE_LOG(LogTemp, Warning, TEXT("LeaveButtonClick"));
 	return;
 }

@@ -29,10 +29,18 @@ void AChatRoomLevel::BeginPlay()
 			chatRoomWidget->SetInfo(roomName, roomNumber);
 		}
 	}
+
+	int32 index =GetWorld()->GetActiveLevelCollectionIndex();
+	for (int i = 0; i < index; ++i)
+	{
+		GetWorld()->GetLevel(i)->GetLevelScriptActor()->SetActorTickEnabled(false);
+	}
+	SetActorTickEnabled(true);
 }
 
 void AChatRoomLevel::Tick(float DeltaTime)
 {
+	UE_LOG(LogTemp, Error, TEXT("CHATROOM TICK"));
 	Super::Tick(DeltaTime);
 
 	auto GINetwork = Cast<UGI_Network>(UGameplayStatics::GetGameInstance(GetWorld()));
@@ -42,7 +50,6 @@ void AChatRoomLevel::Tick(float DeltaTime)
 		return;
 	}
 
-	UE_LOG(LogTemp, Error, TEXT("CHATROOM TICK"));
 
 	FString recvString = GINetwork->Recv();
 
@@ -101,10 +108,14 @@ void AChatRoomLevel::Tick(float DeltaTime)
 	{
 		if (GINetwork->GetCurrentRoomNumber() == 1)
 		{
+			SetActorTickEnabled(false);
 			UGameplayStatics::OpenLevel(this, "MainLevel");
 		}
 		else
+		{ 
+			//SetActorTickEnabled(false);
 			UGameplayStatics::OpenLevel(this, "ChatRoomLevel");
+		}
 	}
 	break;
 	default:
